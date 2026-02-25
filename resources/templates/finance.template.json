@@ -1,0 +1,548 @@
+{
+  "$schemaVersion": "1.0",
+  "modelId": "finance-v1",
+  "provenance": {
+    "author": "model-assistant",
+    "timestamp": "2025-12-20T13:58:06Z"
+  },
+  "glossary": [
+    {
+      "id": "Account",
+      "label": "Account",
+      "synonyms": ["GL Account"],
+      "description": "General ledger account."
+    },
+    {
+      "id": "JournalEntry",
+      "label": "Journal Entry",
+      "synonyms": ["JE"],
+      "description": "Record of debits and credits."
+    },
+    {
+      "id": "Transaction",
+      "label": "Transaction Line",
+      "synonyms": ["Line"],
+      "description": "A debit/credit line within a journal entry."
+    },
+    {
+      "id": "Budget",
+      "label": "Budget",
+      "description": "Planned amounts for accounts/projects."
+    }
+  ],
+  "entities": [
+    {
+      "id": "Account",
+      "label": "Account",
+      "bindings": [
+        {
+          "type": "table",
+          "name": "accounts",
+          "primaryKey": "account_code"
+        }
+      ],
+      "attributes": [
+        {
+          "id": "accountCode",
+          "type": "string",
+          "required": true,
+          "unique": true,
+          "tags": ["identifier"]
+        },
+        {
+          "id": "name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "id": "type",
+          "type": "string",
+          "enum": ["Asset", "Liability", "Equity", "Revenue", "Expense"],
+          "required": true
+        }
+      ],
+      "workflow": {
+        "states": [
+          { "id": "Draft" },
+          { "id": "Submitted" },
+          { "id": "Active" },
+          { "id": "Inactive" },
+          { "id": "Rejected" }
+        ],
+        "transitions": [
+          {
+            "event": "submit",
+            "from": "Draft",
+            "to": "Submitted",
+            "guard": {
+              "expr": {
+                "and": [
+                  { "exists": "accountCode" },
+                  { "exists": "name" },
+                  { "exists": "type" }
+                ]
+              }
+            },
+            "actions": ["validate"]
+          },
+          {
+            "event": "approve",
+            "from": "Submitted",
+            "to": "Active",
+            "guard": {
+              "expr": {
+                "==": [
+                  { "var": "actor.user_id" },
+                  { "var": "approver" }
+                ]
+              }
+            },
+            "actions": ["recordApproval"]
+          },
+          {
+            "event": "reject",
+            "from": "Submitted",
+            "to": "Rejected",
+            "actions": ["recordRejection"]
+          },
+          {
+            "event": "resubmit",
+            "from": "Rejected",
+            "to": "Submitted",
+            "guard": { "expr": { "exists": "correctionNotes" } },
+            "actions": ["validate"]
+          },
+          {
+            "event": "deactivate",
+            "from": "Active",
+            "to": "Inactive",
+            "actions": ["archiveAccount"]
+          },
+          {
+            "event": "reactivate",
+            "from": "Inactive",
+            "to": "Active",
+            "actions": ["restoreAccount"]
+          }
+        ]
+      }
+    },
+
+    {
+      "id": "JournalEntry",
+      "label": "Journal Entry",
+      "bindings": [
+        {
+          "type": "table",
+          "name": "journal_entries",
+          "primaryKey": "je_id"
+        }
+      ],
+      "attributes": [
+        {
+          "id": "jeId",
+          "type": "string",
+          "required": true,
+          "unique": true,
+          "tags": ["identifier"]
+        },
+        {
+          "id": "date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "status",
+          "type": "string",
+          "enum": ["Draft", "Posted"],
+          "required": true,
+          "default": "Draft"
+        },
+        {
+          "id": "totalDebit",
+          "type": "number",
+          "derived": true,
+          "default": 0
+        },
+        {
+          "id": "totalCredit",
+          "type": "number",
+          "derived": true,
+          "default": 0
+        }
+      ],
+      "relationships": [
+        {
+          "id": "je-has-transactions",
+          "type": "aggregates",
+          "from": "JournalEntry",
+          "to": "Transaction",
+          "cardinality": "one-to-many",
+          "keyMapping": {
+            "fromAttr": "jeId",
+            "toAttr": "jeId"
+          }
+        }
+      ],
+      "rules": [
+        {
+          "id": "balanced-entry",
+          "scope": "JournalEntry",
+          "when": "onPost",
+          "expr": {
+            "==": [
+              { "var": "totalDebit" },
+              { "var": "totalCredit" }
+            ]
+          },
+          "effects": [
+            { "allowTransition": "Draft->Posted" }
+          ]
+        }
+      ],
+      "workflow": {
+        "states": [
+          { "id": "Draft" },
+          { "id": "Submitted" },
+          { "id": "Approved" },
+          { "id": "Posted" },
+          { "id": "Rejected" },
+          { "id": "Reversed" }
+        ],
+        "transitions": [
+          {
+            "event": "submit",
+            "from": "Draft",
+            "to": "Submitted",
+            "guard": {
+              "expr": {
+                "and": [
+                  { "exists": "date" },
+                  { "exists": "jeId" },
+                  {
+                    "==": [
+                      { "var": "totalDebit" },
+                      { "var": "totalCredit" }
+                    ]
+                  }
+                ]
+              }
+            },
+            "actions": ["validate"]
+          },
+          {
+            "event": "approve",
+            "from": "Submitted",
+            "to": "Approved",
+            "guard": {
+              "expr": {
+                "==": [
+                  { "var": "actor.user_id" },
+                  { "var": "approver" }
+                ]
+              }
+            },
+            "actions": ["recordApproval"]
+          },
+          {
+            "event": "reject",
+            "from": "Submitted",
+            "to": "Rejected",
+            "actions": ["recordRejection"]
+          },
+          {
+            "event": "resubmit",
+            "from": "Rejected",
+            "to": "Submitted",
+            "guard": { "expr": { "exists": "correctionNotes" } },
+            "actions": ["validate"]
+          },
+          {
+            "event": "post",
+            "from": "Approved",
+            "to": "Posted",
+            "guard": {
+              "expr": {
+                "==": [
+                  { "var": "totalDebit" },
+                  { "var": "totalCredit" }
+                ]
+              }
+            },
+            "actions": ["createLedgerEntries"]
+          },
+          {
+            "event": "reverse",
+            "from": "Posted",
+            "to": "Reversed",
+            "guard": {
+              "expr": {
+                "==": [
+                  { "var": "actor.user_id" },
+                  { "var": "controller" }
+                ]
+              }
+            },
+            "actions": ["createReversalEntry"]
+          },
+          {
+            "event": "reopen",
+            "from": "Reversed",
+            "to": "Draft",
+            "actions": ["unlockForEditing"]
+          }
+        ]
+      }
+    },
+
+    {
+      "id": "Transaction",
+      "label": "Transaction Line",
+      "bindings": [
+        {
+          "type": "table",
+          "name": "transactions",
+          "primaryKey": "tx_id"
+        }
+      ],
+      "attributes": [
+        {
+          "id": "txId",
+          "type": "string",
+          "required": true,
+          "unique": true,
+          "tags": ["identifier"]
+        },
+        {
+          "id": "jeId",
+          "type": "string",
+          "required": true,
+          "tags": ["foreignKey:JournalEntry"]
+        },
+        {
+          "id": "accountCode",
+          "type": "string",
+          "required": true,
+          "tags": ["foreignKey:Account"]
+        },
+        {
+          "id": "debit",
+          "type": "number"
+        },
+        {
+          "id": "credit",
+          "type": "number"
+        },
+        {
+          "id": "description",
+          "type": "string"
+        }
+      ],
+      "rules": [
+        {
+          "id": "nonnegative-lines",
+          "scope": "Transaction",
+          "when": "onCreate|onUpdate",
+          "expr": {
+            "and": [
+              { ">=": [ { "var": "debit" }, 0 ] },
+              { ">=": [ { "var": "credit" }, 0 ] }
+            ]
+          },
+          "effects": []
+        },
+        {
+          "id": "single-sided-line",
+          "scope": "Transaction",
+          "when": "onCreate|onUpdate",
+          "expr": {
+            "or": [
+              {
+                "and": [
+                  { ">": [ { "var": "debit" }, 0 ] },
+                  { "==": [ { "var": "credit" }, 0 ] }
+                ]
+              },
+              {
+                "and": [
+                  { ">": [ { "var": "credit" }, 0 ] },
+                  { "==": [ { "var": "debit" }, 0 ] }
+                ]
+              }
+            ]
+          },
+          "effects": []
+        }
+      ],
+      "workflow": {
+        "states": [
+          { "id": "Draft" },
+          { "id": "Validated" },
+          { "id": "Posted" },
+          { "id": "Corrected" }
+        ],
+        "transitions": [
+          {
+            "event": "validate",
+            "from": "Draft",
+            "to": "Validated",
+            "guard": {
+              "expr": {
+                "and": [
+                  { "exists": "accountCode" },
+                  {
+                    "or": [
+                      { ">": [ { "var": "debit" }, 0 ] },
+                      { ">": [ { "var": "credit" }, 0 ] }
+                    ]
+                  }
+                ]
+              }
+            },
+            "actions": ["validateLine"]
+          },
+          {
+            "event": "post",
+            "from": "Validated",
+            "to": "Posted",
+            "actions": ["attachToJournalEntry"]
+          },
+          {
+            "event": "correct",
+            "from": "Posted",
+            "to": "Corrected",
+            "actions": ["unlockForEditing"]
+          },
+          {
+            "event": "revalidate",
+            "from": "Corrected",
+            "to": "Validated",
+            "actions": ["validateLine"]
+          }
+        ]
+      }
+    },
+
+    {
+      "id": "Budget",
+      "label": "Budget",
+      "bindings": [
+        {
+          "type": "table",
+          "name": "budgets",
+          "primaryKey": "budget_id"
+        }
+      ],
+      "attributes": [
+        {
+          "id": "budgetId",
+          "type": "string",
+          "required": true,
+          "unique": true,
+          "tags": ["identifier"]
+        },
+        {
+          "id": "accountCode",
+          "type": "string",
+          "required": true,
+          "tags": ["foreignKey:Account"]
+        },
+        {
+          "id": "period",
+          "type": "string",
+          "required": true
+        },
+        {
+          "id": "amount",
+          "type": "number",
+          "required": true
+        }
+      ],
+      "workflow": {
+        "states": [
+          { "id": "Draft" },
+          { "id": "Submitted" },
+          { "id": "Approved" },
+          { "id": "Rejected" },
+          { "id": "Revised" }
+        ],
+        "transitions": [
+          {
+            "event": "submit",
+            "from": "Draft",
+            "to": "Submitted",
+            "guard": {
+              "expr": {
+                "and": [
+                  { "exists": "accountCode" },
+                  { "exists": "period" },
+                  { ">": [ { "var": "amount" }, 0 ] }
+                ]
+              }
+            },
+            "actions": ["validate"]
+          },
+          {
+            "event": "approve",
+            "from": "Submitted",
+            "to": "Approved",
+            "guard": {
+              "expr": {
+                "==": [
+                  { "var": "actor.user_id" },
+                  { "var": "approver" }
+                ]
+              }
+            },
+            "actions": ["recordApproval"]
+          },
+          {
+            "event": "reject",
+            "from": "Submitted",
+            "to": "Rejected",
+            "actions": ["recordRejection"]
+          },
+          {
+            "event": "revise",
+            "from": "Rejected",
+            "to": "Revised",
+            "actions": ["unlockForEditing"]
+          },
+          {
+            "event": "resubmit",
+            "from": "Revised",
+            "to": "Submitted",
+            "actions": ["validate"]
+          }
+        ]
+      }
+    }
+  ],
+  "security": {
+    "roles": [
+      {
+        "id": "Finance_Accountant",
+        "permissions": [
+          "JournalEntry.read",
+          "JournalEntry.post",
+          "Transaction.read",
+          "Account.read"
+        ]
+      },
+      {
+        "id": "Finance_Controller",
+        "permissions": [
+          "JournalEntry.read",
+          "JournalEntry.approve",
+          "Budget.read",
+          "Budget.update"
+        ]
+      }
+    ]
+  },
+  "versioning": {
+    "modelVersion": "1.0.0",
+    "effectiveFrom": "2026-01-01",
+    "changelog": []
+  }
+}

@@ -1,0 +1,627 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>semanticIQ Runtime</title>
+  <link rel="stylesheet" href="{% static 'core/runtime.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+
+/* ------------------------------
+   GLOBAL LAYOUT
+------------------------------ */
+
+body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: #f4f6f8;
+    color: #333;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 32px;
+    background: #000000;
+    border-bottom: 1px solid #ddd;
+}
+
+.left-header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.left-header p {
+    margin: 4px 0 0;
+    color: #666;
+}
+
+.right-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Tenant Switcher */
+.tenant-switcher select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+
+/* Profile Badge */
+.profile-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+}
+
+.profile-badge img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.role-badge {
+    background: #444;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+/* Logout */
+.logout-btn {
+    padding: 6px 14px;
+    background: #d9534f;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.logout-btn:hover {
+    background: #c9302c;
+}
+
+/* ------------------------------
+   MAIN PANELS
+------------------------------ */
+
+.container {
+    display: flex;
+    gap: 24px;
+    padding: 24px;
+}
+
+.panel {
+    flex: 1;
+    background: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.panel h2 {
+    margin-top: 0;
+}
+
+/* Form rows */
+.row {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+/* ------------------------------
+   CHAT BOX (COLLAPSIBLE)
+------------------------------ */
+
+.chat-box {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    width: 100%;
+    transition: max-height 0.3s ease, padding 0.3s ease, border 0.3s ease;
+}
+
+.chat-box.expanded {
+    max-height: 420px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.05);
+}
+
+/* Message bubbles */
+.msg {
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 15px;
+    line-height: 1.5;
+    display: inline-block;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.user-msg {
+    align-self: flex-end;
+    background: #0078ff;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.bot-msg {
+    align-self: flex-start;
+    background: #f1f3f5;
+    color: #333;
+    border-bottom-left-radius: 4px;
+}
+
+/* Chat input row */
+.chat-input-row {
+    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background: #fafafa;
+    font-size: 15px;
+}
+
+.chat-input:focus {
+    outline: none;
+    border-color: #0078ff;
+    background: #fff;
+}
+
+#chat-send {
+    padding: 12px 20px;
+    background: #0078ff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 200;
+}
+
+#chat-send:hover {
+    background: #005fcc;
+}
+
+#chat-send:active {
+    transform: scale(0.97);
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hidden-input {
+    display: none;
+}
+
+/* ------------------------------
+   FORCE CHAT LAYOUT OVERRIDES
+------------------------------ */
+
+.container {
+    display: flex !important;
+    gap: 24px !important;
+    align-items: flex-start !important;
+}
+
+.panel {
+    flex: 1 !important;
+}
+
+.row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+}
+
+#chat-box {
+    max-height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    border: 0 !important;
+    width: 100% !important;
+    background: transparent !important;
+    transition: max-height 0.3s ease, padding 0.3s ease, border 0.3s ease;
+}
+
+#chat-box.expanded {
+    max-height: 420px !important;
+    padding: 20px !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+}
+
+.msg {
+    max-width: 75% !important;
+    padding: 10px 14px !important;
+    border-radius: 14px !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    display: inline-block !important;
+}
+
+.user-msg {
+    align-self: flex-end !important;
+    background: #0078ff !important;
+    color: #fff !important;
+}
+
+.bot-msg {
+    align-self: flex-start !important;
+    background: #f1f3f5 !important;
+    color: #333 !important;
+}
+
+.studio-button {
+    padding: 12px 20px;
+    background: #0078ff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 200;
+    font-family: Inter, sans-serif;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.studio-button:hover {
+    background: #005fcc;
+}
+
+.studio-button:active {
+    transform: scale(0.97);
+}
+
+/* ------------------------------
+   WORKSPACE PANEL (NEW)
+------------------------------ */
+
+.workspace-panel {
+    flex: 1;
+}
+
+.model-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.model-card {
+    padding: 16px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.model-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+/* Hide chat + form until a model is selected */
+#chat-panel,
+#form-panel {
+    display: none;
+}
+
+/* ------------------------------
+    FOOTER
+------------------------------ */
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 0;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #222;
+}
+
+#status {
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+    color: #bbb;
+}
+
+#action-bar { display: none;
+ justify-content: flex-start;
+ align-items: center;
+ padding: 8px 0; }
+
+
+.empty-state {
+    grid-column: 1 / -1;          /* span full width of the grid */
+    padding: 32px;
+    text-align: center;
+    background: #fafafa;
+    border: 1px dashed #ccc;
+    border-radius: 12px;
+    color: #555;
+}
+.empty-state h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.hidden {
+    display: none !important;
+  }
+
+.tabs { display: flex; gap: 8px; margin-bottom: 8px; }
+.tab.active { font-weight: bold; }
+.work-table { width: 100%; border-collapse: collapse; }
+.work-table th, .work-table td { border: 1px solid #ddd; padding: 4px 8px; }
+.tab-view { margin-top: 8px; }
+
+#workspace-action-bar {
+    display: none;
+    padding: 12px 0;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="left-header">
+    <h1>semanticIQ • Runtime Environment</h1>
+    <p>Orchestrate processes and workflows via chat and dynamic forms.</p>
+  </div>
+
+  <div class="right-header">
+
+    <!-- Tenant Switcher -->
+    <div class="tenant-switcher">
+      {% if available_tenants|length > 1 %}
+      <form method="POST" action="/switch_tenant">
+        {% csrf_token %}
+        <select name="tenant_id" onchange="this.form.submit()">
+          {% for t in available_tenants %}
+            <option value="{{ t.tenant_id }}" {% if t.tenant_id == tenant.tenant_id %}selected{% endif %}>
+              {{ t.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </form>
+      {% endif %}
+    </div>
+
+    <!-- Profile Badge -->
+    <div class="profile-badge">
+      <img src="{{ user_photo_url|default:'/static/core/default_user.png' }}" alt="Profile Photo">
+      <div>
+        <strong>{{ request.user.username }}</strong><br>
+        {% for r in roles %}
+          <span class="role-badge">{{ r }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <a class="logout-btn" href="/logout">Logout</a>
+  </div>
+</header>
+
+<!-- SHARED ACTION BAR --> 
+  <div id="action-bar" style="display:none; width:100%; margin-bottom: 12px;">     
+    <button id="back-to-workspace" class="studio-button" style="margin-left:28px;"> ← Back to Workspace </button>
+    <button id="view-work-items" class="studio-button" style="margin-left:16px;">My Work</button> 
+  </div>
+  <!-- NEW: Workspace Action Bar -->
+  <div id="workspace-action-bar" style="display:none; width:100%; margin-bottom: 12px;">
+    <button id="goMainMenu" class="studio-button" style="margin-left:28px;">
+        ← Back to Main Menu
+    </button>
+  </div>
+<div class="container"> 
+
+  <!-- WORKSPACE PANEL -->
+  <div class="panel workspace-panel" id="workspace-panel">
+    <h2>Select a Workspace</h2>
+
+    <div class="model-card-grid">
+      {% if models %} {% for m in models %} 
+      <div class="model-card" 
+      onclick="selectModel('{{ m.model_id }}::{{ m.version }}')"> 
+      <h3>{{ m.model_id }}</h3> 
+      <p>Version {{ m.version }}</p> 
+    </div> {% endfor %} {% else %} 
+    <div class="empty-state">
+      <h3>No Active Models</h3> 
+      <p>Your company doesn’t have any active process models and workspaces yet.</p> 
+      <p>These will appear here as soon as they become available.</p> 
+    </div> {% endif %} 
+  </div>
+  </div>
+
+  <!-- CHAT PANEL -->
+  <div class="panel chat-panel" id="chat-panel">
+    <h2>Chat</h2>
+    <div class="row">
+      <label class="input-label">Model</label>
+      <select id="model-select">
+        {% for m in models %}
+        <option value="{{ m.model_id }}::{{ m.version }}">
+          {{ m.model_id }} (v{{ m.version }})
+        </option>
+        {% endfor %}
+      </select>
+
+      <input id="tenant-id" value="{{ tenant_id }}" class="hidden-input">
+
+      <label class="input-label">Tenant</label>
+      <input id="tenant-name" value="{{ tenant_name }}" readonly>
+
+      <label class="input-label">Actor</label>
+      <input id="actor-id" value="{{ actor_id }}" readonly>
+    </div>
+
+    <div class="row">
+      <label class="input-label">Roles</label>
+      <input id="actor-roles" value="{{ actor_roles|join:',' }}" readonly>      
+    </div>
+
+    <div id="chat-box" class="chat-box"></div>
+
+    <div class="chat-input-row">
+      <input id="chat-input" class="chat-input"
+             placeholder="Type a request, e.g., 'Create PO for Vendor ABC €12,000'">
+      <button id="chat-send">Send</button>
+    </div>
+  </div>
+
+  <!-- FORM PANEL -->
+  <div class="panel form-panel" id="form-panel">    
+    <h2>Auto Form</h2>
+    <div class="row">
+      <label class="input-label">Entity</label>
+      <select id="entity-select"></select>
+    </div>
+
+    <button id="load-form" type="button" class="studio-button">Load Form</button>
+
+    <form id="dyn-form"></form>
+
+    <div class="row hidden" id="action-row">
+    <label class="input-label">Action</label>
+     <select id="submit-mode"></select>
+    </div>
+
+    <button id="submit-form" type="button" class="studio-button hidden">Start Workflow</button>
+    <div id="form-result" class="msg"></div>
+  </div>
+
+<!-- WORK ITEMS AND APPROVALS PANEL -->
+  <div id="work-items-panel" class="hidden">
+  <div class="tabs">
+    <button id="tab-my-workflows" class="tab active">My Workflows</button>
+    <button id="tab-my-approvals" class="tab">My Approvals</button>
+  </div>
+
+  <div id="my-workflows-view" class="tab-view">
+    <h3>My Workflows</h3>
+    <table class="work-table">
+      <thead>
+        <tr>
+          <th style="display:none;">ID</th>
+          <th>Entity</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Last Updated</th>
+        </tr>
+      </thead>
+      <tbody id="my-workflows-body"></tbody>
+    </table>
+  </div>
+
+  <div id="my-approvals-view" class="tab-view hidden">
+    <h3>My Approvals</h3>
+    <table class="work-table">
+      <thead>
+        <tr>
+          <th style="display:none;">ID</th>
+          <th>Entity</th>
+          <th>Creator</th>
+          <th>Summary</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="my-approvals-body"></tbody>
+    </table>
+  </div>
+</div>
+
+</div>
+
+<script src="{% static 'core/runtime.js' %}?v={{ timestamp }}" defer></script>
+<script defer>
+document.addEventListener("DOMContentLoaded", () => {
+    const workspacePanel = document.getElementById("workspace-panel");
+    const workspaceBar   = document.getElementById("workspace-action-bar");
+    const mainMenuBtn    = document.getElementById("goMainMenu");
+
+    if (!workspacePanel || !workspaceBar || !mainMenuBtn) return;
+
+    // Redirect handler
+    mainMenuBtn.addEventListener("click", () => {
+        window.location.href = "/main_menu";
+    });
+
+    // Detect real visibility (CSS or inline)
+    function isVisible(el) {
+        return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+    }
+
+    function updateWorkspaceBar() {
+        const visible = isVisible(workspacePanel);
+        workspaceBar.style.display = visible ? "flex" : "none";
+    }
+
+    // ⭐ FIX: Show the bar on first load
+    updateWorkspaceBar();
+
+    // Watch for workspace panel visibility changes
+    const observer = new MutationObserver(updateWorkspaceBar);
+    observer.observe(workspacePanel, { attributes: true, attributeFilter: ["style"] });
+
+    // Also update on layout changes
+    window.addEventListener("load", updateWorkspaceBar);
+    window.addEventListener("resize", updateWorkspaceBar);
+});
+</script>
+<footer>    
+    <div id="status">© semanticIQ <script>document.write(/\d{4}/.exec(Date())[0])</script>. All Rights Reserved.</div>
+</footer>
+
+</body>
+</html>
+{% load static %}

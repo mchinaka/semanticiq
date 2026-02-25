@@ -1,0 +1,456 @@
+{
+  "$schemaVersion": "1.0",
+  "modelId": "hr-v1",
+  "provenance": {
+    "author": "model-assistant",
+    "timestamp": "2025-12-20T13:58:06Z"
+  },
+  "glossary": [
+    {
+      "id": "Employee",
+      "label": "Employee",
+      "synonyms": ["Staff"],
+      "description": "A person employed by the company."
+    },
+    {
+      "id": "Department",
+      "label": "Department",
+      "synonyms": ["Org Unit"],
+      "description": "Organizational unit."
+    },
+    {
+      "id": "Position",
+      "label": "Position",
+      "synonyms": ["Role"],
+      "description": "Job position held by an employee."
+    },
+    {
+      "id": "LeaveRequest",
+      "label": "Leave Request",
+      "synonyms": ["Time Off"],
+      "description": "A request for time off."
+    }
+  ],
+  "entities": [
+    {
+      "id": "Employee",
+      "label": "Employee",
+      "bindings": [
+        {
+          "type": "table",
+          "name": "employees",
+          "primaryKey": "employee_id"
+        }
+      ],
+      "attributes": [
+        { "id": "employeeId", "type": "string", "required": true, "unique": true, "tags": ["identifier"] },
+        { "id": "firstName", "type": "string", "required": true },
+        { "id": "lastName", "type": "string", "required": true },
+        { "id": "email", "type": "string", "required": true },
+        { "id": "hireDate", "type": "date", "required": true },
+        {
+          "id": "employmentStatus",
+          "type": "string",
+          "enum": ["Draft", "Submitted", "Approved", "Active", "OnLeave", "Terminated", "Rejected"],
+          "required": true,
+          "default": "Draft"
+        },
+        { "id": "departmentId", "type": "string", "tags": ["foreignKey:Department"] },
+        { "id": "managerId", "type": "string", "tags": ["foreignKey:Employee"] }
+      ],
+      "relationships": [
+        {
+          "id": "employee-belongs-dept",
+          "type": "references",
+          "from": "Employee",
+          "to": "Department",
+          "cardinality": "many-to-one",
+          "keyMapping": { "fromAttr": "departmentId", "toAttr": "departmentId" }
+        },
+        {
+          "id": "manager-manages-employee",
+          "type": "parentOf",
+          "from": "Employee",
+          "to": "Employee",
+          "cardinality": "one-to-many",
+          "keyMapping": { "fromAttr": "managerId", "toAttr": "employeeId" }
+        }
+      ],
+      "workflow": {
+        "states": [
+          { "id": "Draft" },
+          { "id": "Submitted" },
+          { "id": "Approved" },
+          { "id": "Active" },
+          { "id": "OnLeave" },
+          { "id": "Terminated" },
+          { "id": "Rejected" }
+        ],
+        "transitions": [
+          {
+            "event": "submit",
+            "from": "Draft",
+            "to": "Submitted",
+            "guard": {
+              "expr": {
+                "and": [
+                  { "exists": "firstName" },
+                  { "exists": "lastName" },
+                  { "exists": "email" },
+                  { "exists": "hireDate" }
+                ]
+              }
+            },
+            "actions": ["validate"]
+          },
+          {
+            "event": "approve",
+            "from": "Submitted",
+            "to": "Approved",
+            "guard": {
+              "expr": {
+                "==": [
+                  { "var": "actor.user_id" },
+                  { "var": "approver" }
+                ]
+              }
+            },
+            "actions": ["recordApproval"]
+          },
+          {
+            "event": "reject",
+            "from": "Submitted",
+            "to": "Rejected",
+            "actions": ["recordRejection"]
+          },
+          {
+            "event": "activate",
+            "from": "Approved",
+            "to": "Active",
+            "actions": ["activateEmployee"]
+          },
+          {
+            "event": "leave",
+            "from": "Active",
+            "to": "OnLeave",
+            "actions": ["recordLeaveStatus"]
+          },
+          {
+            "event": "return",
+            "from": "OnLeave",
+            "to": "Active",
+            "actions": ["restoreActiveStatus"]
+          },
+          {
+            "event": "terminate",
+            "from": "Active",
+            "to": "Terminated",
+            "actions": ["terminateEmployee"]
+          },
+          {
+            "event": "resubmit",
+            "from": "Rejected",
+            "to": "Submitted",
+            "guard": { "expr": { "exists": "correctionNotes" } },
+            "actions": ["validate"]
+          }
+        ]
+      }
+    },
+
+    {
+      "id": "Department",
+      "label": "Department",
+      "bindings": [
+        {
+          "type": "table",
+          "name": "departments",
+          "primaryKey": "department_id"
+        }
+      ],
+      "attributes": [
+        { "id": "departmentId", "type": "string", "required": true, "unique": true, "tags": ["identifier"] },
+        { "id": "name", "type": "string", "required": true },
+        { "id": "location", "type": "string" }
+      ],
+      "workflow": {
+        "states": [
+          { "id": "Draft" },
+          { "id": "Submitted" },
+          { "id": "Approved" },
+          { "id": "Active" },
+          { "id": "Archived" },
+          { "id": "Rejected" }
+        ],
+        "transitions": [
+          {
+            "event": "submit",
+            "from": "Draft",
+            "to": "Submitted",
+            "guard": {
+              "expr": {
+                "exists": "name"
+              }
+            },
+            "actions": ["validate"]
+          },
+          {
+            "event": "approve",
+            "from": "Submitted",
+            "to": "Approved",
+            "guard": {
+              "expr": {
+                "==": [
+                  { "var": "actor.user_id" },
+                  { "var": "approver" }
+                ]
+              }
+            },
+            "actions": ["recordApproval"]
+          },
+          {
+            "event": "reject",
+            "from": "Submitted",
+            "to": "Rejected",
+            "actions": ["recordRejection"]
+          },
+          {
+            "event": "activate",
+            "from": "Approved",
+            "to": "Active",
+            "actions": ["activateDepartment"]
+          },
+          {
+            "event": "archive",
+            "from": "Active",
+            "to": "Archived",
+            "actions": ["archiveDepartment"]
+          },
+          {
+            "event": "restore",
+            "from": "Archived",
+            "to": "Active",
+            "actions": ["restoreDepartment"]
+          },
+          {
+            "event": "resubmit",
+            "from": "Rejected",
+            "to": "Submitted",
+            "guard": { "expr": { "exists": "correctionNotes" } },
+            "actions": ["validate"]
+          }
+        ]
+      }
+    },
+
+    {
+      "id": "Position",
+      "label": "Position",
+      "bindings": [
+        {
+          "type": "table",
+          "name": "positions",
+          "primaryKey": "position_id"
+        }
+      ],
+      "attributes": [
+        { "id": "positionId", "type": "string", "required": true, "unique": true, "tags": ["identifier"] },
+        { "id": "title", "type": "string", "required": true },
+        { "id": "departmentId", "type": "string", "tags": ["foreignKey:Department"] },
+        { "id": "grade", "type": "string" }
+      ],
+      "workflow": {
+        "states": [
+          { "id": "Draft" },
+          { "id": "Submitted" },
+          { "id": "Approved" },
+          { "id": "Active" },
+          { "id": "Archived" },
+          { "id": "Rejected" }
+        ],
+        "transitions": [
+          {
+            "event": "submit",
+            "from": "Draft",
+            "to": "Submitted",
+            "guard": {
+              "expr": {
+                "exists": "title"
+              }
+            },
+            "actions": ["validate"]
+          },
+          {
+            "event": "approve",
+            "from": "Submitted",
+            "to": "Approved",
+            "guard": {
+              "expr": {
+                "==": [
+                  { "var": "actor.user_id" },
+                  { "var": "approver" }
+                ]
+              }
+            },
+            "actions": ["recordApproval"]
+          },
+          {
+            "event": "reject",
+            "from": "Submitted",
+            "to": "Rejected",
+            "actions": ["recordRejection"]
+          },
+          {
+            "event": "activate",
+            "from": "Approved",
+            "to": "Active",
+            "actions": ["activatePosition"]
+          },
+          {
+            "event": "archive",
+            "from": "Active",
+            "to": "Archived",
+            "actions": ["archivePosition"]
+          },
+          {
+            "event": "restore",
+            "from": "Archived",
+            "to": "Active",
+            "actions": ["restorePosition"]
+          },
+          {
+            "event": "resubmit",
+            "from": "Rejected",
+            "to": "Submitted",
+            "guard": { "expr": { "exists": "correctionNotes" } },
+            "actions": ["validate"]
+          }
+        ]
+      }
+    },
+
+    {
+      "id": "LeaveRequest",
+      "label": "Leave Request",
+      "bindings": [
+        {
+          "type": "table",
+          "name": "leave_requests",
+          "primaryKey": "leave_id"
+        }
+      ],
+      "attributes": [
+        { "id": "leaveId", "type": "string", "required": true, "unique": true, "tags": ["identifier"] },
+        { "id": "employeeId", "type": "string", "required": true, "tags": ["foreignKey:Employee"] },
+        { "id": "startDate", "type": "date", "required": true },
+        { "id": "endDate", "type": "date", "required": true },
+        { "id": "days", "type": "number", "derived": true, "formula": "dateDiff(endDate, startDate)" },
+        {
+          "id": "status",
+          "type": "string",
+          "enum": ["Draft", "Submitted", "Approved", "Rejected"],
+          "required": true,
+          "default": "Draft"
+        },
+        { "id": "requiresDirectorApproval", "type": "boolean", "derived": true, "default": false }
+      ],
+      "relationships": [
+        {
+          "id": "lr-references-employee",
+          "type": "references",
+          "from": "LeaveRequest",
+          "to": "Employee",
+          "cardinality": "many-to-one",
+          "keyMapping": { "fromAttr": "employeeId", "toAttr": "employeeId" }
+        }
+      ],
+      "rules": [
+        {
+          "id": "leave-director-threshold",
+          "scope": "LeaveRequest",
+          "when": "onCreate|onUpdate",
+          "expr": { ">=": [ { "var": "days" }, 10 ] },
+          "effects": [
+            { "set": { "requiresDirectorApproval": true } },
+            { "enqueueApproval": { "role": "HR_Director", "policyId": "HR-001" } }
+          ]
+        }
+      ],
+      "workflow": {
+        "states": [
+          { "id": "Draft" },
+          { "id": "Submitted" },
+          { "id": "Approved" },
+          { "id": "Rejected" }
+        ],
+        "transitions": [
+          {
+            "event": "submit",
+            "from": "Draft",
+            "to": "Submitted",
+            "actions": ["validate"]
+          },
+          {
+            "event": "approve",
+            "from": "Submitted",
+            "to": "Approved",
+            "guard": {
+              "expr": {
+                "and": [
+                  {
+                    "or": [
+                      { "not": { "var": "requiresDirectorApproval" } },
+                      {
+                        "==": [
+                          { "var": "actor.user_id" },
+                          { "var": "approver" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "actions": ["recordApproval"]
+          },
+          {
+            "event": "reject",
+            "from": "Submitted",
+            "to": "Rejected",
+            "actions": ["recordRejection"]
+          },
+          {
+            "event": "resubmit",
+            "from": "Rejected",
+            "to": "Submitted",
+            "guard": { "expr": { "exists": "correctionNotes" } },
+            "actions": ["validate"]
+          }
+        ]
+      }
+    }
+  ],
+  "security": {
+    "roles": [
+      {
+        "id": "HR_Manager",
+        "permissions": [
+          "Employee.read",
+          "LeaveRequest.read",
+          "LeaveRequest.approve.standard"
+        ]
+      },
+      {
+        "id": "HR_Director",
+        "permissions": [
+          "LeaveRequest.approve.long"
+        ]
+      }
+    ]
+  },
+  "versioning": {
+    "modelVersion": "1.0.0",
+    "effectiveFrom": "2026-01-01",
+    "changelog": []
+  }
+}

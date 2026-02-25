@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>semanticiq • Select Tenant</title>
+  <link rel="stylesheet" href="/static/core/studio.css" />
+
+  <style>
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 32px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .left-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .left-header p {
+      margin: 0;
+      color: #666;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 60vh;
+    }
+
+    .card {
+      width: 360px;
+      padding: 24px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fafafa;
+      text-align: center;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 12px;
+      margin-bottom: 20px;
+      background: #fff;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background: #333;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="left-header">
+      <h1>semanticiq • Select Tenant</h1>
+      <p>Please choose a tenant to continue.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>Select Tenant</h2>
+      <p class="text-muted">You are associated with multiple tenants.</p>
+
+      <form method="POST" action="/switch_tenant/">
+        {% csrf_token %}
+        <select name="tenant_id" required>
+          {% for t in request.user.tenantuser_set.all %}
+            <option value="{{ t.tenant.id }}">{{ t.tenant.name }}</option>
+          {% endfor %}
+        </select>
+
+        <button type="submit">Continue</button>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <div id="status">Welcome to semanticiq</div>
+  </footer>
+
+</body>
+</html>

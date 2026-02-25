@@ -1,0 +1,444 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>semanticIQ Runtime</title>
+  <link rel="stylesheet" href="{% static 'core/runtime.css' %}">
+  <style>
+
+/* ------------------------------
+   GLOBAL LAYOUT
+------------------------------ */
+
+body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: #f4f6f8;
+    color: #333;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 32px;
+    background: #000000;
+    border-bottom: 1px solid #ddd;
+}
+
+.left-header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.left-header p {
+    margin: 4px 0 0;
+    color: #666;
+}
+
+.right-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Tenant Switcher */
+.tenant-switcher select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+
+/* Profile Badge */
+.profile-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+}
+
+.profile-badge img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.role-badge {
+    background: #444;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+/* Logout */
+.logout-btn {
+    padding: 6px 14px;
+    background: #d9534f;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.logout-btn:hover {
+    background: #c9302c;
+}
+
+/* ------------------------------
+   MAIN PANELS
+------------------------------ */
+
+.container {
+    display: flex;
+    gap: 24px;
+    padding: 24px;
+}
+
+.panel {
+    flex: 1;
+    background: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.panel h2 {
+    margin-top: 0;
+}
+
+/* Form rows */
+.row {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+/* ------------------------------
+   CHAT BOX (COLLAPSIBLE)
+------------------------------ */
+
+.chat-box {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    width: 100%;
+    transition: max-height 0.3s ease, padding 0.3s ease, border 0.3s ease;
+}
+
+.chat-box.expanded {
+    max-height: 420px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.05);
+}
+
+/* Message bubbles */
+.msg {
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 15px;
+    line-height: 1.5;
+    display: inline-block;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.user-msg {
+    align-self: flex-end;
+    background: #0078ff;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.bot-msg {
+    align-self: flex-start;
+    background: #f1f3f5;
+    color: #333;
+    border-bottom-left-radius: 4px;
+}
+
+/* Chat input row */
+.chat-input-row {
+    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background: #fafafa;
+    font-size: 15px;
+}
+
+.chat-input:focus {
+    outline: none;
+    border-color: #0078ff;
+    background: #fff;
+}
+
+#chat-send {
+    padding: 12px 20px;
+    background: #0078ff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 200;
+}
+
+#chat-send:hover {
+    background: #005fcc;
+}
+
+#chat-send:active {
+    transform: scale(0.97);
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hidden-input {
+    display: none;
+}
+
+/* Force our chat layout to win over runtime.css */
+
+.container {
+    display: flex !important;
+    gap: 24px !important;
+    align-items: flex-start !important;
+}
+
+.panel {
+    flex: 1 !important;
+}
+
+.row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+}
+
+#chat-box {
+    max-height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    border: 0 !important;
+    width: 100% !important;
+    background: transparent !important;
+    transition: max-height 0.3s ease, padding 0.3s ease, border 0.3s ease;
+}
+
+#chat-box.expanded {
+    max-height: 420px !important;
+    padding: 20px !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+}
+
+.msg {
+    max-width: 75% !important;
+    padding: 10px 14px !important;
+    border-radius: 14px !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    display: inline-block !important;
+}
+
+.user-msg {
+    align-self: flex-end !important;
+    background: #0078ff !important;
+    color: #fff !important;
+}
+
+.bot-msg {
+    align-self: flex-start !important;
+    background: #f1f3f5 !important;
+    color: #333 !important;
+}
+
+.studio-button {
+    padding: 12px 20px;
+    background: #0078ff;      /* Same as #chat-send */
+    color: white;
+    border: none;
+    border-radius: 10px;      /* Same rounded look */
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 200;
+    font-family: Inter, sans-serif;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.studio-button:hover {
+    background: #005fcc;      /* Same hover color */
+}
+
+.studio-button:active {
+    transform: scale(0.97);
+}
+
+/* ------------------------------
+    FOOTER
+------------------------------ */
+  footer { position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    padding: 20px 0; 
+    background: #000; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    border-top: 1px solid #222; }
+
+  #status {
+    font-family: Inter, sans-serif;   /* Clean sans-serif font */
+    font-size: 14px;
+    color: #bbb;                      /* Soft grey for a refined look */
+  }
+  
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="left-header">
+    <h1>semanticIQ • Runtime Environment</h1>
+    <p>Orchestrate processes and workflows via chat and dynamic forms.</p>
+  </div>
+
+  <div class="right-header">
+
+    <!-- Tenant Switcher -->
+    <div class="tenant-switcher">
+      {% if available_tenants|length > 1 %}
+      <form method="POST" action="/switch_tenant">
+        {% csrf_token %}
+        <select name="tenant_id" onchange="this.form.submit()">
+          {% for t in available_tenants %}
+            <option value="{{ t.tenant_id }}" {% if t == tenant.tenant_id %}selected{% endif %}>
+              {{ t.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </form>
+      {% endif %}
+    </div>
+
+    <!-- Profile Badge -->
+    <div class="profile-badge">
+      <img src="{{ user_photo_url|default:'/static/core/default_user.png' }}" alt="Profile Photo">
+      <div>
+        <strong>{{ request.user.username }}</strong><br>
+        {% for r in roles %}
+          <span class="role-badge">{{ r }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <a class="logout-btn" href="/logout">Logout</a>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- CHAT PANEL -->
+  <div class="panel chat-panel">
+    <h2>Chat</h2>
+
+    <div class="row">
+      <label class="input-label">Model</label>
+      <select id="model-select">
+        {% for m in models %}
+        <option value="{{ m.model_id }}::{{ m.version }}">
+          {{ m.model_id }} (v{{ m.version }})
+        </option>
+        {% endfor %}
+      </select>
+
+      <input id="tenant-id" value="{{ tenant_id }}" class="hidden-input">
+
+      <label class="input-label">Tenant</label>
+      <input id="tenant-name" value="{{ tenant_name }}" readonly>
+
+      <label class="input-label">Actor</label>
+      <input id="actor-id" value="{{ actor_id }}" readonly>
+    </div>
+
+    <div class="row">
+      <label class="input-label">Roles</label>
+      <input id="actor-roles" value="{{ actor_roles }}" readonly>
+    </div>
+
+    <div id="chat-box" class="chat-box"></div>
+
+    <div class="chat-input-row">
+      <input id="chat-input" class="chat-input"
+             placeholder="Type a request, e.g., 'Create PO for Vendor ABC €12,000'">
+      <button id="chat-send">Send</button>
+    </div>
+  </div>
+
+  <!-- FORM PANEL -->
+  <div class="panel form-panel">
+    <h2>Auto Form</h2>
+
+    <div class="row">
+      <label class="input-label">Entity</label>
+      <select id="entity-select"></select>
+    </div>
+
+    <button id="load-form" type="button" class="studio-button">Load Form</button>
+
+    <form id="dyn-form"></form>
+
+    <button id="submit-form" type="button" class="studio-button">Start Workflow</button>
+    <div id="form-result" class="msg"></div>
+  </div>
+
+</div>
+
+<script src="{% static 'core/runtime.js' %}?v={{ timestamp }}"></script>
+<footer>    
+    <p>
+    <div id="status">© semanticIQ <script>document.write(/\d{4}/.exec(Date())[0])</script>. All Rights Reserved.</div>
+    </p>
+  </footer>
+</body>
+</html>

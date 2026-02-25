@@ -1,0 +1,546 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SemanticIQ</title>
+
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="{% static 'css/lineicons.css' %}" />
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon/favicon-16x16.png' %}">
+  <link rel="manifest" href="{% static 'images/favicon/site.webmanifest' %}">
+
+  <!-- Google reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+  <!-- Custom CSS -->
+  <style>
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+      background: #f4f6f8;
+      color: #333;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background: #000;
+      border-bottom: 1px solid #222;
+      padding: 16px 0;
+    }
+
+    .navbar-brand img {
+      height: 40px;
+      width: auto;
+    }
+
+    .navbar-nav .nav-link {
+      color: #fff !important;
+      font-weight: 500;
+      margin: 0 10px;
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: #0078ff !important;
+    }
+
+    /* BUTTONS */
+    .btn-primary {
+      background: #0078ff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: #005fcc;
+    }
+
+    .btn-outline-primary {
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-weight: 600;
+      border: 2px solid #0078ff;
+      color: #0078ff;
+    }
+
+    .btn-outline-primary:hover {
+      background: #0078ff;
+      color: #fff;
+    }
+
+    /* HERO */
+    .hero-section {
+      padding: 140px 0;
+      text-align: center;
+      background: linear-gradient(180deg, #000 0%, #111 100%);
+      color: #fff;
+    }
+
+    .hero-section h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+    }
+
+    .hero-section p {
+      font-size: 1.2rem;
+      margin-top: 15px;
+      color: #ddd;
+    }
+
+    /* SECTIONS */
+    .section-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 32px;
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    /* FEATURES */
+    .feature-icon {
+      font-size: 40px;
+      color: #0078ff;
+      margin-bottom: 15px;
+    }
+
+    /* FAQ */
+    .accordion-button {
+      font-weight: 600;
+      background: #fff;
+      color: #333;
+    }
+
+    .accordion-button:not(.collapsed) {
+      background: #e9f2ff;
+      color: #005fcc;
+    }
+
+    .accordion-item {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    /* CONTACT */
+    .contact-section h2 {
+      font-weight: 700;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 30px 0;
+      border-top: 1px solid #222;
+      text-align: center;
+      margin-top: 60px;
+    }
+
+    footer img {
+      height: 60px;
+      width: auto;
+      margin-bottom: 10px;
+    }
+
+    .messages li {
+      padding: 1em;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      box-shadow: rgba(0,0,0,0.1) 0 2px 6px;
+    }
+
+    .messages li.success { background: #d4edda; }
+    .messages li.error { background: #f8d7da; }
+    .messages li.warning { background: #fff3cd; }
+    .messages li.info { background: #d1ecf1; }
+  </style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+
+    <a class="navbar-brand" href="/">
+      <img src="{% static 'images/logo/semanticiq-high-resolution-logo-transparent.png' %}" alt="SemanticIQ Logo">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNavbar">
+
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#features">Use Cases</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+        <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+      </ul>
+
+      <div class="d-flex align-items-center">
+
+        {% if user.is_authenticated %}
+        <a href="/logout" class="btn btn-primary me-3">Sign out</a>
+
+        <div class="dropdown">
+          <a class="d-flex align-items-center text-decoration-none dropdown-toggle text-white"
+             href="#" data-bs-toggle="dropdown">
+            <img src="{{ user.userprofile.get_profile_image_url }}" class="rounded-circle me-2" width="32" height="32">
+            <strong>{{ user.first_name }}</strong>
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-end shadow">
+            <li><a class="dropdown-item" href="/main_menu">Home</a></li>
+            <li><a class="dropdown-item" href="/view_profile">User Profile</a></li>
+            <li><a class="dropdown-item" href="/account_settings">Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+          </ul>
+        </div>
+
+        {% else %}
+        <a href="/login" class="btn btn-primary me-2">Log In</a>
+        <a href="/signup" class="btn btn-outline-primary">Request Demo | Get Started</a>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="hero-section" id="home">
+  <div class="container">
+    <h1>Where legacy systems end, and intelligent operations begin.</h1>
+    <p>Start modernization toward an intelligent, AI‑driven enterprise operating system today.</p>
+
+    {% if user.is_authenticated %}
+    <a href="/main_menu" class="btn btn-primary mt-3">Continue Using SemanticIQ</a>
+    {% else %}
+    <a href="/signup" class="btn btn-primary mt-3">Request Demo | Get Started</a>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ================= USE CASES ================= -->
+<section class="py-5" id="features">
+  <div class="container">
+
+    <div class="section-card">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h2 class="section-title">What SemanticIQ Can Do For You</h2>
+          <p><strong>SemanticIQ empowers enterprises to build and operate modern, cheaper, flexibe and intelligent systems that far outperform traditional software.</strong></p>
+          <p>Legacy platforms rely on rigid schemas that can’t evolve as operations change. They are fragmented, creating data silos and sprawl — two major barriers to effective AI adoption.</p>
+        </div>
+
+        <div class="col-lg-6 text-center">
+          <video width="100%" controls>
+            <source src="{% static 'videos/sematic_IQ_intro.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </div>
+
+    <div class="row text-center">
+      <div class="col-md-3">
+        <div class="section-card">
+          <i class="lni lni-infinite feature-icon"></i>
+          <h5>Adaptive by Design</h5>
+          <p>SemanticIQ evolves as your processes change.</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="section-card">
+          <i class="lni lni-network feature-icon"></i>
+          <h5>AI‑Ready Architecture</h5>
+          <p>Eliminate silos. Build a connected knowledge layer.</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="section-card">
+          <i class="lni lni-layers feature-icon"></i>
+          <h5>Unified Operating Core</h5>
+          <p>Replace fragmented tools with a single system.</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="section-card">
+          <i class="lni lni-timer feature-icon"></i>
+          <h5>Future‑Proof & Affordable</h5>
+          <p>Update your system without costly rebuilds.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="py-5" id="about">
+  <div class="container">
+    <div class="section-card">
+      <div class="row align-items-center">
+
+        <div class="col-lg-6">
+          <h2 class="section-title">Build an Operating System That Evolves With Your Business</h2>
+
+          <p><strong>SemanticIQ replaces rigid, fragmented software with a unified, ontology‑driven operating system that adapts as your business evolves.</strong></p>
+
+          <h5>1. Model Your Business as a Living Ontology</h5>
+          <p>SemanticIQ captures your processes as a dynamic semantic model — a knowledge graph that understands relationships and context.</p>
+
+          <h5>2. Create Semantic Workspaces</h5>
+          <p>Workspaces become adaptive, role‑specific entry points into your enterprise ontology.</p>
+
+          <h5>3. Power AI, Automation, and Agents</h5>
+          <p>AI can reason over your semantic model, enabling safe, intelligent automation.</p>
+
+          <h5>4. Evolve Without Rebuilding</h5>
+          <p>Modify operating system by updating the semantic model — no heavy engineering required.</p>
+
+          {% if user.is_authenticated %}
+          <a href="/main_menu" class="btn btn-primary mt-3">Continue Using SemanticIQ</a>
+          {% else %}
+          <a href="/signup" class="btn btn-primary mt-3">Request Demo | Get Started</a>
+          {% endif %}
+        </div>
+
+        <div class="col-lg-6 text-center">
+          <img src="{% static 'images/about/about-image.svg' %}" alt="About SemanticIQ" class="img-fluid">
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section class="py-5" id="pricing">
+  <div class="container">
+    <div class="section-card text-center">
+      <h2 class="section-title">Our Pricing Plans</h2>
+      <p>SemanticIQ pricing is tailored to each business. Contact us to discuss a plan that suits your needs.</p>
+      <a href="#contact" class="btn btn-outline-primary mt-3">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="py-5" id="faq">
+  <div class="container">
+    <h2 class="section-title text-center mb-4">Common Questions</h2>
+
+    <div class="row">
+      <div class="col-lg-6">
+
+        <!-- FAQ 1 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading1">
+            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq1">
+              What industries does SemanticIQ serve?
+            </button>
+          </h2>
+          <div id="faq1" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              SemanticIQ is industry‑agnostic and supports any workflow‑driven business.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading2">
+            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq2">
+              Who uses SemanticIQ?
+            </button>
+          </h2>
+          <div id="faq2" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              SemanticIQ can support entire enterprises or individual departments.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading3">
+            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq3">
+              How secure is SemanticIQ?
+            </button>
+          </h2>
+          <div id="faq3" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              SemanticIQ uses modern security practices and integrates with secure enterprise systems.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-lg-6">
+
+        <!-- FAQ 4 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading4">
+            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq4">
+              What size of business suits SemanticIQ?
+            </button>
+          </h2>
+          <div id="faq4" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              SemanticIQ scales from small businesses to large enterprises.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading5">
+            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq5">
+              Why should I consider SemanticIQ?
+            </button>
+          </h2>
+          <div id="faq5" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              SemanticIQ modernizes operations, reduces costs, and supports AI‑driven innovation.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 6 -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading6">
+            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq6">
+              How do I get help or leave feedback?
+            </button>
+          </h2>
+          <div id="faq6" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              You can email us anytime using the contact details below.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="py-5" id="contact">
+  <div class="container">
+    <div class="section-card">
+
+      <div class="row align-items-center">
+        <div class="col-lg-7">
+          <h2 class="section-title">Contact Us</h2>
+          <p class="mb-4">We would love to hear from you.</p>
+
+          <div class="mb-3">
+            <h5><i class="lni lni-map-marker"></i> Our Location</h5>
+            <p>Iveagh Court, Harcourt Rd, Saint Kevin's, Dublin, D02 YT22</p>
+          </div>
+
+          <div class="mb-3">
+            <h5><i class="lni lni-envelope"></i> Email Us</h5>
+            <p>malvern@semanticiq.co</p>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <h4>Send us a Message</h4>
+
+         {% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <li class="{{ message.tags }}">{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <div class="mb-3">
+    <label class="form-label">Full Name*</label>
+    <input type="text" name="fullname" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Email*</label>
+    <input type="email" name="email" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Phone</label>
+    <input type="text" name="phone" class="form-control">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Message*</label>
+    <textarea name="message" class="form-control" rows="3" required></textarea>
+  </div>
+
+  <div class="g-recaptcha mb-3" data-sitekey="6Lcck3IsAAAAAJIWr4Qu9lCNtmLOQjGbtv3OvzRy"></div>
+
+  <button type="submit" class="btn btn-primary">Send Message</button>
+</form>
+
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="container text-center">
+
+    <img src="{% static 'images/logo/semanticiq-high-resolution-logo-transparent.png' %}" alt="SemanticIQ Logo">
+
+    <p class="mt-2">Rethinking enterprise software in the AI era</p>
+
+    <p class="mt-3 mb-0">
+      © SemanticIQ <script>document.write(new Date().getFullYear())</script>. All Rights Reserved.
+    </p>
+
+  </div>
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+</html>

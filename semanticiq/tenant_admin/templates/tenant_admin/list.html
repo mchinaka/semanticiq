@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>semanticIQ • Platform Menu</title>
+  <link rel="stylesheet" href="/static/core/studio.css" />
+
+  <style>
+    body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: #f4f6f8;
+    color: #333;
+    }
+
+    header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 32px;
+    background: #000000;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 12px;
+    }
+
+    .left-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .left-header p {
+      margin: 0;
+      color: #666;
+    }
+
+    .right-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Tenant Switcher */
+    .tenant-switcher select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    /* Profile Badge */
+    .profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+    }
+
+    .profile-badge img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .role-badge {
+      background: #444;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-left: 4px;
+    }
+
+    /* Logout Button */
+    .logout-btn {
+      padding: 6px 14px;
+      background: #d9534f;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .logout-btn:hover {
+      background: #c9302c;
+    }
+
+    /* Center the cards */
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 60vh;
+    }
+
+    .menu-container {
+      display: flex;
+      flex-direction: row;
+      gap: 32px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .menu-card {
+      width: 260px;
+      padding: 24px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fafafa;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .menu-card:hover {
+      background: #f0f0f0;
+      transform: translateY(-3px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    }
+
+    .menu-card svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 12px;
+      fill: #444;
+    }
+
+    .menu-card h2 {
+      margin: 8px 0;
+      font-size: 20px;
+    }
+
+    .menu-card p {
+      font-size: 14px;
+      color: #666;
+    }
+
+  footer { position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    padding: 20px 0; 
+    background: #000; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    border-top: 1px solid #222; }
+
+  #status {
+    font-family: Inter, sans-serif;   /* Clean sans-serif font */
+    font-size: 14px;
+    color: #bbb;                      /* Soft grey for a refined look */
+    letter-spacing: 0.3px;
+  }
+
+  /* Page container */
+.tenant-users-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 20px 80px;
+}
+
+/* Header row */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* Add User button */
+.add-user-btn {
+  background: #0078d4;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.add-user-btn:hover {
+  background: #005fa3;
+}
+
+/* Table styling */
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.users-table th {
+  background: #f0f0f0;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+}
+
+.users-table td {
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.users-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Status badges */
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+.status-badge.active {
+  background: #28a745;
+}
+
+.status-badge.inactive {
+  background: #d9534f;
+}
+
+/* Action buttons */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.edit-btn {
+  background: #0078d4;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #005fa3;
+}
+
+.delete-btn {
+  background: #d9534f;
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #c9302c;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-box {
+  background: white;
+  padding: 24px;
+  border-radius: 10px;
+  width: 360px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cancel-btn {
+  padding: 8px 16px;
+  background: #ccc;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.confirm-delete-btn {
+  padding: 8px 16px;
+  background: #d9534f;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.confirm-delete-btn:hover {
+  background: #c9302c;
+}
+
+/* Modal form container */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+/* Form group wrapper */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Labels */
+.form-group label {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Text + email inputs */
+.form-group input[type="text"],
+.form-group input[type="email"] {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Focus state */
+.form-group input:focus {
+  border-color: #0078d4;
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+  outline: none;
+}
+
+/* Checkbox rows */
+.checkbox-row,
+.modal-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+/* Modal title */
+.modal-box h3 {
+  margin-bottom: 12px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Modal actions (buttons) */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Cancel button */
+.cancel-btn {
+  background: #e0e0e0;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background: #d5d5d5;
+}
+
+/* Create button */
+.confirm-delete-btn {
+  background: #0078d4;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.confirm-delete-btn:hover {
+  background: #006bbf;
+}
+
+/* Modal container with fixed header + footer */
+.create-modal {
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+  width: 450px;
+}
+
+/* Header */
+.modal-header {
+  padding: 16px;
+  border-bottom: 1px solid #e5e5e5;
+  background: #fafafa;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Scrollable body */
+.modal-body {
+  padding: 16px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Footer */
+.modal-actions {
+  padding: 12px 16px;
+  border-top: 1px solid #e5e5e5;
+  background: #fafafa;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Form layout */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Inputs */
+.form-group input[type="text"],
+.form-group input[type="email"] {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+  border-color: #0078d4;
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+  outline: none;
+}
+
+/* Checkbox rows */
+.modal-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Buttons */
+.cancel-btn {
+  background: #e0e0e0;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cancel-btn:hover {
+  background: #d5d5d5;
+}
+
+.confirm-delete-btn {
+  background: #0078d4;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.confirm-delete-btn:hover {
+  background: #006bbf;
+}
+
+#action-bar {
+ justify-content: flex-start;
+ align-items: center;
+ padding: 8px 0; }
+
+
+.empty-state {
+    grid-column: 1 / -1;          /* span full width of the grid */
+    padding: 32px;
+    text-align: center;
+    background: #fafafa;
+    border: 1px dashed #ccc;
+    border-radius: 12px;
+    color: #555;
+}
+.empty-state h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.hidden {
+    display: none !important;
+  }
+
+.tabs { display: flex; gap: 8px; margin-bottom: 8px; }
+.tab.active { font-weight: bold; }
+.work-table { width: 100%; border-collapse: collapse; }
+.work-table th, .work-table td { border: 1px solid #ddd; padding: 4px 8px; }
+.tab-view { margin-top: 8px; }
+
+.studio-button {
+    padding: 12px 20px;
+    background: #0078ff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 200;
+    font-family: Inter, sans-serif;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.studio-button:hover {
+    background: #005fcc;
+}
+
+.studio-button:active {
+    transform: scale(0.97);
+}
+
+.alert {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+  }
+  .alert.error {
+    background: #ffdddd;
+    color: #a00;
+  }
+  .alert.success {
+    background: #ddffdd;
+    color: #0a0;
+  }
+
+</style>
+</head>
+
+<body>
+
+  <!-- HEADER WITH TENANT SWITCHER + PROFILE + LOGOUT -->
+  <header>
+    <div class="left-header">
+      <h1>semanticIQ • Tenant Admin</h1>
+      <p>Add, Edit, Delete Tenant Users.</p>
+    </div>
+
+    <div class="right-header">
+
+      <!-- Tenant Switcher -->      
+      <div class="tenant-switcher">
+        {% if available_tenants|length > 1 %}
+        <label style="font-size: 13px; font-weight: 600; color: #f5f5f5; display: block; margin-bottom: 4px;">
+        Tenant
+        </label>
+        <form method="POST" action="/switch_tenant">
+          {% csrf_token %}
+          <select name="tenant_id" onchange="this.form.submit()">
+            {% for t in available_tenants %}
+              <option value="{{ t.tenant_id }}" {% if t.tenant_id == tenant.tenant_id %}selected{% endif %}>
+                {{ t.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </form>
+        {% endif %}
+      </div>
+
+      <!-- Profile Badge -->
+      <div class="profile-badge">
+        {% if user_photo_url %}
+          <img src="{{ user_photo_url }}" alt="Profile Photo">
+        {% else %}
+          <img src="/static/core/default_user.png" alt="Profile Photo">
+        {% endif %}
+
+        <div>
+          <strong>{{ request.user.username }}</strong><br>
+          {% for r in assigned_roles %}
+            <span class="role-badge">{{ r }}</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Logout -->
+      <a class="logout-btn" href="/logout">Logout</a>
+    </div>
+  </header>
+
+  <!-- Action Bar -->
+  <div id="action-bar" width:100%; margin-bottom: 12px;">
+    <a href="{% url 'main_menu' %}" class="studio-button" style="margin-left:28px;">
+    ← Back to Main Menu
+   </a>
+
+
+  </div>
+  {% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+      <div class="alert {{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+
+  <!-- MAIN MENU -->
+  <main class="tenant-users-page">
+
+  <div class="page-header">
+    <h1>Tenant Users</h1>
+    <button
+      type="button"
+      class="add-user-btn"
+      data-url="{% url 'tenant_user_create' %}"
+      onclick="openCreateUserModal(this.dataset.url)"
+    >
+    Add User
+    </button>
+
+  </div>
+
+  <table class="users-table">
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Email</th>
+        <th>Roles</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for u in users %}
+      <tr>
+        <td>{{ u.user.username }}</td>
+        <td>{{ u.user.email }}</td>
+        <td>{{ u.role_list }}</td>
+        <td>
+          <span class="status-badge {{ u.is_active|yesno:'active,inactive' }}">
+            {{ u.is_active|yesno:"Active,Inactive" }}
+          </span>
+        </td>
+        <td class="actions">
+        
+        <button
+          type="button"
+          class="edit-btn"
+          data-url="{% url 'tenant_user_edit' u.id %}"
+          data-active="{{ u.is_active|yesno:'true,false' }}"
+          data-roles='{{ u.assigned_roles_json|safe }}'
+          data-first="{{ u.user.first_name|escapejs }}"
+          data-last="{{ u.user.last_name|escapejs }}"
+          onclick="openEditModalFromButton(this)"
+         >
+        Edit
+        </button>
+
+        <a href="#"
+          class="delete-btn"
+          data-id="{{ u.id }}"
+          data-username="{{ u.user.username|escapejs }}"
+          data-url="{% url 'tenant_user_delete' u.id %}"
+          onclick="openDeleteModalFromButton(this); return false;">
+          Delete
+        </a>
+                  
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div id="createUserModal" class="modal-overlay" style="display:none;">
+  <div class="modal-box create-modal">
+
+    <!-- Fixed Header -->
+    <div class="modal-header">
+      <h3>Add Tenant User</h3>
+    </div>
+
+    <!-- Scrollable Body -->
+    <div class="modal-body">
+      <form id="createUserForm" method="POST" class="form-container">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" name="username" required>
+        </div>
+
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" name="first_name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" name="last_name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <h4>Roles</h4>
+          {% for value, label in roles %}
+            <label class="modal-field">
+              <input type="checkbox" name="roles" value="{{ value }}">
+              {{ label }}
+            </label>
+          {% endfor %}
+        </div>
+      </form>
+    </div>
+
+    <!-- Fixed Footer -->
+    <div class="modal-actions">
+      <button type="button" class="cancel-btn" onclick="closeCreateUserModal()">Cancel</button>
+      <button type="submit" form="createUserForm" class="confirm-delete-btn">Create</button>
+    </div>
+
+  </div>
+</div>
+
+  <div id="deleteModal" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
+    <h3>Confirm Delete</h3>
+    <p id="deleteModalText"></p>
+
+    <div class="modal-actions">
+      <button type="button" class="cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+      <a id="confirmDeleteBtn" class="confirm-delete-btn" href="#">Delete</a>
+    </div>
+  </div>
+</div>
+
+<div id="editModal" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
+
+    <h3>Edit Tenant User</h3>
+
+    <form id="editUserForm" method="POST">
+      {% csrf_token %}
+
+      <!-- First Name -->
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" name="first_name" id="editFirstName" required>
+      </div>
+
+      <!-- Last Name -->
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" name="last_name" id="editLastName" required>
+      </div>
+
+      <!-- Active Checkbox -->
+      <label class="modal-field">
+        <input type="checkbox" name="is_active" id="editIsActive">
+        Active
+      </label>
+
+      <!-- Roles -->
+      <h4>Roles</h4>
+      {% for value, label in roles %}
+        <label class="modal-field">
+          <input type="checkbox" name="roles" value="{{ value }}" class="edit-role-checkbox">
+          {{ label }}
+        </label>
+      {% endfor %}
+
+      <div class="modal-actions">
+        <button type="button" class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+        <button type="submit" class="confirm-delete-btn">Save</button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<script>
+function openCreateUserModal(createUrl) {
+  document.getElementById("createUserForm").action = createUrl;
+
+  // Clear all fields
+  document.querySelectorAll("#createUserForm input[type='text'], #createUserForm input[type='email']")
+    .forEach(input => input.value = "");
+
+  // Clear role checkboxes
+  document.querySelectorAll("#createUserForm input[type='checkbox']")
+    .forEach(cb => cb.checked = false);
+
+  document.getElementById("createUserModal").style.display = "flex";
+}
+
+function closeCreateUserModal() {
+  document.getElementById("createUserModal").style.display = "none";
+}
+
+function openDeleteModal(userId, username, deleteUrl) {
+  document.getElementById("deleteModalText").innerText =
+    `Are you sure you want to delete user "${username}"?`;
+
+  document.getElementById("confirmDeleteBtn").href = deleteUrl;
+
+  document.getElementById("deleteModal").style.display = "flex";
+}
+
+function openDeleteModalFromButton(btn) {
+    openDeleteModal(
+        btn.dataset.id,
+        btn.dataset.username,
+        btn.dataset.url
+    );
+}
+
+function closeDeleteModal() {
+  document.getElementById("deleteModal").style.display = "none";
+}
+
+function openEditModal(editUrl, isActive, assignedRoles, firstName, lastName) {
+  document.getElementById("editUserForm").action = editUrl;
+
+  // Populate name fields
+  document.getElementById("editFirstName").value = firstName;
+  document.getElementById("editLastName").value = lastName;
+
+  // Active checkbox
+  document.getElementById("editIsActive").checked = isActive;
+
+  // Clear role checkboxes
+  document.querySelectorAll(".edit-role-checkbox").forEach(cb => cb.checked = false);
+
+  // Re-check assigned roles
+  assignedRoles.forEach(role => {
+    const cb = document.querySelector(`.edit-role-checkbox[value="${role}"]`);
+    if (cb) cb.checked = true;
+  });
+
+  document.getElementById("editModal").style.display = "flex";
+}
+
+function openEditModalFromButton(btn) {
+  console.log("DATA:", btn.dataset);
+  console.log("ROLES RAW:", btn.dataset.roles);
+  openEditModal(
+    btn.dataset.url,
+    btn.dataset.active === "true",
+    JSON.parse(btn.dataset.roles),
+    btn.dataset.first,
+    btn.dataset.last
+  );
+}
+
+function closeEditModal() {
+  document.getElementById("editModal").style.display = "none";
+}
+</script>
+
+</main>
+
+  <footer>
+    <div id="status">© semanticIQ <script>document.write(/\d{4}/.exec(Date())[0])</script>. All Rights Reserved.</div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>semanticIQ • Platform Menu</title>
+  <link rel="stylesheet" href="/static/core/studio.css" />
+
+  <style>
+    body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: #f4f6f8;
+    color: #333;
+    }
+
+    header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 32px;
+    background: #000000;
+    border-bottom: 1px solid #ddd;
+    }
+
+    .left-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .left-header p {
+      margin: 0;
+      color: #666;
+    }
+
+    .right-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Tenant Switcher */
+    .tenant-switcher select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    /* Profile Badge */
+    .profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+    }
+
+    .profile-badge img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .role-badge {
+      background: #444;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-left: 4px;
+    }
+
+    /* Logout Button */
+    .logout-btn {
+      padding: 6px 14px;
+      background: #d9534f;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .logout-btn:hover {
+      background: #c9302c;
+    }
+
+    /* Center the cards */
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 60vh;
+    }
+
+    .menu-container {
+      display: flex;
+      flex-direction: row;
+      gap: 32px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .menu-card {
+      width: 260px;
+      padding: 24px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fafafa;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .menu-card:hover {
+      background: #f0f0f0;
+      transform: translateY(-3px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    }
+
+    .menu-card svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 12px;
+      fill: #444;
+    }
+
+    .menu-card h2 {
+      margin: 8px 0;
+      font-size: 20px;
+    }
+
+    .menu-card p {
+      font-size: 14px;
+      color: #666;
+    }
+
+  footer { position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    padding: 20px 0; 
+    background: #000; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    border-top: 1px solid #222; }
+
+  #status {
+    font-family: Inter, sans-serif;   /* Clean sans-serif font */
+    font-size: 14px;
+    color: #bbb;                      /* Soft grey for a refined look */
+    letter-spacing: 0.3px;
+  }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER WITH TENANT SWITCHER + PROFILE + LOGOUT -->
+  <header>
+    <div class="left-header">
+      <h1>semanticIQ • Platform Menu</h1>
+      <p>Select a module to begin.</p>
+    </div>
+
+    <div class="right-header">
+
+      <!-- Tenant Switcher -->      
+      <div class="tenant-switcher">
+        {% if available_tenants|length > 1 %}
+        <label style="font-size: 13px; font-weight: 600; color: #f5f5f5; display: block; margin-bottom: 4px;">
+        Tenant
+        </label>
+        <form method="POST" action="/switch_tenant">
+          {% csrf_token %}
+          <select name="tenant_id" onchange="this.form.submit()">
+            {% for t in available_tenants %}
+              <option value="{{ t.tenant_id }}" {% if t == tenant.tenant_id %}selected{% endif %}>
+                {{ t.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </form>
+        {% endif %}
+      </div>
+
+      <!-- Profile Badge -->
+      <div class="profile-badge">
+        {% if user_photo_url %}
+          <img src="{{ user_photo_url }}" alt="Profile Photo">
+        {% else %}
+          <img src="/static/core/default_user.png" alt="Profile Photo">
+        {% endif %}
+
+        <div>
+          <strong>{{ request.user.username }}</strong><br>
+          {% for r in roles %}
+            <span class="role-badge">{{ r }}</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Logout -->
+      <a class="logout-btn" href="/logout">Logout</a>
+    </div>
+  </header>
+
+  <!-- MAIN MENU -->
+  <main>
+    <div class="menu-container">
+
+      {% if is_developer %}
+      <!-- Studio Card -->
+      <div class="menu-card" onclick="location.href='/studio'">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 
+                   7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 
+                   0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+        </svg>
+        <h2>Studio</h2>
+        <p>Design, edit, and publish process and ontology models.</p>
+      </div>
+      {% endif %}
+
+      {% if is_runtime or is_developer or is_admin %}
+      <!-- Runtime Card -->
+      <div class="menu-card" onclick="location.href='/runtime'">
+        <svg viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+        <h2>Runtime</h2>
+        <p>Execute workflows, manage instances, and monitor activity.</p>
+      </div>
+      {% endif %}
+
+      {% if is_admin %}
+      <!-- Admin Card -->
+      <div class="menu-card" onclick="location.href='/tenant-admin'">
+        <svg viewBox="0 0 24 24">
+          <path d="M19.14,12.94a7.14,7.14,0,0,0,.05-.94,7.14,7.14,0,0,0-.05-.94l2.11-1.65a.5.5,0,0,0,.12-.63l-2-3.46a.5.5,0,0,0-.6-.22l-2.49,1a7.28,7.28,0,0,0-1.63-.94l-.38-2.65A.5.5,0,0,0,13.72,2H10.28a.5.5,0,0,0-.49.42L9.41,5.07a7.28,7.28,0,0,0-1.63.94l-2.49-1a.5.5,0,0,0-.6.22l-2,3.46a.5.5,0,0,0,.12.63L4.86,11.06a7.14,7.14,0,0,0-.05.94,7.14,7.14,0,0,0,.05.94L2.75,14.59a.5.5,0,0,0-.12.63l2,3.46a.5.5,0,0,0,.6.22l2.49-1a7.28,7.28,0,0,0,1.63.94l.38,2.65a.5.5,0,0,0,.49.42h3.44a.5.5,0,0,0,.49-.42l.38-2.65a7.28,7.28,0,0,0,1.63-.94l2.49,1a.5.5,0,0,0,.6-.22l2-3.46a.5.5,0,0,0-.12-.63ZM12,15.5A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"/>
+        </svg>
+        <h2>Admin</h2>
+        <p>Manage users, roles, permissions, and system settings.</p>
+      </div>
+      {% endif %}
+
+    </div>
+  </main>
+
+  <footer>
+    <div id="status">© semanticIQ <script>document.write(/\d{4}/.exec(Date())[0])</script>. All Rights Reserved.</div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+
+body{font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; margin:0;}
+header{background:#101820;color:#fff;padding:16px 20px}
+header h1{margin:0;font-size:20px}
+header p{margin:4px 0 0;font-size:13px;opacity:.85}
+.controls{display:flex;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #eee}
+.controls label{display:flex;gap:6px;align-items:center}
+.controls input{padding:6px 8px}
+.controls button{padding:6px 10px}
+main{display:grid;grid-template-columns:320px 1fr;gap:16px;padding:16px}
+aside{border-right:1px solid #eee;padding-right:16px}
+.editor textarea{width:100%;min-height:260px;font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;font-size:12px}
+#attributes .row{display:grid;grid-template-columns:140px 110px 110px 1fr;gap:8px;align-items:center;margin-bottom:8px}
+#attributes input, #attributes select{padding:6px 8px}
+footer{border-top:1px solid #eee;padding:8px 16px;font-size:12px;color:#555}
+.entity-actions{display:flex;gap:8px;margin:8px 0}
+
+.tabs, .view-tabs{display:flex;gap:8px;margin-bottom:8px}
+.tab, .view-tab{padding:6px 10px;border:1px solid #ddd;background:#f8f8f8;cursor:pointer}
+.tab.active, .view-tab.active{background:#e6f2ff;border-color:#9ec5fe}
+.pane{margin-top:8px}
+.view-pane{margin-top:8px}
+
+#modelTable table{border-collapse:collapse;width:100%;background:#fff}
+#modelTable th, #modelTable td{border:1px solid #eee;padding:8px;text-align:left;font-size:13px}
+#modelTable th{background:#f9fbff}
+

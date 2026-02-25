@@ -1,0 +1,444 @@
+{
+  "$schemaVersion": "1.0",
+  "modelId": "procurement-v1",
+  "provenance": {
+    "author": "model-assistant",
+    "timestamp": "2025-12-20T13:58:06Z"
+  },
+  "glossary": [
+    {
+      "id": "Invoice",
+      "label": "Invoice",
+      "synonyms": ["Bill"],
+      "description": "A supplier's request for payment."
+    },
+    {
+      "id": "Supplier",
+      "label": "Supplier",
+      "synonyms": ["Vendor"],
+      "description": "Organization providing goods/services."
+    },
+    {
+      "id": "PurchaseOrder",
+      "label": "Purchase Order",
+      "synonyms": ["PO"],
+      "description": "Authorization to purchase goods/services."
+    },
+    {
+      "id": "ApprovalRequest",
+      "label": "Approval Request",
+      "synonyms": ["Approval"],
+      "description": "A request for an approver to review and approve."
+    }
+  ],
+  "entities": [
+    {
+      "id": "Invoice",
+      "label": "Invoice",
+      "description": "Supplier invoice.",
+      "bindings": [
+        {
+          "type": "table",
+          "name": "invoices",
+          "primaryKey": "invoice_id"
+        }
+      ],
+      "attributes": [
+        { "id": "invoiceNumber", "label": "Invoice Number", "type": "string", "required": true, "unique": true, "tags": ["identifier"] },
+        { "id": "amount", "label": "Amount", "type": "number", "required": true, "constraints": [{ "op": ">=", "value": 0 }], "tags": ["currency"] },
+        { "id": "currency", "label": "Currency", "type": "string", "enum": ["EUR", "USD", "GBP"], "required": true },
+        {
+          "id": "status",
+          "label": "Status",
+          "type": "string",
+          "enum": ["Draft", "Submitted", "Approved", "Rejected", "Paid"],
+          "required": true,
+          "default": "Draft"
+        },
+        { "id": "supplierId", "label": "Supplier ID", "type": "string", "required": true, "tags": ["foreignKey:Supplier"] },
+        { "id": "invoiceDate", "label": "Invoice Date", "type": "date", "required": true },
+        { "id": "dueDate", "label": "Due Date", "type": "date", "required": true },
+        { "id": "requiresDirectorApproval", "label": "Requires Director Approval", "type": "boolean", "required": true, "default": false },
+        { "id": "approver", "label": "Approver", "type": "string", "required": true, "enum": [] }
+      ],
+      "relationships": [
+        {
+          "id": "invoice-references-supplier",
+          "type": "references",
+          "from": "Invoice",
+          "to": "Supplier",
+          "cardinality": "many-to-one",
+          "keyMapping": { "fromAttr": "supplierId", "toAttr": "supplierId" }
+        },
+        {
+          "id": "invoice-generates-approval",
+          "type": "aggregates",
+          "from": "Invoice",
+          "to": "ApprovalRequest",
+          "cardinality": "one-to-many"
+        }
+      ],
+      "rules": [
+        {
+          "id": "director-approval-threshold",
+          "scope": "Invoice",
+          "when": "onCreate|onUpdate",
+          "expr": {
+            "and": [
+              { ">=": [ { "var": "amount" }, 10000 ] },
+              { "==": [ { "var": "currency" }, "EUR" ] }
+            ]
+          },
+          "effects": [
+            { "set": { "requiresDirectorApproval": true } },
+            { "enqueueApproval": { "role": "Director", "policyId": "AP-001" } }
+          ]
+        }
+      ],
+      "workflow": {
+        "states": [
+          { "id": "Draft" },
+          { "id": "Submitted" },
+          { "id": "Approved" },
+          { "id": "Rejected" },
+          { "id": "Paid" }
+        ],
+        "transitions": [
+          {
+            "event": "submit",
+            "from": "Draft",
+            "to": "Submitted",
+            "guard": {
+              "expr": {
+                "and": [
+                  { "exists": "invoiceNumber" },
+                  { ">": [ { "var": "amount" }, 0 ] }
+                ]
+              }
+            },
+            "actions": ["validate"]
+          },
+          {
+            "event": "approve",
+            "from": "Submitted",
+            "to": "Approved",
+            "guard": {
+              "expr": {
+                "==": [
+                  { "var": "actor.user_id" },
+                  { "var": "approver" }
+                ]
+              }
+            },
+            "actions": ["recordApproval"]
+          },
+          {
+            "event": "reject",
+            "from": "Submitted",
+            "to": "Rejected",
+            "actions": ["recordRejection"]
+          },
+          {
+            "event": "resubmit",
+            "from": "Rejected",
+            "to": "Submitted",
+            "guard": { "expr": { "exists": "correctionNotes" } },
+            "actions": ["validate"]
+          },
+          {
+            "event": "pay",
+            "from": "Approved",
+            "to": "Paid",
+            "actions": ["createPayment"]
+          }
+        ]
+      },
+      "views": [
+        {
+          "id": "InvoiceList",
+          "type": "table",
+          "columns": ["invoiceNumber", "supplierId", "amount", "currency", "status"],
+          "filters": []
+        }
+      ]
+    },
+
+    {
+      "id": "Supplier",
+      "label": "Supplier",
+      "bindings": [
+        {
+          "type": "table",
+          "name": "suppliers",
+          "primaryKey": "supplier_id"
+        }
+      ],
+      "attributes": [
+        { "id": "supplierId", "type": "string", "required": true, "unique": true, "tags": ["identifier"] },
+        { "id": "name", "type": "string", "required": true },
+        { "id": "country", "type": "string" },
+        {
+          "id": "riskRating",
+          "type": "number",
+          "constraints": [{ "between": [1, 5] }]
+        }
+      ],
+      "workflow": {
+        "states": [
+          { "id": "Draft" },
+          { "id": "Submitted" },
+          { "id": "Approved" },
+          { "id": "Active" },
+          { "id": "Suspended" },
+          { "id": "Rejected" }
+        ],
+        "transitions": [
+          {
+            "event": "submit",
+            "from": "Draft",
+            "to": "Submitted",
+            "guard": { "expr": { "exists": "name" } },
+            "actions": ["validate"]
+          },
+          {
+            "event": "approve",
+            "from": "Submitted",
+            "to": "Approved",
+            "guard": {
+              "expr": {
+                "==": [
+                  { "var": "actor.user_id" },
+                  { "var": "approver" }
+                ]
+              }
+            },
+            "actions": ["recordApproval"]
+          },
+          {
+            "event": "reject",
+            "from": "Submitted",
+            "to": "Rejected",
+            "actions": ["recordRejection"]
+          },
+          {
+            "event": "activate",
+            "from": "Approved",
+            "to": "Active",
+            "actions": ["activateSupplier"]
+          },
+          {
+            "event": "suspend",
+            "from": "Active",
+            "to": "Suspended",
+            "actions": ["suspendSupplier"]
+          },
+          {
+            "event": "restore",
+            "from": "Suspended",
+            "to": "Active",
+            "actions": ["restoreSupplier"]
+          },
+          {
+            "event": "resubmit",
+            "from": "Rejected",
+            "to": "Submitted",
+            "guard": { "expr": { "exists": "correctionNotes" } },
+            "actions": ["validate"]
+          }
+        ]
+      }
+    },
+
+    {
+      "id": "PurchaseOrder",
+      "label": "Purchase Order",
+      "bindings": [
+        {
+          "type": "table",
+          "name": "purchase_orders",
+          "primaryKey": "po_id"
+        }
+      ],
+      "attributes": [
+        { "id": "poNumber", "type": "string", "required": true, "unique": true, "tags": ["identifier"] },
+        { "id": "supplierId", "type": "string", "required": true, "tags": ["foreignKey:Supplier"] },
+        { "id": "totalAmount", "type": "number", "required": true },
+        { "id": "currency", "type": "string", "enum": ["EUR", "USD", "GBP"], "required": true },
+        {
+          "id": "status",
+          "type": "string",
+          "enum": ["Draft", "Submitted", "Approved", "Rejected", "Closed"],
+          "required": true,
+          "default": "Draft"
+        }
+      ],
+      "relationships": [
+        {
+          "id": "po-references-supplier",
+          "type": "references",
+          "from": "PurchaseOrder",
+          "to": "Supplier",
+          "cardinality": "many-to-one",
+          "keyMapping": { "fromAttr": "supplierId", "toAttr": "supplierId" }
+        },
+        {
+          "id": "po-spawns-invoices",
+          "type": "aggregates",
+          "from": "PurchaseOrder",
+          "to": "Invoice",
+          "cardinality": "one-to-many"
+        }
+      ],
+      "workflow": {
+        "states": [
+          { "id": "Draft" },
+          { "id": "Submitted" },
+          { "id": "Approved" },
+          { "id": "Rejected" },
+          { "id": "Closed" }
+        ],
+        "transitions": [
+          {
+            "event": "submit",
+            "from": "Draft",
+            "to": "Submitted",
+            "guard": {
+              "expr": {
+                "and": [
+                  { "exists": "poNumber" },
+                  { ">": [ { "var": "totalAmount" }, 0 ] }
+                ]
+              }
+            },
+            "actions": ["validate"]
+          },
+          {
+            "event": "approve",
+            "from": "Submitted",
+            "to": "Approved",
+            "guard": {
+              "expr": {
+                "==": [
+                  { "var": "actor.user_id" },
+                  { "var": "approver" }
+                ]
+              }
+            },
+            "actions": ["recordApproval"]
+          },
+          {
+            "event": "reject",
+            "from": "Submitted",
+            "to": "Rejected",
+            "actions": ["recordRejection"]
+          },
+          {
+            "event": "resubmit",
+            "from": "Rejected",
+            "to": "Submitted",
+            "guard": { "expr": { "exists": "correctionNotes" } },
+            "actions": ["validate"]
+          },
+          {
+            "event": "close",
+            "from": "Approved",
+            "to": "Closed",
+            "actions": ["closePO"]
+          }
+        ]
+      }
+    },
+
+    {
+      "id": "ApprovalRequest",
+      "label": "Approval Request",
+      "bindings": [
+        {
+          "type": "table",
+          "name": "approval_requests",
+          "primaryKey": "approval_id"
+        }
+      ],
+      "attributes": [
+        { "id": "approvalId", "type": "string", "required": true, "unique": true, "tags": ["identifier"] },
+        { "id": "entityType", "type": "string", "enum": ["Invoice", "PurchaseOrder"], "required": true },
+        { "id": "entityId", "type": "string", "required": true },
+        {
+          "id": "requiredRole",
+          "type": "string",
+          "enum": ["Manager", "Director", "CFO", "Compliance"],
+          "required": true
+        },
+        {
+          "id": "status",
+          "type": "string",
+          "enum": ["Pending", "Approved", "Rejected"],
+          "required": true,
+          "default": "Pending"
+        }
+      ],
+      "workflow": {
+        "states": [
+          { "id": "Pending" },
+          { "id": "Approved" },
+          { "id": "Rejected" }
+        ],
+        "transitions": [
+          {
+            "event": "approve",
+            "from": "Pending",
+            "to": "Approved",
+            "guard": {
+              "expr": {
+                "==": [
+                  { "var": "actor.role" },
+                  { "var": "requiredRole" }
+                ]
+              }
+            },
+            "actions": ["recordApproval"]
+          },
+          {
+            "event": "reject",
+            "from": "Pending",
+            "to": "Rejected",
+            "actions": ["recordRejection"]
+          }
+        ]
+      }
+    }
+  ],
+  "security": {
+    "roles": [
+      {
+        "id": "AP_Manager",
+        "permissions": [
+          "Invoice.read",
+          "Invoice.approve",
+          "Supplier.read",
+          "PurchaseOrder.read"
+        ]
+      },
+      {
+        "id": "Director",
+        "permissions": [
+          "Invoice.read",
+          "Invoice.approve.highValue",
+          "PurchaseOrder.read"
+        ]
+      },
+      {
+        "id": "Compliance",
+        "permissions": [
+          "Supplier.read",
+          "Invoice.read"
+        ]
+      }
+    ]
+  },
+  "versioning": {
+    "modelVersion": "1.0.0",
+    "effectiveFrom": "2026-01-01",
+    "changelog": []
+  }
+}

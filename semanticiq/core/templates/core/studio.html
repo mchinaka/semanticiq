@@ -1,0 +1,704 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>semanticIQ • Studio</title>
+  <link rel="stylesheet" href="{% static 'core/studio.css' %}" />
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <style>
+    body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: #f4f6f8;
+    color: #333;
+    }
+
+    header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 32px;
+    background: #000000;
+    border-bottom: 1px solid #ddd;
+    }
+    /* High-level layout for the new flow */
+    .studio-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 0 40px 0;
+    }
+
+    .studio-section {
+      margin-top: 24px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      background: #fafafa;
+    }
+
+    .studio-section h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
+    .studio-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .studio-action-btn {
+      padding: 12px 20px;
+      background: #0078ff;      /* Same as #chat-send */
+      color: white;
+      border: none;
+      border-radius: 10px;      /* Same rounded look */
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 200;
+      font-family: Inter, sans-serif;
+      transition: background 0.2s ease, transform 0.15s ease;
+      }
+
+    .studio-action-btn:hover {
+      background: #005fcc;      /* Same hover color */
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .studio-button:active {
+      transform: scale(0.97);
+    }
+
+    .studio-subtitle {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .studio-grid {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .studio-card {
+      flex: 1 1 200px;
+      min-width: 200px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      background: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .studio-card:hover {
+      background: #f7f7f7;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .studio-card h3 {
+      margin-top: 0;
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    .studio-card p {
+      font-size: 13px;
+      color: #666;
+      margin: 0;
+    }
+
+    .studio-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+      align-items: center;
+    }
+
+    .studio-row label {
+      font-size: 14px;
+      color: #444;
+    }
+
+    .studio-row input,
+    .studio-row select,
+    .studio-row textarea {
+      font-size: 14px;
+    }
+
+    .studio-row textarea {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .small-hint {
+      font-size: 12px;
+      color: #777;
+      margin-top: 4px;
+    }
+
+    .divider {
+      border-top: 1px solid #e0e0e0;
+      margin: 16px 0;
+    }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 32px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .left-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .left-header p {
+      margin: 0;
+      color: #666;
+    }
+
+    .right-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Tenant Switcher */
+    .tenant-switcher select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    /* Profile Badge */
+    .profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+    }
+
+    .profile-badge img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .role-badge {
+      background: #444;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-left: 4px;
+    }
+
+    /* Logout Button */
+    .logout-btn {
+      padding: 6px 14px;
+      background: #d9534f;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .logout-btn:hover {
+      background: #c9302c;
+    }
+
+    .input-label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .hidden-input {
+    display: none;
+  }
+
+  .button {
+    padding: 12px 20px;
+    background: #0078ff;      /* Same as #chat-send */
+    color: white;
+    border: none;
+    border-radius: 10px;      /* Same rounded look */
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: Inter, sans-serif;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.button:hover {
+    background: #005fcc;      /* Same hover color */
+}
+
+.button:active {
+    transform: scale(0.97);
+}
+
+  footer { position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    padding: 20px 0; 
+    background: #000; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    border-top: 1px solid #222; }
+
+  #status {
+    font-family: Inter, sans-serif;   /* Clean sans-serif font */
+    font-size: 14px;
+    color: #bbb;                      /* Soft grey for a refined look */
+  }
+
+  #action-bar {
+  justify-content: flex-start;
+  align-items: center;
+  padding: 8px 0; }
+</style>
+</head>
+<body>
+  <header>
+    <div class="left-header">
+      <h1>semanticIQ • Process Model and Ontology Studio</h1>
+      <p>Create and update process and ontology models for your operating system. Load → View → Save → Publish.</p>
+    </div>
+
+    <div class="right-header">
+
+      <!-- Tenant Switcher -->      
+      <div class="tenant-switcher">
+        {% if available_tenants|length > 1 %}
+        <label style="font-size: 13px; font-weight: 600; color: #f5f5f5; display: block; margin-bottom: 4px;">
+        Tenant
+        </label>
+        <form method="POST" action="/switch_tenant">
+          {% csrf_token %}
+          <select name="tenant_id" onchange="this.form.submit()">
+            {% for t in available_tenants %}
+              <option value="{{ t.tenant_id }}" {% if t.tenant_id == tenant.tenant_id %}selected{% endif %}>
+                {{ t.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </form>
+        {% endif %}
+      </div>
+
+      <!-- Profile Badge -->
+      <div class="profile-badge">
+        {% if user_photo_url %}
+          <img src="{{ user_photo_url }}" alt="Profile Photo">
+        {% else %}
+          <img src="/static/core/default_user.png" alt="Profile Photo">
+        {% endif %}
+
+        <div>
+          <strong>{{ request.user.username }}</strong><br>
+          {% for r in roles %}
+            <span class="role-badge">{{ r }}</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Logout -->
+      <a class="logout-btn" href="/logout">Logout</a>
+    </div>    
+  </header>
+  <!-- SHARED ACTION BAR --> 
+  <div id="action-bar" width:100%; margin-bottom: 12px;> 
+    <button id="goMainMenu" class="studio-action-btn" style="margin-left:28px;"> ← Back to Main Menu </button>    
+  </div>
+
+  <div class="studio-container">
+    <!-- STUDIO HOME -->
+    <section id="studioHome" class="studio-section">
+      <h2>What would you like to do?</h2>
+      <p class="studio-subtitle">
+        Start from a fresh model or continue editing an existing one.
+      </p>
+      <div class="studio-actions">
+        <button id="btnCreateNew" class="studio-action-btn">
+          Create New Model
+        </button>
+        <button id="btnEditExisting" class="studio-action-btn">
+          Edit Existing Models
+        </button>
+      </div>
+      <p>
+      <div id="status">Status: idle</div>
+      <div id="validateOut" style="font-size:12px;color:#b30000;margin-top:6px;"></div>
+      </p>
+    </section>
+
+    <!-- CREATE NEW MODEL OPTIONS -->
+    <section id="createOptions" class="studio-section" style="display:none;">
+      <h2>Create New Model</h2>
+      <p class="studio-subtitle">
+        Choose how you want to start. You can always refine the model in the Studio editor.
+      </p>
+      <div class="studio-grid">
+        <div id="cardUseTemplate" class="studio-card">
+          <h3>Use Templates</h3>
+          <p>Start from a curated template and adapt it to your needs.</p>
+        </div>
+        <div id="cardUsePrompt" class="studio-card">
+          <h3>Use Prompt (AI‑assist)</h3>
+          <p>Describe the process you want to build. An AI assistant will generate a draft model. Recommended for simple processes.</p>
+        </div>
+        <div id="cardUploadSpreadsheet" class="studio-card">
+          <h3>Upload Spreadsheet</h3>
+          <p>Convert existing tabular process definitions into an ontology model.</p>
+        </div>
+        <div id="cardConnectData" class="studio-card">
+          <h3>Connect Data</h3>
+          <p>Point at legacy/static data sources and map them into an ontology model.</p>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <button id="btnBackToHomeFromCreate" class="studio-action-btn">
+        ← Back
+      </button>
+    </section>
+
+    <!-- TEMPLATE PICKER -->
+    <section id="templatePicker" class="studio-section" style="display:none;">
+      <h2>Select a Template</h2>
+      <p class="studio-subtitle">
+        Pick a starting point. A new draft model will be created from the selected template.
+      </p>
+      <div class="studio-row">        
+        <input id="tenantIdTpl" value="{{ tenant.tenant_id }}" class="hidden-input"/>
+      </div>
+      <div class="studio-row"> 
+      <label class="input-label">Tenant</label>
+      <input id="tenant-name" value="{{ tenant.name }}" readonly>
+      </div>
+      <div class="studio-row">
+        <label class="input-label" for="templateSelect">Template</label>
+        <select id="templateSelect"></select>
+      </div>
+      <div class="studio-row">
+        <label class="input-label" for="newModelId">New Model ID</label>
+        <input id="newModelId" placeholder="e.g. procurement-mvp" />
+      </div>
+      <div class="studio-actions">
+        <button id="btnLoadTemplate" class="studio-action-btn">Create from Template</button>
+        <button id="btnBackToCreateFromTemplate" class="studio-action-btn">← Back</button>
+      </div>
+      <div id="templateStatus" class="small-hint"></div>
+    </section>
+
+    <!-- PROMPT BUILDER -->
+    <section id="promptBuilder" class="studio-section" style="display:none;">
+      <h2>Create Model from Prompt</h2>
+      <p class="studio-subtitle">
+        Describe the process or operating system you want to build. A draft ontology model will be generated.
+      </p>
+      <div class="studio-row">        
+        <input id="tenantIdPrompt" value="{{ tenant.tenant_id }}" class="hidden-input"/>
+      </div>
+      <div class="studio-row"> 
+      <label class="input-label">Tenant</label>
+      <input id="tenant-name" value="{{ tenant.name }}" readonly>
+      </div>
+      <div class="studio-row">
+        <label class="input-label" for="promptModelId">Model ID</label>
+        <input id="promptModelId" placeholder="e.g. claims-os, onboarding-os" />
+      </div>
+      <div class="studio-row">
+        <label for="promptInput">Describe your process</label>
+        <textarea id="promptInput" placeholder="e.g. A procurement process with requisitions, approvals, purchase orders, and goods receipts..."></textarea>
+      </div>
+      <div class="studio-row">
+        <label class="input-label" for="promptTemplate">Template</label>
+        <select id="promptTemplate"></select>
+      </div>
+      <div class="studio-actions">
+        <button id="btnGenerateFromPrompt" class="studio-action-btn">
+          Generate Draft Model
+        </button>
+        <button id="btnBackToCreateFromPrompt" class="studio-action-btn">
+          ← Back
+        </button>
+      </div>
+      <div id="promptStatus" class="small-hint"></div>
+    </section>
+
+    <!-- SPREADSHEET UPLOAD -->
+    <section id="spreadsheetUpload" class="studio-section" style="display:none;">
+      <h2>Upload Spreadsheet</h2>
+      <p class="studio-subtitle">
+        Upload a table describing your entities, attributes, and relationships. The system will convert it into a draft model.
+      </p>
+      <div class="studio-row">        
+        <input id="tenantIdSheet" value="{{ tenant.tenant_id }}" class="hidden-input"/>
+      </div>
+      <div class="studio-row"> 
+      <label class="input-label">Tenant</label>
+      <input id="tenant-name" value="{{ tenant.name }}" readonly>
+      </div>
+      <div class="studio-row">
+        <label class="input-label for="sheetModelId">Model ID</label>
+        <input id="sheetModelId" placeholder="e.g. procurement-from-sheet" />
+      </div>
+      <div class="studio-row">
+        <input type="file" id="spreadsheetFile" />
+      </div>
+      <div class="studio-actions">
+        <button id="btnProcessSpreadsheet" class="studio-action-btn">
+          Convert to Model
+        </button>
+        <button id="btnBackToCreateFromSheet" class="studio-action-btn">
+          ← Back
+        </button>
+      </div>
+      <div id="sheetStatus" class="small-hint"></div>
+    </section>
+
+    <!-- DATA CONNECTOR -->
+    <section id="dataConnector" class="studio-section" style="display:none;">
+      <h2>Connect Data Source</h2>
+      <p class="studio-subtitle">
+        Connect to static or legacy systems and map their schemas into your ontology‑lite model.
+      </p>
+      <div class="studio-row">        
+        <input id="tenantIdData" value="{{ tenant.tenant_id }}" class="hidden-input"/>
+      </div>
+      <div class="studio-row"> 
+      <label class="input-label">Tenant</label>
+      <input id="tenant-name" value="{{ tenant.name }}" readonly>
+      </div>
+      <div class="studio-row">
+        <label class="input-label for="dataModelId">Model ID</label>
+        <input id="dataModelId" placeholder="e.g. legacy-erp-mapping" />
+      </div>
+      <div class="studio-row">
+        <label class="input-label for="dataSourceType">Data Source Type</label>
+        <select id="dataSourceType">
+          <option value="csv">CSV / File</option>
+          <option value="db">Database (placeholder)</option>
+          <option value="api">API (placeholder)</option>
+        </select>
+      </div>
+      <p class="small-hint">
+        For MVP, you can start with CSV/JSON mappings. Database/API connectors can be added incrementally.
+      </p>
+      <div class="studio-actions">
+        <button id="btnConnectDataSource" class="studio-action-btn">
+          Connect & Generate Model
+        </button>
+        <button id="btnBackToCreateFromData" class="studio-action-btn">
+          ← Back
+        </button>
+      </div>
+      <div id="dataStatus" class="small-hint"></div>
+    </section>
+
+    <!-- EXISTING MODELS PICKER (for edit existing) -->
+    <section id="existingModels" class="studio-section" style="display:none;">
+      <h2>Edit Existing Models</h2>
+      <p class="studio-subtitle">
+        Select a tenant and a model to open in the Studio editor.
+      </p>
+      <div class="studio-row">        
+        <input id="tenantIdExisting" value="{{ tenant.tenant_id }}" class="hidden-input"/>
+      </div>
+      <div class="studio-row"> 
+      <label class="input-label">Tenant</label>
+      <input id="tenant-name" value="{{ tenant.name }}" readonly>
+      </div>
+      <div class="studio-row">
+        <label class="input-label for="existingModelSelect">Model</label>
+        <select id="existingModelSelect"></select>
+      </div>
+      <div class="studio-actions">
+        <button id="btnOpenExistingModel" class="studio-action-btn">
+          Open in Editor
+        </button>
+        <button id="btnBackToHomeFromExisting" class="studio-action-btn">
+          ← Back
+        </button>
+      </div>
+      <div id="existingStatus" class="small-hint"></div>
+    </section>
+
+    <!-- EDITOR -->
+    <section id="studioEditor" style="display:none; margin-top:24px;">
+      <section class="controls">
+        <label class="input-label" style="display:none;">
+        Tenant ID 
+        <input id="tenantId" value="{{ tenant.tenant_id }}" readonly />
+        </label>
+        <label class="input-label">
+          Model
+          <select id="modelSelect"></select>
+        </label>
+        <label style="margin-left:8px;">
+          <strong>Model ID</strong> 
+          <input id="modelId" placeholder="model-id" />
+        </label>
+        <button id="btnLoad">Load</button>
+        <button id="btnValidate">Validate</button>
+        <button id="btnSave">Save</button>
+        <button id="btnPublish">Publish</button>
+      </section>
+
+      <main>
+        <aside>
+          <div class="tabs">
+            <button class="tab active" data-tab="attributes">Attributes</button>
+            <button class="tab" data-tab="relationships">Relationships</button>
+          </div>
+
+          <div id="pane-attributes" class="pane">
+            <h3>Entities</h3>
+            <select id="entitySelect"></select>
+            <div class="entity-actions">
+              <button id="btnAddEntity">+ Add Entity</button>
+              <button id="btnRemoveEntity">− Remove Entity</button>
+            </div>
+            <hr/>
+            <h3>Attributes</h3>
+            <div id="attributes"></div>
+            <button id="btnAddAttribute">+ Add Attribute</button>
+          </div>
+
+          <div id="pane-relationships" class="pane" style="display:none">
+            <h3>Relationships for <span id="relEntityName"></span></h3>
+            <div id="relationships"></div>
+            <button id="btnAddRelationship">+ Add Relationship</button>
+          </div>
+        </aside>
+
+        <section class="editor">
+          <div class="view-tabs">
+            <button class="view-tab active" data-view="json">JSON</button>
+            <button class="view-tab" data-view="table">Table</button>
+            <button class="view-tab" data-view="graph">Graph</button>
+          </div>
+
+          <div id="view-json" class="view-pane">
+            <h3>Raw JSON (Advanced)</h3>
+            <textarea id="jsonEditor" spellcheck="false"></textarea>
+            <div>
+              <button id="btnFormat">Format JSON</button>
+              <button id="btnExport">Download JSON</button>
+            </div>
+
+            <h3 style="margin-top:16px;">JSON Patch (AI‑assist)</h3>
+            <p style="font-size:12px;color:#666;">Paste a JSON Patch array (RFC 6902) and click Apply.</p>
+            <textarea id="patchEditor" rows="6" spellcheck="false">[
+  { "op":"add", "path":"/entities/0/attributes/-", "value":{"id":"aiSuggested","type":"string"} }
+]</textarea>
+            <div>
+              <button id="btnApplyPatch">Apply Patch</button>
+            </div>
+          </div>
+
+          <div id="view-table" class="view-pane" style="display:none;">
+            <h3>Model Table</h3>
+            <div id="modelTable"></div>
+          </div>
+
+          <div id="view-graph" class="view-pane" style="display:none;">
+            <h3>Model Graph</h3>
+
+            <div id="modelGraph"
+                style="width:100%; height:420px; border:1px solid #eee; background:#fafafa;">
+            </div>
+            <p style="font-size:12px;color:#666; margin-top:8px;">
+              Entities are shown as nodes; relationships as arrows.
+            </p>
+          </div>
+        </section>
+      </main>
+    </section>
+  </div>
+
+  <footer>
+    <div id="status">Status: idle</div>
+    <div id="validateOut" style="font-size:12px;color:#b30000;margin-top:6px;"></div>
+  </footer>
+
+  <script src="{% static 'core/studio.js' %}?v={{ timestamp }}"></script>
+
+  <!-- Dynamic model loader -->
+  <script>
+    async function loadModels() {
+      const tenantId = document.getElementById("tenantId").value.trim();
+      const sel = document.getElementById("modelSelect");
+      sel.innerHTML = "<option>Loading...</option>";
+
+      try {
+        const res = await fetch(`/api/tenants/${tenantId}/list_models`);
+        const payload = await res.json();
+
+        sel.innerHTML = "";
+        payload.models.forEach(m => {
+          const opt = document.createElement("option");
+          opt.value = m.model_id;
+          opt.textContent = `${m.model_id} (${m.status}, v${m.version})`;
+          sel.appendChild(opt);
+        });
+
+        // Auto-fill the manual input for compatibility with existing JS
+        sel.addEventListener("change", () => {
+          document.getElementById("modelId").value = sel.value;
+        });
+
+        // Set initial value
+        if (payload.models.length > 0) {
+          document.getElementById("modelId").value = payload.models[0].model_id;
+        }
+
+      } catch (err) {
+        sel.innerHTML = "<option>Error loading models</option>";
+      }
+    }
+
+    // Load models when tenant changes
+    document.getElementById("tenantId").addEventListener("change", loadModels);
+
+    // Load models on page load
+    window.addEventListener("DOMContentLoaded", loadModels);
+  </script>
+<!-- Studio Action Bar Button Script -->
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("goMainMenu");
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+        window.location.href = "main_menu";
+    });
+    });
+  </script>
+  <footer>    
+    <p>
+    <div id="status">© semanticIQ <script>document.write(/\d{4}/.exec(Date())[0])</script>. All Rights Reserved.</div>
+    </p>
+  </footer>
+</body>
+</html>
