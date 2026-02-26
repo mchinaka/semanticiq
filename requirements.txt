@@ -2,3 +2,6 @@ Django>=4.2,<5.1
 psycopg2-binary>=2.9
 jsonschema>=4.19
 python-dotenv>=1.0
+gunicorn>=20.1
+django-environ>=0.8
+django_recaptcha>=3.0

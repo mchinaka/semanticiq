@@ -1,7 +1,11 @@
 import os
+import environ
 from pathlib import Path
 from dotenv import load_dotenv
 from urllib.parse import urlparse
+env = environ.Env()
+environ.Env.read_env()
+
 
 load_dotenv()
 
@@ -54,35 +58,39 @@ WSGI_APPLICATION = 'semanticiq.wsgi.application'
 ENV = os.getenv("DJANGO_ENV", "development").lower()
 
 DATABASES = {
-    "development": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DEV_DB_NAME"),
-        "USER": os.getenv("DEV_DB_USER"),
-        "PASSWORD": os.getenv("DEV_DB_PASSWORD"),
-        "HOST": os.getenv("DEV_DB_HOST", "localhost"),
-        "PORT": os.getenv("DEV_DB_PORT", "5432"),
-    },
-    "testing": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("TEST_DB_NAME"),
-        "USER": os.getenv("TEST_DB_USER"),
-        "PASSWORD": os.getenv("TEST_DB_PASSWORD"),
-        "HOST": os.getenv("TEST_DB_HOST", "localhost"),
-        "PORT": os.getenv("TEST_DB_PORT", "5432"),
-    },
-    "production": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("PROD_DB_NAME"),
-        "USER": os.getenv("PROD_DB_USER"),
-        "PASSWORD": os.getenv("PROD_DB_PASSWORD"),
-        "HOST": os.getenv("PROD_DB_HOST", "localhost"),
-        "PORT": os.getenv("PROD_DB_PORT", "5432"),
-    },
+    'default': env.db('DATABASE_URL')
 }
 
-DATABASES["default"] = DATABASES[ENV]
+#DATABASES = {
+    #"development": {
+        #"ENGINE": "django.db.backends.postgresql",
+        #"NAME": os.getenv("DEV_DB_NAME"),
+        #"USER": os.getenv("DEV_DB_USER"),
+        #"PASSWORD": os.getenv("DEV_DB_PASSWORD"),
+        #"HOST": os.getenv("DEV_DB_HOST", "localhost"),
+        #"PORT": os.getenv("DEV_DB_PORT", "5432"),
+    #},
+    #"testing": {
+        #"ENGINE": "django.db.backends.postgresql",
+        #"NAME": os.getenv("TEST_DB_NAME"),
+        #"USER": os.getenv("TEST_DB_USER"),
+        #"PASSWORD": os.getenv("TEST_DB_PASSWORD"),
+        #"HOST": os.getenv("TEST_DB_HOST", "localhost"),
+        #"PORT": os.getenv("TEST_DB_PORT", "5432"),
+    #},
+    #"production": {
+        #"ENGINE": "django.db.backends.postgresql",
+        #"NAME": os.getenv("PROD_DB_NAME"),
+        #"USER": os.getenv("PROD_DB_USER"),
+        #"PASSWORD": os.getenv("PROD_DB_PASSWORD"),
+        #"HOST": os.getenv("PROD_DB_HOST", "localhost"),
+        #"PORT": os.getenv("PROD_DB_PORT", "5432"),
+#},
+#}
 
-DATABASE_ROUTERS = ["semanticiq.core.db_router.EnvironmentRouter"]
+#DATABASES["default"] = DATABASES[ENV]
+
+#DATABASE_ROUTERS = ["semanticiq.core.db_router.EnvironmentRouter"]
 
 #DATABASE_URL = os.getenv('DATABASE_URL')
 #if DATABASE_URL:
