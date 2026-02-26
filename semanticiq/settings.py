@@ -92,7 +92,7 @@ DATABASES = {
 
 #DATABASE_ROUTERS = ["semanticiq.core.db_router.EnvironmentRouter"]
 
-#DATABASE_URL = os.getenv('DATABASE_URL')
+DATABASE_URL = os.getenv('DATABASE_URL')
 #if DATABASE_URL:
     #url = urlparse(DATABASE_URL)
     #DATABASES = {
