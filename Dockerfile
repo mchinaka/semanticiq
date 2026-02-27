@@ -22,7 +22,8 @@ COPY . /code
 
 # Run collectstatic during build with a dummy Secret Key
 # This ensures files are baked into the image
-RUN SECRET_KEY=dummy-key-for-build python manage.py collectstatic --noinput
+# RUN SECRET_KEY=dummy-key-for-build python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput || (python manage.py collectstatic --noinput 2>&1)
 
 EXPOSE 8000
 
