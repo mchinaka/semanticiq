@@ -27,6 +27,4 @@ COPY . /code
 
 EXPOSE 8000
 
-# Use the shell form if you need to run migrations before gunicorn
-CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "semanticiq.wsgi"]
-CMD ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn --bind :8000 --workers 2 semanticiq.wsgi"]
+CMD ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 --workers 2 semanticiq.wsgi"]
