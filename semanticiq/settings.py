@@ -54,7 +54,6 @@ TEMPLATES = [
     },
 ]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 WSGI_APPLICATION = 'semanticiq.wsgi.application'
 
@@ -128,6 +127,12 @@ RESOURCES_DIR = BASE_DIR / 'resources'
 STATICFILES_DIRS = [
     BASE_DIR / "semanticiq/core/static",
 ]
+
+# The folder where 'collectstatic' will output everything for production
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
