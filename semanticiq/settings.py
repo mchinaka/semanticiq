@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from urllib.parse import urlparse
 env = environ.Env()
 environ.Env.read_env()
+import dj_database_url
 
 
 load_dotenv()
@@ -60,7 +61,13 @@ WSGI_APPLICATION = 'semanticiq.wsgi.application'
 ENV = os.getenv("DJANGO_ENV", "development").lower()
 
 DATABASES = {
-    'default': env.db('DATABASE_URL')
+    'default': dj_database_url.config(
+        # This is ONLY used if DATABASE_URL is missing (Local Dev)
+        default='sqlite:///db.sqlite3', 
+        
+        # This is REQUIRED for Neon to work securely
+        ssl_require=True 
+    )
 }
 
 #DATABASES = {
