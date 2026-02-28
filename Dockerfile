@@ -25,6 +25,5 @@ COPY . /code
 # RUN SECRET_KEY=dummy-key-for-build python manage.py collectstatic --noinput
 # RUN python manage.py collectstatic --noinput || (python manage.py collectstatic --noinput 2>&1)
 
-EXPOSE 8000
-
-CMD ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 --workers 2 semanticiq.wsgi"]
+EXPOSE 8080
+CMD ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8080 --workers 2 semanticiq.wsgi"]
