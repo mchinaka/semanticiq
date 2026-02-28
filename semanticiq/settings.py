@@ -13,7 +13,13 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'dev-secret-not-for-prod')
 DEBUG = os.getenv('DJANGO_DEBUG', '1') == '1'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://semanticiq.co",
+    "https://www.semanticiq.co",
+    "https://semanticiq-dawn-brook-485.fly.dev",
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
