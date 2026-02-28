@@ -64,7 +64,7 @@ DATABASES = {
     'default': dj_database_url.config(
         # This is ONLY used if DATABASE_URL is missing (Local Dev)
         default='sqlite:///db.sqlite3', 
-        
+        conn_max_age=600,
         # This is REQUIRED for Neon to work securely
         ssl_require=True 
     )
