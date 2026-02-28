@@ -131,7 +131,7 @@ STATICFILES_DIRS = [
 # The folder where 'collectstatic' will output everything for production
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
