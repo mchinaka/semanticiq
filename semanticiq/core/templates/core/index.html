@@ -11,10 +11,11 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SemanticIQ</title>
+  <title>SemanticIQ — Edge-Native Data for Mining</title>
 
-  <!-- Inter Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 
   <!-- Bootstrap -->
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
@@ -32,155 +33,441 @@
   <!-- Google reCAPTCHA -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-  <!-- Custom CSS -->
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ore: #C8873A;
+      --ore-dark: #8F5A1E;
+      --ore-light: #E8A855;
+      --steel: #2A2E35;
+      --steel-mid: #1C1F24;
+      --steel-deep: #0E1013;
+      --dust: #8A8880;
+      --dust-light: #B5B2AC;
+      --seam: #3A3E47;
+      --signal: #4FC3A1;
+      --danger: #E84545;
+      --text: #EAE8E3;
+      --text-muted: #8A8880;
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      margin: 0;
-      font-family: Inter, sans-serif;
-      background: #f4f6f8;
-      color: #333;
+      background: var(--steel-deep);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
     }
 
-    /* NAVBAR */
+    /* ── MESSAGES ── */
+    .messages { list-style: none; padding: 0; margin-bottom: 1rem; }
+    .messages li {
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+    }
+    .messages li.success { background: rgba(79,195,161,0.12); border: 1px solid rgba(79,195,161,0.3); color: #4FC3A1; }
+    .messages li.error   { background: rgba(232,69,69,0.12);  border: 1px solid rgba(232,69,69,0.3);  color: #E84545; }
+    .messages li.warning { background: rgba(232,168,85,0.12); border: 1px solid rgba(232,168,85,0.3); color: var(--ore-light); }
+    .messages li.info    { background: rgba(79,195,161,0.08); border: 1px solid rgba(79,195,161,0.2); color: var(--dust-light); }
+
+    /* ── NAV ── */
     .navbar {
-      background: #000;
-      border-bottom: 1px solid #222;
-      padding: 16px 0;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(14,16,19,0.95) !important;
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(200,135,58,0.15) !important;
+      padding: 0 !important;
+      height: 64px;
     }
+    .navbar .container { height: 64px; }
 
-    .navbar-brand img {
-      height: 40px;
-      width: auto;
-    }
+    .navbar-brand img { height: 36px; width: auto; }
 
     .navbar-nav .nav-link {
-      color: #fff !important;
-      font-weight: 500;
-      margin: 0 10px;
+      font-family: var(--font-mono) !important;
+      font-size: 0.7rem !important;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dust-light) !important;
+      font-weight: 400 !important;
+      padding: 0 0.1rem !important;
+      margin: 0 0.75rem !important;
+      transition: color 0.2s;
     }
+    .navbar-nav .nav-link:hover { color: var(--ore-light) !important; }
 
-    .navbar-nav .nav-link:hover {
-      color: #0078ff !important;
-    }
-
-    /* BUTTONS */
     .btn-primary {
-      background: #0078ff;
-      border: none;
-      border-radius: 10px;
-      padding: 12px 20px;
-      font-weight: 600;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--steel-deep) !important;
+      background: var(--ore) !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0.5rem 1.25rem !important;
+      transition: background 0.2s;
     }
-
-    .btn-primary:hover {
-      background: #005fcc;
-    }
+    .btn-primary:hover { background: var(--ore-light) !important; }
 
     .btn-outline-primary {
-      border-radius: 10px;
-      padding: 12px 20px;
-      font-weight: 600;
-      border: 2px solid #0078ff;
-      color: #0078ff;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dust-light) !important;
+      background: transparent !important;
+      border: 1px solid var(--seam) !important;
+      border-radius: 0 !important;
+      padding: 0.5rem 1.25rem !important;
+      transition: border-color 0.2s, color 0.2s;
     }
-
     .btn-outline-primary:hover {
-      background: #0078ff;
-      color: #fff;
+      border-color: var(--ore) !important;
+      color: var(--ore-light) !important;
     }
 
-    /* HERO */
-    .hero-section {
-      padding: 140px 0;
-      text-align: center;
-      background: linear-gradient(180deg, #000 0%, #111 100%);
-      color: #fff;
+    .dropdown-menu {
+      background: var(--steel-mid);
+      border: 1px solid var(--seam);
+      border-radius: 0;
     }
+    .dropdown-item { color: var(--dust-light); font-size: 0.85rem; }
+    .dropdown-item:hover { background: var(--seam); color: var(--ore-light); }
+    .dropdown-divider { border-color: var(--seam); }
+
+    /* ── HERO ── */
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 0 6rem;
+      position: relative;
+      overflow: hidden;
+      background: var(--steel-deep);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(200,135,58,0.04) 39px, rgba(200,135,58,0.04) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(200,135,58,0.03) 59px, rgba(200,135,58,0.03) 60px);
+    }
+    .hero-accent {
+      position: absolute; top: 0; right: 0;
+      width: 55%; height: 100%;
+      background: linear-gradient(135deg, transparent 40%, rgba(200,135,58,0.06) 100%);
+      border-left: 1px solid rgba(200,135,58,0.08);
+    }
+    .hero-depth {
+      position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 200px;
+      background: linear-gradient(to top, var(--steel-deep), transparent);
+    }
+
+    .hero-inner {
+      position: relative;
+      padding: 0 3rem;
+    }
+
+    .hero-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ore);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .hero-tag::before { content: ''; display: block; width: 32px; height: 1px; background: var(--ore); }
 
     .hero-section h1 {
-      font-size: 2.8rem;
-      font-weight: 700;
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      font-weight: 800;
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      color: var(--text);
+      max-width: 900px;
+      text-align: left;
+    }
+    .hero-section h1 .accent { color: var(--ore); }
+    .hero-section h1 .dim    { color: var(--dust); }
+
+    .hero-section .hero-sub {
+      margin-top: 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--dust-light);
+      max-width: 480px;
+      line-height: 1.65;
+      text-align: left;
     }
 
-    .hero-section p {
-      font-size: 1.2rem;
-      margin-top: 15px;
-      color: #ddd;
+    .hero-actions { margin-top: 2.5rem; display: flex; gap: 1rem; align-items: center; }
+
+    .hero-metrics {
+      position: absolute;
+      right: 3rem;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: flex-end;
+    }
+    .metric-chip { display: flex; flex-direction: column; align-items: flex-end; gap: 0.15rem; }
+    .metric-val { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--ore-light); line-height: 1; }
+    .metric-label { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dust); }
+    .metric-divider { width: 1px; height: 30px; background: var(--seam); margin-left: auto; }
+
+    /* ── TICKER ── */
+    .ticker-wrap {
+      background: var(--steel-mid);
+      border-top: 1px solid rgba(200,135,58,0.2);
+      border-bottom: 1px solid rgba(200,135,58,0.2);
+      padding: 0.7rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .ticker-inner { display: inline-block; animation: ticker 28s linear infinite; }
+    .ticker-item {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.68rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--dust); padding: 0 3rem;
+    }
+    .ticker-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ore); display: inline-block; }
+    .ticker-item.live .ticker-dot { background: var(--signal); }
+    @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* ── SECTION COMMONS ── */
+    .siq-section { padding: 6rem 0; }
+    .siq-section .container { max-width: 1100px; }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ore); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--ore); }
+
+    .siq-h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      font-weight: 700; text-transform: uppercase;
+      line-height: 1.0; letter-spacing: 0.01em; color: var(--text);
+    }
+    .siq-h2 .accent { color: var(--ore); }
+
+    /* ── PROBLEM ── */
+    .problem-section {
+      background: var(--steel-mid);
+      border-top: 1px solid var(--seam);
+      border-bottom: 1px solid var(--seam);
     }
 
-    /* SECTIONS */
-    .section-card {
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 32px;
-      margin-bottom: 40px;
+    .problem-body { font-size: 1.05rem; color: var(--dust-light); line-height: 1.75; margin-top: 1.5rem; }
+
+    .pain-list { list-style: none; margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1rem; padding: 0; }
+    .pain-list li {
+      display: flex; gap: 1rem; align-items: flex-start;
+      font-size: 0.95rem; color: var(--dust-light);
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--seam);
+      background: rgba(14,16,19,0.6);
+    }
+    .pain-icon { color: var(--danger); font-family: var(--font-mono); font-size: 0.85rem; font-weight: 500; flex-shrink: 0; margin-top: 0.1rem; }
+
+    /* ── PIPELINE ── */
+    .pipeline-section { background: var(--steel-deep); }
+
+    .pipeline-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0; margin-top: 4rem;
+      border: 1px solid var(--seam);
+    }
+    .pipeline-step {
+      padding: 2.5rem 2rem;
+      border-right: 1px solid var(--seam);
+      position: relative;
+    }
+    .pipeline-step:last-child { border-right: none; }
+    .step-num {
+      font-family: var(--font-display); font-size: 4rem; font-weight: 800;
+      color: rgba(200,135,58,0.12); line-height: 1;
+      position: absolute; top: 1.5rem; right: 1.5rem;
+    }
+    .step-icon-wrap {
+      width: 40px; height: 40px; border: 1px solid var(--ore-dark);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;
+    }
+    .step-icon-wrap svg { width: 20px; height: 20px; stroke: var(--ore); fill: none; stroke-width: 1.5; }
+    .step-title {
+      font-family: var(--font-display); font-size: 1.2rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.04em; color: var(--text); margin-bottom: 0.75rem;
+    }
+    .step-body { font-size: 0.88rem; color: var(--dust); line-height: 1.65; }
+    .step-tag {
+      display: inline-block; font-family: var(--font-mono); font-size: 0.58rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--signal); background: rgba(79,195,161,0.08);
+      border: 1px solid rgba(79,195,161,0.2); padding: 0.25rem 0.6rem; margin-top: 1rem;
     }
 
-    .section-title {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
+    /* ── USE CASES ── */
+    .usecases-section { background: var(--steel-mid); border-top: 1px solid var(--seam); }
 
-    /* FEATURES */
-    .feature-icon {
-      font-size: 40px;
-      color: #0078ff;
-      margin-bottom: 15px;
-    }
+    .uc-intro-body { font-size: 1rem; color: var(--dust-light); line-height: 1.75; margin-top: 1rem; }
 
-    /* FAQ */
-    .accordion-button {
-      font-weight: 600;
-      background: #fff;
-      color: #333;
+    .uc-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--seam); margin-top: 4rem;
     }
+    .uc-card { background: var(--steel-mid); padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1rem; }
+    .uc-eyebrow { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ore); }
+    .uc-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.1; color: var(--text); }
+    .uc-body { font-size: 0.88rem; color: var(--dust); line-height: 1.7; flex: 1; }
+    .uc-stat { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--ore-light); line-height: 1; margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--seam); }
+    .uc-stat span { display: block; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dust); margin-top: 0.25rem; }
 
-    .accordion-button:not(.collapsed) {
-      background: #e9f2ff;
-      color: #005fcc;
-    }
-
-    .accordion-item {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      margin-bottom: 12px;
+    /* ── VIDEO BLOCK ── */
+    .video-wrap {
+      border: 1px solid var(--seam);
+      background: #000;
       overflow: hidden;
     }
+    .video-wrap video { display: block; width: 100%; }
 
-    /* CONTACT */
-    .contact-section h2 {
-      font-weight: 700;
+    /* ── ABOUT / HOW IT WORKS ── */
+    .about-section { background: var(--steel-deep); }
+
+    .how-steps { margin-top: 2rem; display: flex; flex-direction: column; gap: 0; border: 1px solid var(--seam); }
+    .how-step {
+      display: grid; grid-template-columns: 3rem 1fr;
+      gap: 1.25rem; padding: 1.5rem 1.75rem;
+      border-bottom: 1px solid var(--seam); align-items: start;
     }
+    .how-step:last-child { border-bottom: none; }
+    .how-num { font-family: var(--font-mono); font-size: 0.65rem; color: var(--ore); font-weight: 500; margin-top: 0.2rem; }
+    .how-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); margin-bottom: 0.3rem; }
+    .how-body { font-size: 0.88rem; color: var(--dust); line-height: 1.65; }
 
-    /* FOOTER */
+    /* ── EDGE SECTION ── */
+    .edge-section { background: var(--steel-mid); border-top: 1px solid var(--seam); }
+
+    .edge-points { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--seam); margin-top: 1rem; }
+    .edge-point { padding: 1.5rem 1.75rem; border-bottom: 1px solid var(--seam); display: grid; grid-template-columns: auto 1fr; gap: 1.25rem; align-items: start; }
+    .edge-point:last-child { border-bottom: none; }
+    .edge-num { font-family: var(--font-mono); font-size: 0.65rem; color: var(--ore); font-weight: 500; margin-top: 0.2rem; }
+    .edge-point-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); margin-bottom: 0.3rem; }
+    .edge-point-body { font-size: 0.85rem; color: var(--dust); line-height: 1.65; }
+
+    .terminal { background: #0A0C0F; border: 1px solid var(--seam); border-top: 3px solid var(--ore); overflow: hidden; }
+    .terminal-bar { background: rgba(200,135,58,0.06); padding: 0.6rem 1rem; border-bottom: 1px solid var(--seam); display: flex; align-items: center; gap: 0.5rem; }
+    .t-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .terminal-body { padding: 1.5rem; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.9; }
+    .t-comment { color: #4A4E57; } .t-key { color: var(--ore-light); } .t-val { color: var(--signal); }
+    .t-str { color: #B5D4A8; } .t-prompt { color: var(--ore); } .t-dim { color: #3A3E47; }
+
+    /* ── INDUSTRIES ── */
+    .industries-section { background: var(--steel-deep); border-top: 1px solid var(--seam); }
+    .ind-strip { display: flex; gap: 1px; background: var(--seam); margin-top: 4rem; }
+    .ind-tile { flex: 1; background: var(--steel-deep); padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .ind-tile.active { background: var(--steel-mid); border-top: 2px solid var(--ore); }
+    .ind-name { font-family: var(--font-display); font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text); }
+    .ind-desc { font-size: 0.8rem; color: var(--dust); line-height: 1.55; }
+    .ind-tile.active .ind-name { color: var(--ore-light); }
+
+    /* ── PRICING ── */
+    .pricing-section { background: var(--steel-mid); border-top: 1px solid var(--seam); text-align: center; }
+    .pricing-card { border: 1px solid var(--seam); padding: 4rem 2rem; background: var(--steel-deep); max-width: 540px; margin: 3rem auto 0; }
+    .pricing-card p { color: var(--dust-light); font-size: 1rem; margin: 1rem 0 2rem; }
+
+    /* ── FAQ ── */
+    .faq-section { background: var(--steel-deep); border-top: 1px solid var(--seam); }
+
+    .accordion-item { border: 1px solid var(--seam) !important; border-radius: 0 !important; margin-bottom: 8px !important; overflow: hidden; background: var(--steel-mid) !important; }
+    .accordion-button {
+      font-family: var(--font-body); font-weight: 500; font-size: 0.9rem;
+      background: var(--steel-mid) !important; color: var(--text) !important;
+      border-radius: 0 !important; padding: 1rem 1.25rem !important;
+    }
+    .accordion-button:not(.collapsed) { background: rgba(200,135,58,0.08) !important; color: var(--ore-light) !important; box-shadow: none !important; }
+    .accordion-button::after { filter: invert(0.7) sepia(1) saturate(2) hue-rotate(5deg); }
+    .accordion-body { background: var(--steel-deep); color: var(--dust-light); font-size: 0.88rem; line-height: 1.7; padding: 1rem 1.25rem !important; border-top: 1px solid var(--seam); }
+
+    /* ── CONTACT ── */
+    .contact-section { background: var(--steel-mid); border-top: 1px solid var(--seam); }
+
+    .contact-info-label {
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--ore);
+      margin-bottom: 0.25rem; margin-top: 1.5rem;
+    }
+    .contact-info-val { font-size: 0.95rem; color: var(--dust-light); }
+
+    .form-label { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dust); margin-bottom: 0.4rem; }
+    .form-control {
+      background: var(--steel-deep) !important; border: 1px solid var(--seam) !important;
+      border-radius: 0 !important; color: var(--text) !important;
+      font-family: var(--font-body); font-size: 0.9rem; padding: 0.65rem 0.9rem !important;
+    }
+    .form-control:focus { border-color: var(--ore) !important; box-shadow: none !important; outline: none; }
+    .form-control::placeholder { color: var(--dust) !important; }
+    textarea.form-control { resize: vertical; }
+
+    /* ── CTA STRIP ── */
+    .cta-section {
+      background: var(--steel-deep); border-top: 1px solid rgba(200,135,58,0.2);
+      text-align: center; padding: 7rem 0; position: relative; overflow: hidden;
+    }
+    .cta-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at center bottom, rgba(200,135,58,0.07) 0%, transparent 65%); }
+    .cta-note { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dust); margin-top: 1.75rem; }
+
+    /* ── FOOTER ── */
     footer {
-      background: #000;
-      color: #fff;
-      padding: 30px 0;
-      border-top: 1px solid #222;
-      text-align: center;
-      margin-top: 60px;
+      background: #080A0C;
+      border-top: 1px solid var(--seam);
+      padding: 2.5rem 0;
+      margin-top: 0;
     }
+    .footer-logo { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; letter-spacing: 0.08em; color: var(--dust); }
+    .footer-logo span { color: var(--ore); }
+    .footer-tagline { font-size: 0.8rem; color: var(--text-muted); margin: 0.25rem 0 0; }
+    .footer-copy { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; color: #3A3E47; margin: 0; }
+    .footer-links { display: flex; gap: 2rem; list-style: none; padding: 0; margin: 0; }
+    .footer-links a { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dust); text-decoration: none; }
+    .footer-links a:hover { color: var(--ore-light); }
 
-    footer img {
-      height: 60px;
-      width: auto;
-      margin-bottom: 10px;
+    @media (max-width: 768px) {
+      .hero-inner { padding: 0 1.5rem; }
+      .hero-metrics { display: none; }
+      .pipeline-grid { grid-template-columns: 1fr 1fr; }
+      .uc-grid { grid-template-columns: 1fr; }
+      .ind-strip { flex-direction: column; }
+      .siq-section { padding: 4rem 0; }
     }
-
-    .messages li {
-      padding: 1em;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      box-shadow: rgba(0,0,0,0.1) 0 2px 6px;
-    }
-
-    .messages li.success { background: #d4edda; }
-    .messages li.error { background: #f8d7da; }
-    .messages li.warning { background: #fff3cd; }
-    .messages li.info { background: #d1ecf1; }
   </style>
 </head>
 
@@ -190,9 +477,9 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-KWWLJZR88D');
 </script>
+
 <body>
 
 <!-- ================= NAVBAR ================= -->
@@ -203,14 +490,15 @@
       <img src="{% static 'images/logo/semanticiq-high-resolution-logo-transparent.png' %}" alt="SemanticIQ Logo">
     </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+            style="border-color: var(--seam);">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="mainNavbar">
-
       <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#pipeline">Pipeline</a></li>
         <li class="nav-item"><a class="nav-link" href="#features">Use Cases</a></li>
         <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
         <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
@@ -219,32 +507,27 @@
         <li class="nav-item"><a class="nav-link" href="https://146179273.hs-sites-eu1.com/blog" target="_blank" rel="noopener noreferrer">Blog</a></li>
       </ul>
 
-      <div class="d-flex align-items-center">
-
+      <div class="d-flex align-items-center gap-2">
         {% if user.is_authenticated %}
-        <a href="/logout" class="btn btn-primary me-3">Sign out</a>
-
-        <div class="dropdown">
-          <a class="d-flex align-items-center text-decoration-none dropdown-toggle text-white"
-             href="#" data-bs-toggle="dropdown">
-            <img src="{{ user.userprofile.get_profile_image_url }}" class="rounded-circle me-2" width="32" height="32">
-            <strong>{{ user.first_name }}</strong>
-          </a>
-
-          <ul class="dropdown-menu dropdown-menu-end shadow">
-            <li><a class="dropdown-item" href="/main_menu">Home</a></li>
-            <li><a class="dropdown-item" href="/view_profile">User Profile</a></li>
-            <li><a class="dropdown-item" href="/account_settings">Settings</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/logout">Sign out</a></li>
-          </ul>
-        </div>
-
+          <a href="/logout" class="btn btn-primary">Sign out</a>
+          <div class="dropdown">
+            <a class="d-flex align-items-center text-decoration-none dropdown-toggle text-white"
+               href="#" data-bs-toggle="dropdown">
+              <img src="{{ user.userprofile.get_profile_image_url }}" class="rounded-circle me-2" width="32" height="32">
+              <strong style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.05em;">{{ user.first_name }}</strong>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow">
+              <li><a class="dropdown-item" href="/main_menu">Home</a></li>
+              <li><a class="dropdown-item" href="/view_profile">User Profile</a></li>
+              <li><a class="dropdown-item" href="/account_settings">Settings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+            </ul>
+          </div>
         {% else %}
-        <a href="/login" class="btn btn-primary me-2">Log In</a>
-        <a href="/signup" class="btn btn-outline-primary">Request Demo | Get Started</a>
+          <a href="/login" class="btn btn-primary">Log In</a>
+          <a href="/signup" class="btn btn-outline-primary">Request Demo</a>
         {% endif %}
-
       </div>
     </div>
   </div>
@@ -252,311 +535,456 @@
 
 <!-- ================= HERO ================= -->
 <section class="hero-section" id="home">
-  <div class="container">
-    <h1>Where legacy systems end, and intelligent operations begin.</h1>
-    <p>Start modernization toward an intelligent, AI‑driven enterprise operating system today.</p>
+  <div class="hero-bg"></div>
+  <div class="hero-accent"></div>
+  <div class="hero-depth"></div>
 
-    {% if user.is_authenticated %}
-    <a href="/main_menu" class="btn btn-primary mt-3">Continue Using SemanticIQ</a>
-    {% else %}
-    <a href="/signup" class="btn btn-primary mt-3">Request Demo | Get Started</a>
-    {% endif %}
+  <div class="hero-inner">
+    <div class="hero-tag">Edge-Native · Physical AI · Mining</div>
+
+    <h1>
+      Data<br>
+      <span class="accent">Intelligence</span><br>
+      <span class="dim">At the Face</span>
+    </h1>
+
+    <p class="hero-sub">
+      SemanticIQ delivers real-time, edge-native data pipelines built for the harsh realities of modern mining — where connectivity is sparse, latency is fatal, and every tonne of ore matters.
+    </p>
+
+    <div class="hero-actions">
+      {% if user.is_authenticated %}
+        <a href="/main_menu" class="btn btn-primary">Continue Using SemanticIQ</a>
+      {% else %}
+        <a href="/signup" class="btn btn-primary">Request Demo</a>
+        <a href="#pipeline" class="btn btn-outline-primary">See How It Works</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="hero-metrics">
+    <div class="metric-chip">
+      <div class="metric-val">&lt;12ms</div>
+      <div class="metric-label">Edge Inference Latency</div>
+    </div>
+    <div class="metric-divider"></div>
+    <div class="metric-chip">
+      <div class="metric-val">99.4%</div>
+      <div class="metric-label">Uptime Off-Grid</div>
+    </div>
+    <div class="metric-divider"></div>
+    <div class="metric-chip">
+      <div class="metric-val">8+</div>
+      <div class="metric-label">Mine Types Supported</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TICKER ================= -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="ticker-item live"><span class="ticker-dot"></span>Live Edge Feed · Haul Truck #14 — Payload 287t — Zone C3</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Ontology Sync · Drill Pattern Classifier v2.1 Deployed</span>
+    <span class="ticker-item live"><span class="ticker-dot"></span>Live Anomaly · Conveyor Belt 07 — Vibration Spike Detected</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Agent Action · Blasting Delay Issued — Sector 11 Safety Zone Active</span>
+    <span class="ticker-item live"><span class="ticker-dot"></span>Live Ore Grade · 4.2 g/t Au — Block 9 Southeast Stope</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Pipeline Status · 1,240 Sensors Streaming · Latency 9ms</span>
+    <span class="ticker-item live"><span class="ticker-dot"></span>Live Edge Feed · Haul Truck #14 — Payload 287t — Zone C3</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Ontology Sync · Drill Pattern Classifier v2.1 Deployed</span>
+    <span class="ticker-item live"><span class="ticker-dot"></span>Live Anomaly · Conveyor Belt 07 — Vibration Spike Detected</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Agent Action · Blasting Delay Issued — Sector 11 Safety Zone Active</span>
+    <span class="ticker-item live"><span class="ticker-dot"></span>Live Ore Grade · 4.2 g/t Au — Block 9 Southeast Stope</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Pipeline Status · 1,240 Sensors Streaming · Latency 9ms</span>
+  </div>
+</div>
+
+<!-- ================= PROBLEM ================= -->
+<section class="siq-section problem-section">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-5">
+        <div class="section-label">The Problem</div>
+        <h2 class="siq-h2">Mining Runs on <span class="accent">Blind Spots</span></h2>
+        <p class="problem-body">Underground equipment, open-pit sensors, and fleet telematics generate enormous data volumes — but without a coherent semantic layer, it stays siloed, stale, and unusable. Cloud-first architectures break down 3,000 feet below surface.</p>
+      </div>
+      <div class="col-lg-7">
+        <ul class="pain-list">
+          <li><span class="pain-icon">!</span><span>Sensor data trapped in vendor silos — drill telemetry, conveyor health, and ore tracking systems that never talk to each other.</span></li>
+          <li><span class="pain-icon">!</span><span>Cloud-dependent AI models fail in underground environments where LTE and WiFi are intermittent or unavailable.</span></li>
+          <li><span class="pain-icon">!</span><span>Decisions made on 4-hour-old data — haul cycles, grade control, and safety events require sub-second intelligence.</span></li>
+          <li><span class="pain-icon">!</span><span>Legacy MES and ERP systems treated as the "source of truth" for operational reality that changed hours ago.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PIPELINE ================= -->
+<section class="siq-section pipeline-section" id="pipeline">
+  <div class="container">
+    <div class="section-label">The Solution</div>
+    <h2 class="siq-h2">The <span class="accent">Edge Pipeline</span><br>Architecture</h2>
+
+    <div class="pipeline-grid">
+      <div class="pipeline-step">
+        <span class="step-num">01</span>
+        <div class="step-icon-wrap">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="12" y1="7" x2="5" y2="17"/><line x1="12" y1="7" x2="19" y2="17"/></svg>
+        </div>
+        <div class="step-title">Sensor Ingestion</div>
+        <div class="step-body">Onboard edge nodes collect raw streams from drills, conveyors, haul trucks, and environmental monitors — no cloud dependency required.</div>
+        <div class="step-tag">Sub-50ms polling</div>
+      </div>
+      <div class="pipeline-step">
+        <span class="step-num">02</span>
+        <div class="step-icon-wrap">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+        </div>
+        <div class="step-title">Semantic Mapping</div>
+        <div class="step-body">Mining-specific ontology kits translate raw telemetry into structured, agent-ready intelligence using CRIRSCO and ISO 19156-aligned schemas.</div>
+        <div class="step-tag">Mining ontology kit v3</div>
+      </div>
+      <div class="pipeline-step">
+        <span class="step-num">03</span>
+        <div class="step-icon-wrap">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="step-title">Physical AI Inference</div>
+        <div class="step-body">Lightweight AI models run directly at the edge — ore grade prediction, equipment fault detection, cycle time optimisation — without a single cloud round-trip.</div>
+        <div class="step-tag">&lt;12ms inference</div>
+      </div>
+      <div class="pipeline-step">
+        <span class="step-num">04</span>
+        <div class="step-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="step-title">Autonomous Action</div>
+        <div class="step-body">Agents issue recommendations and automated controls to fleet management, SCADA, and ERP systems — closing the loop between insight and operation in real time.</div>
+        <div class="step-tag">SCADA + ERP integration</div>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- ================= USE CASES ================= -->
-<section class="py-5" id="features">
+<section class="siq-section usecases-section" id="features">
   <div class="container">
-
-    <div class="section-card">
-      <div class="row align-items-center">
-        <div class="col-lg-6">
-          <h2 class="section-title">What SemanticIQ Can Do For You</h2>
-          <p><strong>SemanticIQ empowers enterprises to build and operate modern, cheaper, flexibe and intelligent systems that far outperform traditional software.</strong></p>
-          <p>Legacy platforms rely on rigid schemas that can’t evolve as operations change. They are fragmented, creating data silos and sprawl — two major barriers to effective AI adoption.</p>
-        </div>
-
-        <div class="col-lg-6 text-center">
-          <video width="100%" controls>
-            <source src="{% static 'videos/sematic_IQ_intro.mp4' %}" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
+    <div class="row align-items-end g-4 mb-2">
+      <div class="col-lg-6">
+        <div class="section-label">Applications</div>
+        <h2 class="siq-h2">Built for the <span class="accent">Operational Realities</span> of Modern Mining</h2>
+      </div>
+      <div class="col-lg-6">
+        <p class="uc-intro-body">SemanticIQ's edge-native platform was designed from the ground up for mining operations — not retrofitted from an enterprise SaaS product. Each use case ships with a pre-built ontology kit and agent template.</p>
+        <div class="mt-3">
+          <div class="video-wrap">
+            <video width="100%" controls>
+              <source src="{% static 'videos/sematic_IQ_intro.mp4' %}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="row text-center">
-      <div class="col-md-3">
-        <div class="section-card">
-          <i class="lni lni-infinite feature-icon"></i>
-          <h5>Adaptive by Design</h5>
-          <p>SemanticIQ evolves as your processes change.</p>
-        </div>
+    <div class="uc-grid">
+      <div class="uc-card">
+        <div class="uc-eyebrow">Grade Control</div>
+        <div class="uc-title">Real-Time Ore Intelligence</div>
+        <div class="uc-body">Continuous ore grade estimation from drill cuttings, blasthole sensors, and XRF data — semantically unified and fed directly into block model updates.</div>
+        <div class="uc-stat">↑23%<span>Ore recovery improvement</span></div>
       </div>
-
-      <div class="col-md-3">
-        <div class="section-card">
-          <i class="lni lni-network feature-icon"></i>
-          <h5>AI‑Ready Architecture</h5>
-          <p>Eliminate silos. Build a connected knowledge layer.</p>
-        </div>
+      <div class="uc-card">
+        <div class="uc-eyebrow">Fleet & Haulage</div>
+        <div class="uc-title">Predictive Cycle Optimisation</div>
+        <div class="uc-body">AI agents monitor haul truck payload, cycle times, and queue dynamics — autonomously rebalancing routes and load targets without operator input.</div>
+        <div class="uc-stat">↓18%<span>Reduction in cycle variance</span></div>
       </div>
-
-      <div class="col-md-3">
-        <div class="section-card">
-          <i class="lni lni-layers feature-icon"></i>
-          <h5>Unified Operating Core</h5>
-          <p>Replace fragmented tools with a single system.</p>
-        </div>
+      <div class="uc-card">
+        <div class="uc-eyebrow">Maintenance</div>
+        <div class="uc-title">Equipment Fault Prediction</div>
+        <div class="uc-body">Vibration, temperature, and current signatures from crushers, mills, and conveyors processed at the edge — detecting fault signatures 72–96 hours before failure.</div>
+        <div class="uc-stat">72h<span>Advance failure warning</span></div>
       </div>
-
-      <div class="col-md-3">
-        <div class="section-card">
-          <i class="lni lni-timer feature-icon"></i>
-          <h5>Future‑Proof & Affordable</h5>
-          <p>Update your system without costly rebuilds.</p>
-        </div>
+      <div class="uc-card">
+        <div class="uc-eyebrow">Safety & Compliance</div>
+        <div class="uc-title">Autonomous Hazard Response</div>
+        <div class="uc-body">Gas sensor arrays, proximity detection, and seismic monitoring fed through the semantic pipeline — triggering automatic zone lockdowns before human observation.</div>
+        <div class="uc-stat">&lt;400ms<span>Alert-to-lockdown latency</span></div>
+      </div>
+      <div class="uc-card">
+        <div class="uc-eyebrow">Energy & Water</div>
+        <div class="uc-title">Resource Consumption AI</div>
+        <div class="uc-body">Edge models track energy draw across the processing plant and pumping network — autonomously scheduling high-draw processes to off-peak windows.</div>
+        <div class="uc-stat">↓31%<span>Energy cost reduction</span></div>
+      </div>
+      <div class="uc-card">
+        <div class="uc-eyebrow">Reporting</div>
+        <div class="uc-title">Automated Shift Intelligence</div>
+        <div class="uc-body">End-of-shift and regulatory reports generated automatically from the live semantic graph — feeding JORC, NI 43-101, and internal KPI dashboards without manual entry.</div>
+        <div class="uc-stat">−6h<span>Reporting overhead per shift</span></div>
       </div>
     </div>
-
   </div>
 </section>
 
 <!-- ================= ABOUT ================= -->
-<section class="py-5" id="about">
+<section class="siq-section about-section" id="about">
   <div class="container">
-    <div class="section-card">
-      <div class="row align-items-center">
-
-        <div class="col-lg-6">
-          <h2 class="section-title">Build an Operating System That Evolves With Your Business</h2>
-
-          <p><strong>SemanticIQ replaces rigid, fragmented software with a unified, ontology‑driven operating system that adapts as your business evolves.</strong></p>
-
-          <h5>1. Model Your Business as a Living Ontology</h5>
-          <p>SemanticIQ captures your processes as a dynamic semantic model — a knowledge graph that understands relationships and context.</p>
-
-          <h5>2. Create Semantic Workspaces</h5>
-          <p>Workspaces become adaptive, role‑specific entry points into your enterprise ontology.</p>
-
-          <h5>3. Power AI, Automation, and Agents</h5>
-          <p>AI can reason over your semantic model, enabling safe, intelligent automation.</p>
-
-          <h5>4. Evolve Without Rebuilding</h5>
-          <p>Modify operating system by updating the semantic model — no heavy engineering required.</p>
-
+    <div class="row align-items-start g-5">
+      <div class="col-lg-6">
+        <div class="section-label">How It Works</div>
+        <h2 class="siq-h2">Deploy in <span class="accent">Four Steps</span></h2>
+        <div class="how-steps">
+          <div class="how-step">
+            <div class="how-num">01</div>
+            <div><div class="how-title">Deploy Industry-Standard Kits</div><div class="how-body">Start with pre-built ontology models for mining — designed for immediate AI readiness and aligned with CRIRSCO and ISO standards.</div></div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">02</div>
+            <div><div class="how-title">Map Your Existing Legacy Data</div><div class="how-body">We connect your current ERP, MES, and siloed sensor data to our semantic layer — without breaking your current systems.</div></div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">03</div>
+            <div><div class="how-title">Activate Autonomous Agents</div><div class="how-body">Deploy AI agents that reason over your data to handle grade control, fleet dispatch, or maintenance scheduling in real time.</div></div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">04</div>
+            <div><div class="how-title">Modernize at Your Own Pace</div><div class="how-body">Gradually shift operations to an AI-first architecture, phasing out legacy costs and complexity as you scale.</div></div>
+          </div>
+        </div>
+        <div class="mt-4">
           {% if user.is_authenticated %}
-          <a href="/main_menu" class="btn btn-primary mt-3">Continue Using SemanticIQ</a>
+            <a href="/main_menu" class="btn btn-primary">Continue Using SemanticIQ</a>
           {% else %}
-          <a href="/signup" class="btn btn-primary mt-3">Request Demo | Get Started</a>
+            <a href="/signup" class="btn btn-primary">Request Demo</a>
           {% endif %}
         </div>
+      </div>
+      <div class="col-lg-6">
+        <img src="{% static 'images/about/about-image.svg' %}" alt="About SemanticIQ" class="img-fluid" style="opacity: 0.8; filter: sepia(0.3) hue-rotate(5deg);">
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class="col-lg-6 text-center">
-          <img src="{% static 'images/about/about-image.svg' %}" alt="About SemanticIQ" class="img-fluid">
+<!-- ================= WHY EDGE ================= -->
+<section class="siq-section edge-section">
+  <div class="container">
+    <div class="row align-items-start g-5">
+      <div class="col-lg-6">
+        <div class="section-label">Why Edge-Native</div>
+        <h2 class="siq-h2">Cloud AI<br><span class="accent">Doesn't Work</span><br>Underground</h2>
+        <div class="edge-points">
+          <div class="edge-point">
+            <div class="edge-num">01</div>
+            <div><div class="edge-point-title">Zero Connectivity Tolerance</div><div class="edge-point-body">Underground mines average 40–60% network availability. SemanticIQ edge nodes operate fully autonomously during outages and sync delta changes on reconnect.</div></div>
+          </div>
+          <div class="edge-point">
+            <div class="edge-num">02</div>
+            <div><div class="edge-point-title">Latency That Kills Operations</div><div class="edge-point-body">A cloud round-trip takes 80–400ms. Safety-critical responses require sub-50ms decisions. Edge inference delivers 9–12ms.</div></div>
+          </div>
+          <div class="edge-point">
+            <div class="edge-num">03</div>
+            <div><div class="edge-point-title">Data Sovereignty & Security</div><div class="edge-point-body">Resource data never leaves your operational perimeter. Geological models and production intelligence stay on-site — satisfying regulatory and competitive security requirements.</div></div>
+          </div>
+          <div class="edge-point">
+            <div class="edge-num">04</div>
+            <div><div class="edge-point-title">Bandwidth Economics</div><div class="edge-point-body">A 1,000-sensor operation generates 15–40GB/day raw. Edge-side semantic compression reduces cloud egress by 97% — transforming infrastructure cost.</div></div>
+          </div>
         </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="terminal">
+          <div class="terminal-bar">
+            <div class="t-dot" style="background:#E84545;"></div>
+            <div class="t-dot" style="background:#E8A855; margin:0 4px;"></div>
+            <div class="t-dot" style="background:#4FC3A1;"></div>
+            <span style="font-family:var(--font-mono);font-size:0.62rem;color:#4A4E57;margin-left:0.75rem;letter-spacing:0.1em;">semanticiq.edge · node-07 · underground-l4</span>
+          </div>
+          <div class="terminal-body">
+            <div class="t-comment"># SemanticIQ Edge Node — Live Stream</div>
+            <div class="t-dim">─────────────────────────────────────────</div>
+            <div><span class="t-prompt">$</span> <span style="color:#EAE8E3;">siq status</span></div>
+            <div class="t-dim">&nbsp;</div>
+            <div><span class="t-key">node_id      </span> <span class="t-val">edge-07-l4-westwing</span></div>
+            <div><span class="t-key">connectivity </span> <span style="color:#E84545;">OFFLINE</span></div>
+            <div><span class="t-key">mode         </span> <span class="t-val">AUTONOMOUS</span></div>
+            <div><span class="t-key">uptime       </span> <span class="t-val">14d 06h 42m</span></div>
+            <div class="t-dim">&nbsp;</div>
+            <div><span class="t-key">sensors_active    </span> <span class="t-str">148 / 148</span></div>
+            <div><span class="t-key">inference_latency </span> <span class="t-str">11ms avg</span></div>
+            <div><span class="t-key">events_buffered   </span> <span class="t-str">3,821</span></div>
+            <div class="t-dim">&nbsp;</div>
+            <div><span class="t-key">last_alert   </span> <span style="color:#E8A855;">BELT_07_VIBRATION</span></div>
+            <div><span class="t-key">alert_action </span> <span class="t-str">maint_ticket_raised</span></div>
+            <div><span class="t-key">alert_age    </span> <span class="t-str">4m 12s</span></div>
+            <div class="t-dim">&nbsp;</div>
+            <div class="t-comment"># Operating autonomously. No cloud needed.</div>
+            <div><span class="t-prompt">$</span> <span style="color:#4A4E57;">_</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- ================= INDUSTRIES ================= -->
+<section class="siq-section industries-section">
+  <div class="container">
+    <div class="section-label">Industry Coverage</div>
+    <h2 class="siq-h2">One Platform.<br><span class="accent">Every Ore Body.</span></h2>
+    <div class="ind-strip">
+      <div class="ind-tile active">
+        <div class="ind-name">Hard Rock Underground</div>
+        <div class="ind-desc">Gold, copper, nickel. Deep stope operations with intermittent comms.</div>
+      </div>
+      <div class="ind-tile">
+        <div class="ind-name">Open Pit</div>
+        <div class="ind-desc">Large-scale fleet, blast scheduling, and grade control.</div>
+      </div>
+      <div class="ind-tile">
+        <div class="ind-name">Battery Minerals</div>
+        <div class="ind-desc">Lithium, cobalt, graphite. Critical mineral traceability from face to port.</div>
+      </div>
+      <div class="ind-tile">
+        <div class="ind-name">Coal & Potash</div>
+        <div class="ind-desc">Continuous miner telemetry and methane monitoring at the longwall.</div>
+      </div>
+      <div class="ind-tile">
+        <div class="ind-name">Processing Plants</div>
+        <div class="ind-desc">Comminution, flotation, and tailings — end-to-end semantic integration.</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ================= PRICING ================= -->
-<section class="py-5" id="pricing">
+<section class="siq-section pricing-section" id="pricing">
   <div class="container">
-    <div class="section-card text-center">
-      <h2 class="section-title">Our Pricing Plans</h2>
-      <p>SemanticIQ pricing is tailored to each business. Contact us to discuss a plan that suits your needs.</p>
-      <a href="#contact" class="btn btn-outline-primary mt-3">Contact Us</a>
+    <div class="section-label" style="justify-content: center;">Pricing</div>
+    <h2 class="siq-h2 text-center">Tailored to Your <span class="accent">Operation</span></h2>
+    <div class="pricing-card mx-auto">
+      <p>SemanticIQ pricing is scoped to your site footprint — number of edge nodes, sensors, and agent workloads. Contact us to discuss a plan that fits your operation.</p>
+      <a href="#contact" class="btn btn-outline-primary">Talk to the Team</a>
     </div>
   </div>
 </section>
 
 <!-- ================= FAQ ================= -->
-<section class="py-5" id="faq">
+<section class="siq-section faq-section" id="faq">
   <div class="container">
-    <h2 class="section-title text-center mb-4">Common Questions</h2>
-
-    <div class="row">
+    <div class="section-label">Common Questions</div>
+    <h2 class="siq-h2 mb-5">FAQ</h2>
+    <div class="row g-3">
       <div class="col-lg-6">
-
-        <!-- FAQ 1 -->
         <div class="accordion-item">
-          <h2 class="accordion-header" id="heading1">
-            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq1">
-              What industries does SemanticIQ serve?
-            </button>
-          </h2>
-          <div id="faq1" class="accordion-collapse collapse">
-            <div class="accordion-body">
-              SemanticIQ is industry‑agnostic and supports any workflow‑driven business.
-            </div>
-          </div>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq1">Do I need to rebuild my systems to use SemanticIQ?</button></h2>
+          <div id="faq1" class="accordion-collapse collapse"><div class="accordion-body">No. SemanticIQ sits on top of your current systems. Our mining ontology kits map directly to your existing ERP, MES, or sensor databases — no rip and replace required.</div></div>
         </div>
-
-        <!-- FAQ 2 -->
         <div class="accordion-item">
-          <h2 class="accordion-header" id="heading2">
-            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq2">
-              Who uses SemanticIQ?
-            </button>
-          </h2>
-          <div id="faq2" class="accordion-collapse collapse">
-            <div class="accordion-body">
-              SemanticIQ can support entire enterprises or individual departments.
-            </div>
-          </div>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq2">What mining ontology kits are available?</button></h2>
+          <div id="faq2" class="accordion-collapse collapse"><div class="accordion-body">We ship kits for hard rock underground, open pit, battery minerals, coal and potash, and processing plant operations — each aligned to CRIRSCO and ISO 19156 schemas.</div></div>
         </div>
-
-        <!-- FAQ 3 -->
         <div class="accordion-item">
-          <h2 class="accordion-header" id="heading3">
-            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq3">
-              How secure is SemanticIQ?
-            </button>
-          </h2>
-          <div id="faq3" class="accordion-collapse collapse">
-            <div class="accordion-body">
-              SemanticIQ uses modern security practices and integrates with secure enterprise systems.
-            </div>
-          </div>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq3">How does SemanticIQ handle data security underground?</button></h2>
+          <div id="faq3" class="accordion-collapse collapse"><div class="accordion-body">All inference and data processing happens on-site at the edge node. No raw operational or geological data leaves your perimeter unless you explicitly configure cloud sync.</div></div>
         </div>
-
       </div>
-
       <div class="col-lg-6">
-
-        <!-- FAQ 4 -->
         <div class="accordion-item">
-          <h2 class="accordion-header" id="heading4">
-            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq4">
-              What size of business suits SemanticIQ?
-            </button>
-          </h2>
-          <div id="faq4" class="accordion-collapse collapse">
-            <div class="accordion-body">
-              SemanticIQ scales from small businesses to large enterprises.
-            </div>
-          </div>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq4">How long does deployment take?</button></h2>
+          <div id="faq4" class="accordion-collapse collapse"><div class="accordion-body">Typical deployments go from data mapping to live edge inference in 4 to 6 weeks, including sensor integration, ontology configuration, and agent activation.</div></div>
         </div>
-
-        <!-- FAQ 5 -->
         <div class="accordion-item">
-          <h2 class="accordion-header" id="heading5">
-            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq5">
-              Why should I consider SemanticIQ?
-            </button>
-          </h2>
-          <div id="faq5" class="accordion-collapse collapse">
-            <div class="accordion-body">
-              SemanticIQ modernizes operations, reduces costs, and supports AI‑driven innovation.
-            </div>
-          </div>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq5">How is this different from other mining AI vendors?</button></h2>
+          <div id="faq5" class="accordion-collapse collapse"><div class="accordion-body">Most mining AI vendors require cloud connectivity and offer point solutions. SemanticIQ provides a unified semantic layer that runs fully offline — unifying all data sources into one agent-ready graph.</div></div>
         </div>
-
-        <!-- FAQ 6 -->
         <div class="accordion-item">
-          <h2 class="accordion-header" id="heading6">
-            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq6">
-              How do I get help or leave feedback?
-            </button>
-          </h2>
-          <div id="faq6" class="accordion-collapse collapse">
-            <div class="accordion-body">
-              You can email us anytime using the contact details below.
-            </div>
-          </div>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq6">Can we pilot a single use case first?</button></h2>
+          <div id="faq6" class="accordion-collapse collapse"><div class="accordion-body">Absolutely. Most sites start with a single high-value use case — grade control or predictive maintenance — to prove ROI before expanding to the full platform.</div></div>
         </div>
-
       </div>
     </div>
-
   </div>
 </section>
 
 <!-- ================= CONTACT ================= -->
-<section class="py-5" id="contact">
+<section class="siq-section contact-section" id="contact">
   <div class="container">
-    <div class="section-card">
+    <div class="row align-items-start g-5">
+      <div class="col-lg-6">
+        <div class="section-label">Get in Touch</div>
+        <h2 class="siq-h2">Ready to Wire<br>the <span class="accent">Mine of the Future?</span></h2>
+        <p style="color: var(--dust-light); margin-top: 1.25rem; font-size: 1rem; max-width: 400px; line-height: 1.7;">Talk to our team about deploying a pilot edge node on your site. We go from data mapping to live inference in under four weeks.</p>
 
-      <div class="row align-items-center">
-        <div class="col-lg-7">
-          <h2 class="section-title">Contact Us</h2>
-          <p class="mb-4">We would love to hear from you.</p>
-
-          <div class="mb-3">
-            <h5><i class="lni lni-map-marker"></i> Our Location</h5>
-            <p>Iveagh Court, Harcourt Rd, Saint Kevin's, Dublin, D02 YT22</p>
-          </div>
-
-          <div class="mb-3">
-            <h5><i class="lni lni-envelope"></i> Email Us</h5>
-            <p>malvern@semanticiq.co</p>
-          </div>
+        <div class="mt-4">
+          <div class="contact-info-label">Our Location</div>
+          <div class="contact-info-val">Iveagh Court, Harcourt Rd, Saint Kevin's<br>Dublin, D02 YT22</div>
+          <div class="contact-info-label">Email</div>
+          <div class="contact-info-val">malvern@semanticiq.co</div>
         </div>
+      </div>
 
-        <div class="col-lg-5">
-          <h4>Send us a Message</h4>
+      <div class="col-lg-6">
+        <div style="border: 1px solid var(--seam); padding: 2rem; background: var(--steel-deep);">
+          <h4 style="font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text); margin-bottom: 1.5rem;">Send a Message</h4>
 
-         {% if messages %}
-<ul class="messages">
-  {% for message in messages %}
-  <li class="{{ message.tags }}">{{ message }}</li>
-  {% endfor %}
-</ul>
-{% endif %}
+          {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
 
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-
-  <div class="mb-3">
-    <label class="form-label">Full Name*</label>
-    <input type="text" name="fullname" class="form-control" required>
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label">Full Name*</label>
+              <input type="text" name="fullname" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email*</label>
+              <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Phone</label>
+              <input type="text" name="phone" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Message*</label>
+              <textarea name="message" class="form-control" rows="4" required></textarea>
+            </div>
+            <div class="g-recaptcha mb-3" data-sitekey="6LcK53osAAAAAHb0YMu9CxaOl_g_3V6oUnqkdndc"></div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div class="mb-3">
-    <label class="form-label">Email*</label>
-    <input type="email" name="email" class="form-control" required>
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label">Phone</label>
-    <input type="text" name="phone" class="form-control">
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label">Message*</label>
-    <textarea name="message" class="form-control" rows="3" required></textarea>
-  </div>
-
-  <div class="g-recaptcha mb-3" data-sitekey="6LcK53osAAAAAHb0YMu9CxaOl_g_3V6oUnqkdndc"></div>
-
-  <button type="submit" class="btn btn-primary">Send Message</button>
-</form>
-
-</div>
-</div>
-</div>
-</div>
 </section>
 
 <!-- ================= FOOTER ================= -->
 <footer>
-  <div class="container text-center">
-
-    <img src="{% static 'images/logo/semanticiq-high-resolution-logo-transparent.png' %}" alt="SemanticIQ Logo">
-
-    <p class="mt-2">Rethinking enterprise software in the AI era</p>
-
-    <p class="mt-3 mb-0">
-      © SemanticIQ <script>document.write(new Date().getFullYear())</script>. All Rights Reserved.
-    </p>
-
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <div>
+        <div class="footer-logo">Semantic<span>IQ</span></div>
+        <p class="footer-tagline">Edge-native intelligence for physical AI operations</p>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#pipeline">Pipeline</a></li>
+        <li><a href="#features">Use Cases</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="https://146179273.hs-sites-eu1.com/blog" target="_blank" rel="noopener noreferrer">Blog</a></li>
+      </ul>
+      <p class="footer-copy">© SemanticIQ <script>document.write(new Date().getFullYear())</script>. All Rights Reserved.</p>
+    </div>
   </div>
 </footer>
 
 <!-- ================= SCRIPTS ================= -->
 <script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
-
 </body>
 </html>
