@@ -299,20 +299,20 @@
     }
     .pain-icon { color: var(--danger); font-family: var(--font-mono); font-size: 0.85rem; font-weight: 500; flex-shrink: 0; margin-top: 0.1rem; }
 
-    /* ── PIPELINE ── */
-    .pipeline-section { background: var(--steel-deep); }
+    /* ── Solution ── */
+    .solution-section { background: var(--steel-deep); }
 
-    .pipeline-grid {
+    .solution-grid {
       display: grid; grid-template-columns: repeat(4, 1fr);
       gap: 0; margin-top: 4rem;
       border: 1px solid var(--seam);
     }
-    .pipeline-step {
+    .solution-step {
       padding: 2.5rem 2rem;
       border-right: 1px solid var(--seam);
       position: relative;
     }
-    .pipeline-step:last-child { border-right: none; }
+    .solution-step:last-child { border-right: none; }
     .step-num {
       font-family: var(--font-display); font-size: 4rem; font-weight: 800;
       color: rgba(200,135,58,0.12); line-height: 1;
@@ -335,7 +335,7 @@
       border: 1px solid rgba(79,195,161,0.2); padding: 0.25rem 0.6rem; margin-top: 1rem;
     }
 
-    /* ── USE CASES ── */
+    /* ── Applications ── */
     .usecases-section { background: var(--steel-mid); border-top: 1px solid var(--seam); }
 
     .uc-intro-body { font-size: 1rem; color: var(--dust-light); line-height: 1.75; margin-top: 1rem; }
@@ -463,7 +463,7 @@
     @media (max-width: 768px) {
       .hero-inner { padding: 0 1.5rem; }
       .hero-metrics { display: none; }
-      .pipeline-grid { grid-template-columns: 1fr 1fr; }
+      .solution-grid { grid-template-columns: 1fr 1fr; }
       .uc-grid { grid-template-columns: 1fr; }
       .ind-strip { flex-direction: column; }
       .siq-section { padding: 4rem 0; }
@@ -498,8 +498,8 @@
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="#pipeline">Pipeline</a></li>
-        <li class="nav-item"><a class="nav-link" href="#features">Use Cases</a></li>
+        <li class="nav-item"><a class="nav-link" href="#solution">solution</a></li>
+        <li class="nav-item"><a class="nav-link" href="#features">applications</a></li>
         <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
         <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
         <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
@@ -540,11 +540,11 @@
   <div class="hero-depth"></div>
 
   <div class="hero-inner">
-    <div class="hero-tag">Cross-Industry · Pump Intelligence · System of Truth</div>
+    <div class="hero-tag">Cross-Industry · Pump Intelligence · Operational Memory</div>
 
     <h1>
       One Source<br>
-      <span class="accent">of Truth</span><br>
+      <span class="accent">of Full Lifecycle Truth</span><br>
       <span class="dim">for Every Pump</span>
     </h1>
 
@@ -557,7 +557,7 @@
         <a href="/main_menu" class="btn btn-primary">Continue Using semanticIQ</a>
       {% else %}
         <a href="/signup" class="btn btn-primary">Request Early Access</a>
-        <a href="#pipeline" class="btn btn-outline-primary">See How It Works</a>
+        <a href="#solution" class="btn btn-outline-primary">See How It Works</a>
       {% endif %}
     </div>
   </div>
@@ -613,21 +613,22 @@
           <li><span class="pain-icon">!</span><span>Efficiency loss is invisible until it hits the energy bill — pumps quietly drift off their design curve for months or years with nobody watching.</span></li>
           <li><span class="pain-icon">!</span><span>Replacement decisions are made on age and gut feel, not data — with no real picture of remaining useful life or true lifecycle cost.</span></li>
           <li><span class="pain-icon">!</span><span>Every site relearns the same failure modes alone — with no way to benchmark against how the same pump model performs anywhere else.</span></li>
+          <li><span class="pain-icon">!</span><span>Your pump's operational memory is incomplete — lacking the full context of its performance history, failure patterns, what was changed and why.</span></li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ================= PIPELINE ================= -->
-<section class="siq-section pipeline-section" id="pipeline">
+<!-- ================= SOLUTION ================= -->
+<section class="siq-section solution-section" id="solution">
   <div class="container">
-    <div class="section-label">How It Works</div>
+    <div class="section-label">Solution</div>
     <h2 class="siq-h2">One Physics-Based Engine,<br><span class="accent">Any Pump, Any Plant</span></h2>
     <p style="color: var(--dust-light); font-size: 1rem; max-width: 600px; margin-top: 1rem; line-height: 1.7;">How semanticIQ turns ordinary operating data into physics-based intelligence — without rip and replace, without proprietary sensors.</p>
 
-    <div class="pipeline-grid">
-      <div class="pipeline-step">
+    <div class="solution-grid">
+      <div class="solution-step">
         <span class="step-num">01</span>
         <div class="step-icon-wrap">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="12" y1="7" x2="5" y2="17"/><line x1="12" y1="7" x2="19" y2="17"/></svg>
@@ -637,7 +638,7 @@
         <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--dust); margin-top: 0.75rem; line-height: 1.6; border-left: 2px solid var(--seam); padding-left: 0.75rem;">Works with existing plant instrumentation across any pump brand or vintage. Add-on sensors only where genuine gaps exist.</div>
         <div class="step-tag">Brownfield-first</div>
       </div>
-      <div class="pipeline-step">
+      <div class="solution-step">
         <span class="step-num">02</span>
         <div class="step-icon-wrap">
           <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
@@ -646,7 +647,7 @@
         <div class="step-body">Each pump is matched to a physics-based model for its type and duty — built from hydraulic first principles, not generic vendor data — so the system understands how that specific class of pump should behave before it's seen a single failure.</div>
         <div class="step-tag">Mechanistic model library v3</div>
       </div>
-      <div class="pipeline-step">
+      <div class="solution-step">
         <span class="step-num">03</span>
         <div class="step-icon-wrap">
           <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -655,7 +656,7 @@
         <div class="step-body">Hydraulic models, failure-mode libraries, and per-asset baselines work together to catch what generic vibration tools miss — cavitation, efficiency drift, and early-stage degradation across the full pump lifecycle.</div>
         <div class="step-tag">3-layer model architecture</div>
       </div>
-      <div class="pipeline-step">
+      <div class="solution-step">
         <span class="step-num">04</span>
         <div class="step-icon-wrap">
           <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
@@ -668,7 +669,7 @@
   </div>
 </section>
 
-<!-- ================= USE CASES ================= -->
+<!-- ================= applications ================= -->
 <section class="siq-section usecases-section" id="features">
   <div class="container">
     <div class="row align-items-end g-4 mb-2">
@@ -976,8 +977,8 @@
         <p class="footer-tagline">The system of truth for industrial pump assets</p>
       </div>
       <ul class="footer-links">
-        <li><a href="#pipeline">Pipeline</a></li>
-        <li><a href="#features">Use Cases</a></li>
+        <li><a href="#solution">Solution</a></li>
+        <li><a href="#features">applications</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="https://146179273.hs-sites-eu1.com/blog" target="_blank" rel="noopener noreferrer">Blog</a></li>
       </ul>
