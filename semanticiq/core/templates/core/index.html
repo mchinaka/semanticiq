@@ -11,7 +11,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>semanticIQ — The System of Truth for Industrial Pumps</title>
+  <title>semanticIQ — Physics-Native Industrial Intelligence</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -299,20 +299,20 @@
     }
     .pain-icon { color: var(--danger); font-family: var(--font-mono); font-size: 0.85rem; font-weight: 500; flex-shrink: 0; margin-top: 0.1rem; }
 
-    /* ── Solution ── */
-    .solution-section { background: var(--steel-deep); }
+    /* ── PIPELINE ── */
+    .pipeline-section { background: var(--steel-deep); }
 
-    .solution-grid {
+    .pipeline-grid {
       display: grid; grid-template-columns: repeat(4, 1fr);
       gap: 0; margin-top: 4rem;
       border: 1px solid var(--seam);
     }
-    .solution-step {
+    .pipeline-step {
       padding: 2.5rem 2rem;
       border-right: 1px solid var(--seam);
       position: relative;
     }
-    .solution-step:last-child { border-right: none; }
+    .pipeline-step:last-child { border-right: none; }
     .step-num {
       font-family: var(--font-display); font-size: 4rem; font-weight: 800;
       color: rgba(200,135,58,0.12); line-height: 1;
@@ -335,7 +335,7 @@
       border: 1px solid rgba(79,195,161,0.2); padding: 0.25rem 0.6rem; margin-top: 1rem;
     }
 
-    /* ── Applications ── */
+    /* ── USE CASES ── */
     .usecases-section { background: var(--steel-mid); border-top: 1px solid var(--seam); }
 
     .uc-intro-body { font-size: 1rem; color: var(--dust-light); line-height: 1.75; margin-top: 1rem; }
@@ -463,7 +463,7 @@
     @media (max-width: 768px) {
       .hero-inner { padding: 0 1.5rem; }
       .hero-metrics { display: none; }
-      .solution-grid { grid-template-columns: 1fr 1fr; }
+      .pipeline-grid { grid-template-columns: 1fr 1fr; }
       .uc-grid { grid-template-columns: 1fr; }
       .ind-strip { flex-direction: column; }
       .siq-section { padding: 4rem 0; }
@@ -498,9 +498,9 @@
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="#solution">solution</a></li>
-        <li class="nav-item"><a class="nav-link" href="#features">applications</a></li>
-        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#pipeline">Solution</a></li>
+        <li class="nav-item"><a class="nav-link" href="#features">Use Cases</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">How It Works</a></li>
         <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
         <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
         <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
@@ -540,16 +540,16 @@
   <div class="hero-depth"></div>
 
   <div class="hero-inner">
-    <div class="hero-tag">Cross-Industry · Pump Intelligence · Operational Memory</div>
+    <div class="hero-tag">Physics-Native · Industrial Intelligence · Process Operations</div>
 
     <h1>
-      One Source<br>
-      <span class="accent">of Lifecycle Truth</span><br>
-      <span class="dim">for Every Pump</span>
+      The Physics<br>
+      <span class="accent">Layer</span><br>
+      <span class="dim">for Industrial Operations</span>
     </h1>
 
     <p class="hero-sub">
-      Condition, performance, hydraulic efficiency, energy draw, and useful life — tracked across every brand and industry, from commissioning to end of life. One platform, not a patchwork of point tools.
+      Industrial data tells you what happened. Physics tells you why. semanticIQ helps industrial teams understand how processes are actually performing — and what should happen next.
     </p>
 
     <div class="hero-actions">
@@ -557,25 +557,25 @@
         <a href="/main_menu" class="btn btn-primary">Continue Using semanticIQ</a>
       {% else %}
         <a href="/signup" class="btn btn-primary">Request Early Access</a>
-        <a href="#solution" class="btn btn-outline-primary">See How It Works</a>
+        <a href="#pipeline" class="btn btn-outline-primary">See the Solution</a>
       {% endif %}
     </div>
   </div>
 
   <div class="hero-metrics">
     <div class="metric-chip">
-      <div class="metric-val">6-12wk</div>
-      <div class="metric-label">Failure Detection Window</div>
+      <div class="metric-val">Reactive</div>
+      <div class="metric-label">How most industrial software operates today</div>
     </div>
     <div class="metric-divider"></div>
     <div class="metric-chip">
-      <div class="metric-val">$260k</div>
-      <div class="metric-label">Avg. Cost Per Hour of Downtime</div>
+      <div class="metric-val">Physics</div>
+      <div class="metric-label">What semanticIQ uses to understand why</div>
     </div>
     <div class="metric-divider"></div>
     <div class="metric-chip">
-      <div class="metric-val">1</div>
-      <div class="metric-label">Asset Class, Every Industry</div>
+      <div class="metric-val">Decisions</div>
+      <div class="metric-label">What we help operators make better</div>
     </div>
   </div>
 </section>
@@ -583,18 +583,18 @@
 <!-- ================= TICKER ================= -->
 <div class="ticker-wrap">
   <div class="ticker-inner">
-    <span class="ticker-item live"><span class="ticker-dot"></span>Live Asset Feed · Pump 7B — Efficiency 71% vs 89% Fleet Median</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>Class Model Sync · Centrifugal Cavitation Signature v2.1 Deployed</span>
-    <span class="ticker-item live"><span class="ticker-dot"></span>Live Anomaly · Booster Station 4 — Bearing Vibration Spike Detected</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>System Action · Maintenance Ticket Raised — Site 11 Reliability Queue</span>
-    <span class="ticker-item live"><span class="ticker-dot"></span>Live Hydraulic Reading · Flow 412 m³/h — Pump 14 Within Design Curve</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>Fleet Status · 1,240 Assets Streaming · Latency 9ms</span>
-    <span class="ticker-item live"><span class="ticker-dot"></span>Live Asset Feed · Pump 7B — Efficiency 71% vs 89% Fleet Median</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>Class Model Sync · Centrifugal Cavitation Signature v2.1 Deployed</span>
-    <span class="ticker-item live"><span class="ticker-dot"></span>Live Anomaly · Booster Station 4 — Bearing Vibration Spike Detected</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>System Action · Maintenance Ticket Raised — Site 11 Reliability Queue</span>
-    <span class="ticker-item live"><span class="ticker-dot"></span>Live Hydraulic Reading · Flow 412 m³/h — Pump 14 Within Design Curve</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>Fleet Status · 1,240 Assets Streaming · Latency 9ms</span>
+    <span class="ticker-item live"><span class="ticker-dot"></span>Live Process Feed · Unit 3 — Energy Consumption 14% Above Physics Baseline</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Physics Model Sync · Heat Exchanger Fouling Signature Deployed · Chemical Plant Site 4</span>
+    <span class="ticker-item live"><span class="ticker-dot"></span>Live Anomaly · Compressor Train B — Operating Point Drifting from Design Curve</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Decision Alert · Pump 12 — Repair vs Replace Analysis Complete · Replacement Recommended</span>
+    <span class="ticker-item live"><span class="ticker-dot"></span>Live Efficiency · Water Treatment Line 2 — Running at 91% of Design Efficiency</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Process Status · 1,240 Tags Streaming · Physics Models Active · Latency 9ms</span>
+    <span class="ticker-item live"><span class="ticker-dot"></span>Live Process Feed · Unit 3 — Energy Consumption 14% Above Physics Baseline</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Physics Model Sync · Heat Exchanger Fouling Signature Deployed · Chemical Plant Site 4</span>
+    <span class="ticker-item live"><span class="ticker-dot"></span>Live Anomaly · Compressor Train B — Operating Point Drifting from Design Curve</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Decision Alert · Pump 12 — Repair vs Replace Analysis Complete · Replacement Recommended</span>
+    <span class="ticker-item live"><span class="ticker-dot"></span>Live Efficiency · Water Treatment Line 2 — Running at 91% of Design Efficiency</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Process Status · 1,240 Tags Streaming · Physics Models Active · Latency 9ms</span>
   </div>
 </div>
 
@@ -604,120 +604,127 @@
     <div class="row align-items-center g-5">
       <div class="col-lg-5">
         <div class="section-label">The Problem</div>
-        <h2 class="siq-h2">Pumps Are Run on <span class="accent">Guesswork</span></h2>
-        <p class="problem-body">Most pumps are monitored by generic vibration alerts or maintenance logs. Very few are understood in detail— how efficiently they're really running, how they're ageing, or when they're worth replacing. That gap costs far more than the failures occasionally caught.</p>
+        <h2 class="siq-h2">Industrial Software <span class="accent">Reacts.</span><br>It Doesn't Understand.</h2>
+        <p class="problem-body">Most industrial software is built around thresholds and alarms — it screams when a limit is breached. By then, efficiency has already dropped, energy has already been wasted, or equipment has already been stressed. The plant has data. What it lacks is understanding of what that data means against the physics of how the process should actually be behaving.</p>
       </div>
       <div class="col-lg-7">
         <ul class="pain-list">
-          <li><span class="pain-icon">!</span><span>Vibration-only monitoring misses the failure modes that matter most — cavitation, recirculation, and hydraulic instability don't always show up as vibration until it's too late.</span></li>
-          <li><span class="pain-icon">!</span><span>Efficiency loss is invisible until it hits the energy bill — pumps quietly drift off their best efficiency points for months or years with nobody watching.</span></li>
-          <li><span class="pain-icon">!</span><span>Replacement decisions are made on age and gut feel, not data — with no real picture of remaining useful life or true lifecycle cost.</span></li>
-          <li><span class="pain-icon">!</span><span>Every site relearns the same failure modes alone — with no way to benchmark against how same pump models perform elsewhere.</span></li>
-          <li><span class="pain-icon">!</span><span>Pump operational memory is in people's heads and gets lost when engineers or technicians leave — limiting historical context of pump performance, failure patterns, what was changed and why.</span></li>
+          <li><span class="pain-icon">!</span><span>Threshold-based alarms fire after the problem has already occurred — not before the conditions that cause it have developed.</span></li>
+          <li><span class="pain-icon">!</span><span>Energy waste is invisible until it hits the utility bill — processes drift from their design operating point for months with nobody watching the gap.</span></li>
+          <li><span class="pain-icon">!</span><span>Repair, replace, and capital planning decisions are made on age and gut feel — with no physics-grounded picture of remaining useful life or true degradation trajectory.</span></li>
+          <li><span class="pain-icon">!</span><span>Every site diagnoses the same failure modes alone — with no way to benchmark how similar equipment and processes perform elsewhere under comparable conditions.</span></li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ================= SOLUTION ================= -->
-<section class="siq-section solution-section" id="solution">
+<!-- ================= PIPELINE ================= -->
+<section class="siq-section pipeline-section" id="pipeline">
   <div class="container">
     <div class="section-label">Solution</div>
-    <h2 class="siq-h2">One Software-Defined Physics Engine,<br><span class="accent">Any Pump, Any Plant</span></h2>
-    <p style="color: var(--dust-light); font-size: 1rem; max-width: 600px; margin-top: 1rem; line-height: 1.7;">How semanticIQ turns ordinary operating data into physics-based intelligence — without rip and replace, without proprietary sensors.</p>
+    <h2 class="siq-h2">Physics-Native Intelligence,<br><span class="accent">Any Process, Any Plant</span></h2>
+    <p style="color: var(--dust-light); font-size: 1rem; max-width: 600px; margin-top: 1rem; line-height: 1.7;">How semanticIQ turns existing operational data into physics-based process intelligence — without replacing existing systems, without proprietary sensors.</p>
 
-    <div class="solution-grid">
-      <div class="solution-step">
+    <div class="pipeline-grid">
+      <div class="pipeline-step">
         <span class="step-num">01</span>
         <div class="step-icon-wrap">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="12" y1="7" x2="5" y2="17"/><line x1="12" y1="7" x2="19" y2="17"/></svg>
         </div>
-        <div class="step-title">Sensor-Agnostic Ingestion</div>
-        <div class="step-body">Connects to whatever you already have — OPC-UA, Modbus, 4-20mA loops, OSIsoft PI historians. No proprietary hardware required, no rip and replace.</div>
-        <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--dust); margin-top: 0.75rem; line-height: 1.6; border-left: 2px solid var(--seam); padding-left: 0.75rem;">Works with existing plant instrumentation across any pump brand or vintage. Add-on sensors only where genuine gaps exist.</div>
+        <div class="step-title">Connect to Existing Data</div>
+        <div class="step-body">Connects to whatever you already have — OPC-UA, Modbus, OSIsoft PI historians, SCADA exports. No proprietary hardware, no rip and replace. The intelligence sits above your existing systems.</div>
+        <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--dust); margin-top: 0.75rem; line-height: 1.6; border-left: 2px solid var(--seam); padding-left: 0.75rem;">Works with existing plant instrumentation across any equipment brand or vintage.</div>
         <div class="step-tag">Brownfield-first</div>
       </div>
-      <div class="solution-step">
+      <div class="pipeline-step">
         <span class="step-num">02</span>
         <div class="step-icon-wrap">
           <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
         </div>
-        <div class="step-title">Physics-Based Mechanistic Model Matching</div>
-        <div class="step-body">Hydraulic models, failure-mode libraries, and per-asset baselines work together to catch what generic vibration tools miss — cavitation, efficiency drift, and early-stage degradation across the full pump lifecycle.</div>
-        <div class="step-tag">Mechanistic model library v3</div>
+        <div class="step-title">Harmonise & Contextualise</div>
+        <div class="step-body">Raw operational data is cleaned, structured, and given engineering context — linking live readings to design specifications, equipment class, and operating history so the physics models have the right foundation to reason from.</div>
+        <div class="step-tag">Data harmonisation layer</div>
       </div>
-      <div class="solution-step">
+      <div class="pipeline-step">
         <span class="step-num">03</span>
         <div class="step-icon-wrap">
           <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         </div>
-        <div class="step-title">Persistent Operating Memory</div>
-        <div class="step-body">Living operational pump records enhance understanding of how design decisions, operating conditions, maintenance actions, and process changes impact pump performance over the entire life.</div>
-        <div class="step-tag">3-layer model architecture</div>
+        <div class="step-title">Apply Physics Models</div>
+        <div class="step-body">Engineering and physics models — thermodynamics, fluid mechanics, mass and energy balances — continuously compare live operating conditions against design intent, identifying deviations before they become problems.</div>
+        <div class="step-tag">Physics model library</div>
       </div>
-      <div class="solution-step">
+      <div class="pipeline-step">
         <span class="step-num">04</span>
         <div class="step-icon-wrap">
           <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
         </div>
-        <div class="step-title">Action, Not Just Alerts</div>
-        <div class="step-body">Clean intelligence flows directly into your existing CMMS and ERP — automatically raising work orders, flagging parts to order, and feeding reliability dashboards without manual handoffs.</div>
-        <div class="step-tag">CMMS + ERP integration</div>
+        <div class="step-title">Intelligence That Drives Decisions</div>
+        <div class="step-body">Outputs are framed as operational decisions — not raw anomaly scores. Energy waste to address, assets approaching replacement, process bottlenecks to clear, scenarios to evaluate — intelligence that feeds directly into how you run the plant.</div>
+        <div class="step-tag">Decision-ready outputs</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ================= Applications ================= -->
+<!-- ================= USE CASES ================= -->
 <section class="siq-section usecases-section" id="features">
   <div class="container">
     <div class="row align-items-end g-4 mb-2">
       <div class="col-lg-6">
-        <div class="section-label">Applications</div>
-        <h2 class="siq-h2">One Asset Class, <span class="accent">Lifecycle Intelligence</span></h2>
+        <div class="section-label">Use Cases</div>
+        <h2 class="siq-h2">Intelligence Across <span class="accent">Every Operational Decision</span></h2>
       </div>
       <div class="col-lg-6">
-        <p class="uc-intro-body">Every use case below is live on site from day one — no rip and replace, no complex IT setup. semanticIQ plugs into the equipment and systems you already have and starts delivering measurable results within weeks.</p>
+        <p class="uc-intro-body">semanticIQ connects to the operational data you already have and applies physics-based models to surface intelligence that matters — from daily reliability decisions to long-term capital planning. Start with one use case, one asset class, or one process unit. Expand at your own pace.</p>
+        <div class="mt-3">
+          <div class="video-wrap">
+            <video width="100%" controls>
+              <source src="" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="uc-grid">
       <div class="uc-card">
-        <div class="uc-eyebrow">Failure Prediction</div>
-        <div class="uc-title">Know a Pump Is Failing Weeks Before It Stops</div>
-        <div class="uc-body">Flow, pressure, power, and vibration are analysed together against physics-based failure models — catching cavitation, seal wear, and bearing degradation in the 6 to 12 week window before functional failure.</div>
-        <div class="uc-stat">6-12wk<span>Advance failure warning</span></div>
+        <div class="uc-eyebrow">Reliability & Asset Health</div>
+        <div class="uc-title">Know What's Degrading Before It Fails</div>
+        <div class="uc-body">Physics models continuously compare live operating conditions against design intent — detecting developing faults from their hydraulic and thermodynamic signatures, not from vibration spikes that arrive after the damage has started.</div>
+        <div class="uc-stat">Earlier<span>Detection from causes, not symptoms</span></div>
       </div>
       <div class="uc-card">
-        <div class="uc-eyebrow">Efficiency & Energy</div>
-        <div class="uc-title">Stop Paying for Pumps That Are Quietly Underperforming</div>
-        <div class="uc-body">Hydraulic efficiency is tracked continuously against design curve and commissioning baseline — surfacing energy waste from impeller wear, recirculation, and duty point drift long before it shows up on the power bill.</div>
-        <div class="uc-stat">↓18%<span>Typical energy waste identified</span></div>
+        <div class="uc-eyebrow">Energy Optimisation</div>
+        <div class="uc-title">Find the Energy Waste Your Meters Can't See</div>
+        <div class="uc-body">Process and equipment efficiency is tracked continuously against physics-based baselines — surfacing hidden energy losses from operating point drift, fouling, degradation, and suboptimal control setpoints before they accumulate into significant utility cost.</div>
+        <div class="uc-stat">Invisible<span>Until physics models surface it</span></div>
       </div>
       <div class="uc-card">
-        <div class="uc-eyebrow">Cross-Fleet Benchmarking</div>
-        <div class="uc-title">See How Your Pump Compares to Every Other One Like It</div>
-        <div class="uc-body">Performance is benchmarked against the same pump model running elsewhere — across industries — so you know whether a reading is normal wear or a genuine outlier worth investigating.</div>
-        <div class="uc-stat">1000s<span>Of comparable assets in the network</span></div>
+        <div class="uc-eyebrow">Capital Planning & CapEx</div>
+        <div class="uc-title">Replace Assets When the Physics Says — Not When the Calendar Does</div>
+        <div class="uc-body">Degradation trajectories modelled from real operating history give a physics-grounded picture of remaining useful life — turning repair-vs-replace decisions from gut feel into a defensible, data-backed capital budget conversation.</div>
+        <div class="uc-stat">Grounded<span>CapEx decisions backed by physics</span></div>
       </div>
       <div class="uc-card">
-        <div class="uc-eyebrow">Maintenance & CMMS</div>
-        <div class="uc-title">Work Orders That Write Themselves</div>
-        <div class="uc-body">Diagnoses feed directly into Maximo, SAP PM, or Fiix — raising work orders with root cause, recommended action, and parts to order, so your reliability team acts on intelligence, not raw alerts.</div>
-        <div class="uc-stat">−6h<span>Manual triage per incident</span></div>
+        <div class="uc-eyebrow">Debottlenecking</div>
+        <div class="uc-title">Find Exactly Where Your Process Is Leaving Throughput on the Table</div>
+        <div class="uc-body">Mass and energy balance models across the process identify where constraints are limiting output — distinguishing real capacity bottlenecks from operational inefficiencies, so improvement effort goes where the physics says it will have most impact.</div>
+        <div class="uc-stat">Pinpoint<span>Where throughput is actually constrained</span></div>
       </div>
       <div class="uc-card">
-        <div class="uc-eyebrow">Remaining Useful Life</div>
-        <div class="uc-title">Plan Replacement Before It Becomes an Emergency</div>
-        <div class="uc-body">Degradation trajectories across the asset's full lifecycle inform realistic remaining-useful-life estimates — turning capital planning from guesswork into a data-backed budget conversation.</div>
-        <div class="uc-stat">3-5yr<span>Lifecycle visibility horizon</span></div>
+        <div class="uc-eyebrow">Scenario Analysis</div>
+        <div class="uc-title">Test Process Changes Before You Make Them</div>
+        <div class="uc-body">The same physics models used for monitoring can simulate how a process would respond to a change in operating conditions, feedstock, throughput target, or equipment configuration — giving operators a grounded answer to "what happens if we do X?" before they commit.</div>
+        <div class="uc-stat">Simulate<span>Before committing to change</span></div>
       </div>
       <div class="uc-card">
-        <div class="uc-eyebrow">Design & Selection</div>
-        <div class="uc-title">Design Your Next Pump System Without a Consultant</div>
-        <div class="uc-body">The same physics models that monitor your fleet let you simulate a new pump or pipe configuration before you buy — validated against how that exact model performs in the real world, not just its catalogue curve.</div>
-        <div class="uc-stat">1000s<span>Of real installs behind every simulation</span></div>
+        <div class="uc-eyebrow">Asset Lifecycle & Selection</div>
+        <div class="uc-title">Specify and Select Assets Against Real-World Performance Data</div>
+        <div class="uc-body">Physics models informed by real operating experience across similar assets and processes let operators evaluate new equipment against how comparable assets actually perform in the field — not just what the catalogue specification claims.</div>
+        <div class="uc-stat">Real-world<span>Performance, not catalogue assumptions</span></div>
       </div>
     </div>
   </div>
@@ -729,30 +736,34 @@
     <div class="row align-items-start g-5">
       <div class="col-lg-6">
         <div class="section-label">How It Works</div>
-        <h2 class="siq-h2">Deploy in <span class="accent">Four Steps</span></h2>
+        <h2 class="siq-h2">From Assessment <span class="accent">to Intelligence</span></h2>
         <div class="how-steps">
           <div class="how-step">
             <div class="how-num">01</div>
-            <div><div class="how-title">Deploy the Mechanistic Model Library</div><div class="how-body">Start with pre-built, physics-based models for centrifugal, positive displacement, and slurry pumps — built from hydraulic first principles and ready to apply across any OEM.</div></div>
+            <div><div class="how-title">Process & Asset Assessment</div><div class="how-body">We start with a structured assessment of your process, assets, and operational priorities — identifying where physics-based intelligence would have the highest impact. This is also the natural starting point for a conversation about what semanticIQ could do for your operation specifically.</div></div>
           </div>
           <div class="how-step">
             <div class="how-num">02</div>
-            <div><div class="how-title">Connect Your Existing Data</div><div class="how-body">We connect your current CMMS, ERP, and historian data to our semantic layer — without replacing your current systems or installing proprietary sensors.</div></div>
+            <div><div class="how-title">Data Review & Connectivity</div><div class="how-body">We review what operational data already exists — historian tags, SCADA outputs, CMMS records, design documentation — and connect directly to existing systems via OPC-UA, Modbus, or API. No new sensors, no rip and replace.</div></div>
           </div>
           <div class="how-step">
             <div class="how-num">03</div>
-            <div><div class="how-title">Build the Asset Baseline</div><div class="how-body">Over a 90-day baseline period, the system learns each pump's individual signature — flow, pressure, power, and vibration under normal operation.</div></div>
+            <div><div class="how-title">Data Harmonisation</div><div class="how-body">Raw operational data is cleaned, structured, and given engineering context — linking live readings to design specifications, equipment class, and operating history, so physics models have a reliable foundation to reason from.</div></div>
           </div>
           <div class="how-step">
             <div class="how-num">04</div>
-            <div><div class="how-title">Scale Across the Fleet</div><div class="how-body">Expand from a pilot site to the full pump fleet, and from pump intelligence to adjacent asset classes, at your own pace.</div></div>
+            <div><div class="how-title">Physics Model Deployment</div><div class="how-body">Engineering and physics models are configured for your specific process and asset classes — thermodynamics, fluid mechanics, mass and energy balances — and run continuously against live data to generate decision-ready intelligence.</div></div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">05</div>
+            <div><div class="how-title">Ongoing Intelligence & Expansion</div><div class="how-body">Intelligence improves as operating history builds. Start with one asset class, unit process, or production line — then expand progressively across the plant as value is proven, without redesigning the underlying system.</div></div>
           </div>
         </div>
         <div class="mt-4">
           {% if user.is_authenticated %}
             <a href="/main_menu" class="btn btn-primary">Continue Using semanticIQ</a>
           {% else %}
-            <a href="/signup" class="btn btn-primary">Request Early Access</a>
+            <a href="/signup" class="btn btn-primary">Start With an Assessment</a>
           {% endif %}
         </div>
       </div>
@@ -769,27 +780,23 @@
     <div class="row align-items-start g-5">
       <div class="col-lg-6">
         <div class="section-label">Why We're Different</div>
-        <h2 class="siq-h2">Generic Monitoring<br><span class="accent">Misses Complex Hydraulic Behavior</span></h2>
+        <h2 class="siq-h2">Threshold Alarms<br><span class="accent">React. Physics Understands.</span></h2>
         <div class="edge-points">
           <div class="edge-point">
             <div class="edge-num">01</div>
-            <div><div class="edge-point-title">Sensor-Agnostic by Design</div><div class="edge-point-body">No proprietary hardware to procure or certify. semanticIQ connects to the OPC-UA, Modbus, and historian data you already have — deploying in days, not the months a new sensor rollout requires.</div></div>
+            <div><div class="edge-point-title">Physics, Not Just Pattern-Matching</div><div class="edge-point-body">Most industrial AI learns patterns from historical data — and fails when conditions change. semanticIQ reasons from the underlying laws of thermodynamics, fluid mechanics, and mass-energy balance, so it understands why a process behaves as it does, not just that something changed.</div></div>
           </div>
           <div class="edge-point">
             <div class="edge-num">02</div>
-            <div><div class="edge-point-title">Physics, Not Just Pattern-Matching</div><div class="edge-point-body">Hydraulic models built from flow, pressure, and power relationships catch cavitation, recirculation, and efficiency loss that vibration-only monitoring simply cannot see.</div></div>
+            <div><div class="edge-point-title">Decisions, Not Just Observations</div><div class="edge-point-body">Most monitoring software surfaces data and alerts. semanticIQ frames outputs as operational decisions — energy waste to address, assets approaching replacement, bottlenecks constraining throughput, scenarios to evaluate before committing to a change.</div></div>
           </div>
           <div class="edge-point">
             <div class="edge-num">03</div>
-            <div><div class="edge-point-title">Cross-Industry Network Effect</div><div class="edge-point-body">Every pump instrumented anywhere in the network sharpens the model for every other pump of that type — a Grundfos in a water plant teaches the system about every other Grundfos in the fleet, and powers design simulations grounded in real-world performance, not just catalogue curves.</div></div>
+            <div><div class="edge-point-title">Sits Above Existing Systems</div><div class="edge-point-body">No rip and replace. semanticIQ connects to the SCADA, historian, and operational data you already have — adding a physics intelligence layer above your existing control systems without disrupting them.</div></div>
           </div>
           <div class="edge-point">
             <div class="edge-num">04</div>
-            <div><div class="edge-point-title">Cradle-to-Grave Lifecycle Intelligence</div><div class="edge-point-body">Persistent monitoring and analysis throughout the entire asset lifecycle, creating auditable history and providing actionable insights for pump asset management, CAPEX, energy and safety planning.</div></div>
-          </div>
-          <div class="edge-point">
-            <div class="edge-num">05</div>
-            <div><div class="edge-point-title">Edge-Capable Where It Matters</div><div class="edge-point-body">For sites with unreliable connectivity, local inference keeps detection running autonomously and syncs the moment connection is restored — no data lost, no blind spots.</div></div>
+            <div><div class="edge-point-title">Start Small, Scale With Confidence</div><div class="edge-point-body">Begin with one asset class, one process unit, or one production line. Prove the value locally. Expand progressively — with an architecture designed to grow across the plant without redesign.</div></div>
           </div>
         </div>
       </div>
@@ -799,27 +806,27 @@
             <div class="t-dot" style="background:#E84545;"></div>
             <div class="t-dot" style="background:#E8A855; margin:0 4px;"></div>
             <div class="t-dot" style="background:#4FC3A1;"></div>
-            <span style="font-family:var(--font-mono);font-size:0.62rem;color:#4A4E57;margin-left:0.75rem;letter-spacing:0.1em;">semanticiq.fleet · site-07 · water-utility-east</span>
+            <span style="font-family:var(--font-mono);font-size:0.62rem;color:#4A4E57;margin-left:0.75rem;letter-spacing:0.1em;">semanticiq.process · site-04 · chemical-plant-west</span>
           </div>
           <div class="terminal-body">
-            <div class="t-comment"># semanticIQ Fleet Monitor — Live Stream</div>
+            <div class="t-comment"># semanticIQ Process Intelligence — Live Stream</div>
             <div class="t-dim">─────────────────────────────────────────</div>
             <div><span class="t-prompt">$</span> <span style="color:#EAE8E3;">siq status</span></div>
             <div class="t-dim">&nbsp;</div>
-            <div><span class="t-key">site_id      </span> <span class="t-val">site-07-east-booster</span></div>
-            <div><span class="t-key">connectivity </span> <span style="color:#E84545;">OFFLINE</span></div>
-            <div><span class="t-key">mode         </span> <span class="t-val">AUTONOMOUS</span></div>
-            <div><span class="t-key">uptime       </span> <span class="t-val">14d 06h 42m</span></div>
+            <div><span class="t-key">site_id      </span> <span class="t-val">site-04-west-process</span></div>
+            <div><span class="t-key">data_source  </span> <span class="t-val">HISTORIAN · OPC-UA</span></div>
+            <div><span class="t-key">physics_mode </span> <span class="t-val">CONTINUOUS</span></div>
+            <div><span class="t-key">uptime       </span> <span class="t-val">21d 14h 07m</span></div>
             <div class="t-dim">&nbsp;</div>
-            <div><span class="t-key">pumps_active      </span> <span class="t-str">148 / 148</span></div>
-            <div><span class="t-key">inference_latency </span> <span class="t-str">11ms avg</span></div>
-            <div><span class="t-key">events_buffered   </span> <span class="t-str">3,821</span></div>
+            <div><span class="t-key">tags_active       </span> <span class="t-str">1,240 / 1,240</span></div>
+            <div><span class="t-key">models_running    </span> <span class="t-str">14 physics models</span></div>
+            <div><span class="t-key">inference_latency </span> <span class="t-str">9ms avg</span></div>
             <div class="t-dim">&nbsp;</div>
-            <div><span class="t-key">last_alert   </span> <span style="color:#E8A855;">PUMP_14_CAVITATION_RISK</span></div>
-            <div><span class="t-key">alert_action </span> <span class="t-str">maint_ticket_raised</span></div>
-            <div><span class="t-key">alert_age    </span> <span class="t-str">4m 12s</span></div>
+            <div><span class="t-key">last_insight </span> <span style="color:#E8A855;">UNIT_3_ENERGY_DRIFT_14PCT</span></div>
+            <div><span class="t-key">decision     </span> <span class="t-str">setpoint_review_recommended</span></div>
+            <div><span class="t-key">insight_age  </span> <span class="t-str">7m 34s</span></div>
             <div class="t-dim">&nbsp;</div>
-            <div class="t-comment"># Operating autonomously. No cloud needed.</div>
+            <div class="t-comment"># Physics running. Understanding process in real time.</div>
             <div><span class="t-prompt">$</span> <span style="color:#4A4E57;">_</span></div>
           </div>
         </div>
@@ -832,27 +839,27 @@
 <section class="siq-section industries-section">
   <div class="container">
     <div class="section-label">Industry Coverage</div>
-    <h2 class="siq-h2">One Asset Class.<br><span class="accent">Every Industry.</span></h2>
+    <h2 class="siq-h2">Physics Works Across<br><span class="accent">Every Process Industry</span></h2>
     <div class="ind-strip">
       <div class="ind-tile active">
         <div class="ind-name">Water & Wastewater</div>
-        <div class="ind-desc">Booster stations, treatment works, and network pumping under regulatory efficiency pressure.</div>
+        <div class="ind-desc">Energy efficiency, network performance, asset lifecycle and regulatory compliance for utilities under pressure to do more with ageing infrastructure.</div>
       </div>
       <div class="ind-tile">
         <div class="ind-name">Chemical & Process</div>
-        <div class="ind-desc">Slurry, corrosive, and high-criticality transfer pumps where failure cost is severe.</div>
+        <div class="ind-desc">Process reliability, energy optimisation, and debottlenecking for continuous process plants where unplanned downtime has immediate cost consequences.</div>
       </div>
       <div class="ind-tile">
         <div class="ind-name">Food & Beverage</div>
-        <div class="ind-desc">Hygienic and CIP-cycle pumps where downtime halts entire production lines.</div>
+        <div class="ind-desc">Production line reliability, energy consumption, and throughput optimisation for manufacturers where process consistency directly affects product quality.</div>
       </div>
       <div class="ind-tile">
         <div class="ind-name">Oil, Gas & Energy</div>
-        <div class="ind-desc">Process and transfer pumps across upstream, midstream, and power generation assets.</div>
+        <div class="ind-desc">Asset integrity, process efficiency, and capital planning across upstream, midstream, and power generation operations with high asset criticality.</div>
       </div>
       <div class="ind-tile">
-        <div class="ind-name">Manufacturing</div>
-        <div class="ind-desc">Cooling, hydraulic, and process pumps embedded across the production floor.</div>
+        <div class="ind-name">Pulp, Paper & Mining</div>
+        <div class="ind-desc">Throughput maximisation, energy reduction, and equipment lifecycle intelligence for asset-intensive continuous process operations.</div>
       </div>
     </div>
   </div>
@@ -862,10 +869,10 @@
 <section class="siq-section pricing-section" id="pricing">
   <div class="container">
     <div class="section-label" style="justify-content: center;">Pricing</div>
-    <h2 class="siq-h2 text-center">Built Around Your <span class="accent">Fleet</span></h2>
+    <h2 class="siq-h2 text-center">Built Around Your <span class="accent">Operation</span></h2>
     <div class="pricing-card mx-auto">
-      <p>semanticIQ is currently in early access, working with a small number of design partners to shape the platform. Pricing will scope to your fleet size and asset criticality. Get in touch to join the early access programme.</p>
-      <a href="#contact" class="btn btn-outline-primary">Join Early Access</a>
+      <p>semanticIQ is currently in early access, working with a small number of design partners to shape the platform. We start with an assessment of your process and priorities — then scope the engagement around where physics-based intelligence would have the most immediate impact. Get in touch to start the conversation.</p>
+      <a href="#contact" class="btn btn-outline-primary">Start With an Assessment</a>
     </div>
   </div>
 </section>
@@ -878,30 +885,30 @@
     <div class="row g-3">
       <div class="col-lg-6">
         <div class="accordion-item">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq1">Do I need to install new sensors to use semanticIQ?</button></h2>
-          <div id="faq1" class="accordion-collapse collapse"><div class="accordion-body">In most cases, no. semanticIQ connects to the OPC-UA, Modbus, and historian data you already have — your existing flow, pressure, power, and vibration readings. New sensors are only recommended where a genuine instrumentation gap exists.</div></div>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq1">Do I need to replace existing SCADA or control systems?</button></h2>
+          <div id="faq1" class="accordion-collapse collapse"><div class="accordion-body">No. semanticIQ sits above your existing systems — connecting to the historian, SCADA, and operational data you already have via OPC-UA, Modbus, or API. It adds a physics intelligence layer without disrupting what's already running.</div></div>
         </div>
         <div class="accordion-item">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq2">Which pump types and brands are supported?</button></h2>
-          <div id="faq2" class="accordion-collapse collapse"><div class="accordion-body">Our equipment class models cover centrifugal, multistage, slurry, and positive displacement pumps across major OEMs. The architecture is brand-agnostic by design — physics-based priors apply before any brand-specific tuning.</div></div>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq2">What types of processes and equipment does semanticIQ support?</button></h2>
+          <div id="faq2" class="accordion-collapse collapse"><div class="accordion-body">We build physics models for continuous process industries — covering rotating equipment (pumps, compressors, fans), heat transfer (exchangers, boilers, condensers), and broader process units. We typically start with one asset class or process unit and expand from there.</div></div>
         </div>
         <div class="accordion-item">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq3">How is this different from generic vibration monitoring tools?</button></h2>
-          <div id="faq3" class="accordion-collapse collapse"><div class="accordion-body">Vibration alone misses hydraulic failure modes. semanticIQ models flow, pressure, power, and vibration together — catching cavitation, recirculation, and efficiency loss that vibration-only tools structurally cannot see.</div></div>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq3">How is this different from threshold-based monitoring or generic AI tools?</button></h2>
+          <div id="faq3" class="accordion-collapse collapse"><div class="accordion-body">Threshold alarms react after a limit is breached. Generic AI learns patterns from historical data — and can fail when operating conditions change. semanticIQ reasons from physics: thermodynamics, fluid mechanics, and mass-energy balance. It understands why a process behaves as it does, not just that something changed.</div></div>
         </div>
       </div>
       <div class="col-lg-6">
         <div class="accordion-item">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq4">What does early access actually involve?</button></h2>
-          <div id="faq4" class="accordion-collapse collapse"><div class="accordion-body">We're working with a small number of design partners to validate the platform on real fleets. Early access typically starts with a focused pilot on 20–50 pumps at a single site, with direct input into the product roadmap.</div></div>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq4">What does the early access process look like?</button></h2>
+          <div id="faq4" class="accordion-collapse collapse"><div class="accordion-body">We start with a structured assessment of your process, assets, and operational priorities. From there we connect to existing data, harmonise it, deploy physics models, and begin generating decision-ready intelligence — typically within weeks of data access. Design partners have direct input into the product roadmap.</div></div>
         </div>
         <div class="accordion-item">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq5">How long until we see useful intelligence?</button></h2>
-          <div id="faq5" class="accordion-collapse collapse"><div class="accordion-body">Data connection typically takes days given our sensor-agnostic approach. A meaningful asset baseline builds over roughly 90 days, after which prediction accuracy improves significantly.</div></div>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq5">How quickly does it produce useful output?</button></h2>
+          <div id="faq5" class="accordion-collapse collapse"><div class="accordion-body">Initial insights from the assessment are available quickly. Physics models begin generating process intelligence as soon as data is connected and harmonised — typically within days to weeks of starting, depending on data availability and process complexity.</div></div>
         </div>
         <div class="accordion-item">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq6">Do you cover the full pump lifecycle or just failure prediction?</button></h2>
-          <div id="faq6" class="accordion-collapse collapse"><div class="accordion-body">Full lifecycle. Beyond failure prediction, semanticIQ tracks hydraulic efficiency, energy consumption, and degradation trends from commissioning through to remaining-useful-life and replacement planning — including simulating how a new pump or system change would actually perform before you buy.</div></div>
+          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq6">Can we start with one area and expand later?</button></h2>
+          <div id="faq6" class="accordion-collapse collapse"><div class="accordion-body">Yes — this is by design. semanticIQ is built to start where your most immediate operational headache is: a single asset class, a specific unit process, or one production line. Prove the value locally, then expand progressively across the plant without redesigning the underlying system.</div></div>
         </div>
       </div>
     </div>
@@ -914,8 +921,8 @@
     <div class="row align-items-start g-5">
       <div class="col-lg-6">
         <div class="section-label">Get in Touch</div>
-        <h2 class="siq-h2">Help Shape the<br>System of <span class="accent">Truth for Pumps</span></h2>
-        <p style="color: var(--dust-light); margin-top: 1.25rem; font-size: 1rem; max-width: 400px; line-height: 1.7;">We're talking to reliability and asset managers across industries to shape the early access programme. Tell us about your fleet and how you manage pump reliability today.</p>
+        <h2 class="siq-h2">Start With an <span class="accent">Assessment</span></h2>
+        <p style="color: var(--dust-light); margin-top: 1.25rem; font-size: 1rem; max-width: 400px; line-height: 1.7;">We start every engagement with a structured assessment of your process, assets, and operational priorities — identifying where physics-based intelligence would have the most immediate impact. No commitment required. Just a conversation.</p>
 
         <div class="mt-4">
           <div class="contact-info-label">Our Location</div>
@@ -970,11 +977,11 @@
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
       <div>
         <div class="footer-logo">semantic<span>IQ</span></div>
-        <p class="footer-tagline">The system of truth for industrial pump assets</p>
+        <p class="footer-tagline">Physics-Native Industrial Intelligence</p>
       </div>
       <ul class="footer-links">
-        <li><a href="#solution">Solution</a></li>
-        <li><a href="#features">applications</a></li>
+        <li><a href="#pipeline">Solution</a></li>
+        <li><a href="#features">Use Cases</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="https://146179273.hs-sites-eu1.com/blog" target="_blank" rel="noopener noreferrer">Blog</a></li>
       </ul>
