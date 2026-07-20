@@ -55,7 +55,7 @@
       --font-mono: 'IBM Plex Mono', monospace;
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100%; }
 
     body {
       background: var(--steel-deep);
@@ -64,6 +64,7 @@
       font-weight: 300;
       line-height: 1.6;
       overflow-x: hidden;
+      max-width: 100%;
     }
 
     /* ── MESSAGES ── */
@@ -248,8 +249,10 @@
       padding: 0.7rem 0;
       overflow: hidden;
       white-space: nowrap;
+      max-width: 100%;
+      position: relative;
     }
-    .ticker-inner { display: inline-block; animation: ticker 28s linear infinite; }
+    .ticker-inner { display: inline-block; animation: ticker 28s linear infinite; will-change: transform; }
     .ticker-item {
       display: inline-flex; align-items: center; gap: 0.5rem;
       font-family: var(--font-mono); font-size: 0.68rem;
@@ -383,7 +386,7 @@
     .edge-point-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); margin-bottom: 0.3rem; }
     .edge-point-body { font-size: 0.85rem; color: var(--dust); line-height: 1.65; }
 
-    .terminal { background: #0A0C0F; border: 1px solid var(--seam); border-top: 3px solid var(--ore); overflow: hidden; }
+    .terminal { background: #0A0C0F; border: 1px solid var(--seam); border-top: 3px solid var(--ore); overflow: hidden; max-width: 100%; }
     .terminal-bar { background: rgba(200,135,58,0.06); padding: 0.6rem 1rem; border-bottom: 1px solid var(--seam); display: flex; align-items: center; gap: 0.5rem; }
     .t-dot { width: 8px; height: 8px; border-radius: 50%; }
     .terminal-body { padding: 1.5rem; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.9; }
@@ -463,10 +466,21 @@
     @media (max-width: 768px) {
       .hero-inner { padding: 0 1.5rem; }
       .hero-metrics { display: none; }
-      .pipeline-grid { grid-template-columns: 1fr 1fr; }
+      .pipeline-grid { grid-template-columns: 1fr; }
       .uc-grid { grid-template-columns: 1fr; }
       .ind-strip { flex-direction: column; }
       .siq-section { padding: 4rem 0; }
+      .terminal { overflow-x: auto; }
+      .terminal-body { font-size: 0.62rem; padding: 1rem; word-break: break-all; }
+      .how-step { grid-template-columns: 2.5rem 1fr; }
+      .edge-point { grid-template-columns: 2.5rem 1fr; }
+      .footer-links { flex-wrap: wrap; gap: 1rem; }
+      .contact-form-wrap { padding: 1.5rem; }
+    }
+    @media (max-width: 480px) {
+      .pipeline-grid { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .ticker-inner { animation-duration: 40s; }
     }
   </style>
 </head>
