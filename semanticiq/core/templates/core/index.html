@@ -1,1010 +1,1236 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<script>
-  function initApollo(){var n=Math.random().toString(36).substring(7),o=document.createElement("script");
-  o.src="https://assets.apollo.io/micro/website-tracker/tracker.iife.js?nocache="+n,o.async=!0,o.defer=!0,
-  o.onload=function(){window.trackingFunctions.onLoad({appId:"683f561739740b0021332961"})},
-  document.head.appendChild(o)}initApollo();
-</script>
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>semanticIQ — Physics-Native Industrial Intelligence</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Fonts -->
+  <title>Veldar — Physics-Based Intelligence for Industrial Operations</title>
+  <meta name="description" content="Veldar combines operational data with engineering physics to help industrial teams observe, understand, decide, act and autonomously optimise.">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Icons -->
-  <link rel="stylesheet" href="{% static 'css/lineicons.css' %}" />
-
-  <!-- Favicon -->
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon/favicon-16x16.png' %}">
   <link rel="manifest" href="{% static 'images/favicon/site.webmanifest' %}">
-
-  <!-- Google reCAPTCHA -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --ore: #C8873A;
-      --ore-dark: #8F5A1E;
-      --ore-light: #E8A855;
-      --steel: #2A2E35;
-      --steel-mid: #1C1F24;
-      --steel-deep: #0E1013;
-      --dust: #8A8880;
-      --dust-light: #B5B2AC;
-      --seam: #3A3E47;
-      --signal: #4FC3A1;
-      --danger: #E84545;
-      --text: #EAE8E3;
-      --text-muted: #8A8880;
-      --font-display: 'Barlow Condensed', sans-serif;
-      --font-body: 'Barlow', sans-serif;
-      --font-mono: 'IBM Plex Mono', monospace;
+      --ink: #16191d;
+      --ink-soft: #262b31;
+      --muted: #666a70;
+      --line: #d9d5cd;
+      --paper: #fbfaf7;
+      --warm: #f2efe9;
+      --white: #ffffff;
+      --bronze: #b8752e;
+      --bronze-dark: #7e4e20;
+      --bronze-light: #d79a56;
+      --font-display: "Barlow Condensed", sans-serif;
+      --font-body: "Barlow", sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+      --shadow: 0 18px 55px rgba(22, 25, 29, .09);
     }
 
-    html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100%; }
-
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
-      background: var(--steel-deep);
-      color: var(--text);
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
       font-family: var(--font-body);
-      font-weight: 300;
+      font-weight: 400;
       line-height: 1.6;
       overflow-x: hidden;
-      max-width: 100%;
     }
 
-    /* ── MESSAGES ── */
-    .messages { list-style: none; padding: 0; margin-bottom: 1rem; }
-    .messages li {
-      padding: 0.75rem 1rem;
-      border-radius: 4px;
-      margin-bottom: 8px;
+    .container-xl { max-width: 1180px; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .75rem;
       font-family: var(--font-mono);
-      font-size: 0.78rem;
-      letter-spacing: 0.04em;
+      font-size: .68rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--bronze-dark);
+      margin-bottom: 1rem;
     }
-    .messages li.success { background: rgba(79,195,161,0.12); border: 1px solid rgba(79,195,161,0.3); color: #4FC3A1; }
-    .messages li.error   { background: rgba(232,69,69,0.12);  border: 1px solid rgba(232,69,69,0.3);  color: #E84545; }
-    .messages li.warning { background: rgba(232,168,85,0.12); border: 1px solid rgba(232,168,85,0.3); color: var(--ore-light); }
-    .messages li.info    { background: rgba(79,195,161,0.08); border: 1px solid rgba(79,195,161,0.2); color: var(--dust-light); }
 
-    /* ── NAV ── */
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: currentColor;
+    }
+
+    .display-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 7vw, 7rem);
+      font-weight: 800;
+      line-height: .95;
+      letter-spacing: -.015em;
+    }
+
+    .section-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 4.5vw, 4.4rem);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .lead-copy {
+      max-width: 650px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1.75;
+    }
+
+    .section-pad { padding: 110px 0; }
+    .light { background: var(--paper); }
+    .warm { background: var(--warm); }
+    .dark { background: var(--ink); color: #fff; }
+    .dark .lead-copy { color: rgba(255,255,255,.64); }
+    .dark .eyebrow { color: var(--bronze-light); }
+
+    .btn-veldar {
+      border-radius: 0;
+      padding: .85rem 1.35rem;
+      border: 1px solid transparent;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      transition: .22s ease;
+    }
+
+    .btn-veldar-primary {
+      background: var(--bronze);
+      color: #fff;
+    }
+
+    .btn-veldar-primary:hover {
+      background: var(--bronze-dark);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .btn-veldar-outline {
+      background: transparent;
+      color: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .btn-veldar-outline:hover {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    /* Veldar logo */
+    .brand-lockup {
+      display: inline-flex;
+      align-items: center;
+      gap: .75rem;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+    }
+
+    .brand-word {
+      font-family: var(--font-display);
+      font-size: 1.42rem;
+      font-weight: 700;
+      letter-spacing: .015em;
+      text-transform: none;
+    }
+
+    /* Navigation */
     .navbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: rgba(14,16,19,0.95) !important;
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(200,135,58,0.15) !important;
-      padding: 0 !important;
-      height: 64px;
+      height: 72px;
+      padding: 0;
+      background: rgba(251,250,247,.94) !important;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(22,25,29,.08);
     }
-    .navbar .container { height: 64px; }
 
-    .navbar-brand img { height: 36px; width: auto; }
+    .navbar .container-xl { height: 100%; }
 
     .navbar-nav .nav-link {
-      font-family: var(--font-mono) !important;
-      font-size: 0.7rem !important;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--dust-light) !important;
-      font-weight: 400 !important;
-      padding: 0 0.1rem !important;
-      margin: 0 0.75rem !important;
-      transition: color 0.2s;
-    }
-    .navbar-nav .nav-link:hover { color: var(--ore-light) !important; }
-
-    .btn-primary {
+      margin: 0 .48rem;
+      color: #555960 !important;
       font-family: var(--font-mono);
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
+      font-size: .66rem;
+      letter-spacing: .09em;
       text-transform: uppercase;
-      color: var(--steel-deep) !important;
-      background: var(--ore) !important;
-      border: none !important;
-      border-radius: 0 !important;
-      padding: 0.5rem 1.25rem !important;
-      transition: background 0.2s;
-    }
-    .btn-primary:hover { background: var(--ore-light) !important; }
-
-    .btn-outline-primary {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      font-weight: 400;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--dust-light) !important;
-      background: transparent !important;
-      border: 1px solid var(--seam) !important;
-      border-radius: 0 !important;
-      padding: 0.5rem 1.25rem !important;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .btn-outline-primary:hover {
-      border-color: var(--ore) !important;
-      color: var(--ore-light) !important;
     }
 
-    .dropdown-menu {
-      background: var(--steel-mid);
-      border: 1px solid var(--seam);
-      border-radius: 0;
-    }
-    .dropdown-item { color: var(--dust-light); font-size: 0.85rem; }
-    .dropdown-item:hover { background: var(--seam); color: var(--ore-light); }
-    .dropdown-divider { border-color: var(--seam); }
+    .navbar-nav .nav-link:hover { color: var(--bronze-dark) !important; }
 
-    /* ── HERO ── */
-    .hero-section {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 0 0 6rem;
+    /* Hero */
+    .hero {
+      min-height: 94vh;
+      padding: 138px 0 72px;
       position: relative;
       overflow: hidden;
-      background: var(--steel-deep);
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
       background:
-        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(200,135,58,0.04) 39px, rgba(200,135,58,0.04) 40px),
-        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(200,135,58,0.03) 59px, rgba(200,135,58,0.03) 60px);
-    }
-    .hero-accent {
-      position: absolute; top: 0; right: 0;
-      width: 55%; height: 100%;
-      background: linear-gradient(135deg, transparent 40%, rgba(200,135,58,0.06) 100%);
-      border-left: 1px solid rgba(200,135,58,0.08);
-    }
-    .hero-depth {
-      position: absolute; bottom: -2px; left: 0; right: 0;
-      height: 200px;
-      background: linear-gradient(to top, var(--steel-deep), transparent);
+        linear-gradient(rgba(22,25,29,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(22,25,29,.035) 1px, transparent 1px),
+        var(--paper);
+      background-size: 42px 42px;
     }
 
-    .hero-inner {
-      position: relative;
-      padding: 0 3rem;
-    }
-
-    .hero-tag {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--ore);
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    .hero-tag::before { content: ''; display: block; width: 32px; height: 1px; background: var(--ore); }
-
-    .hero-section h1 {
-      font-family: var(--font-display);
-      font-size: clamp(3.5rem, 8vw, 7.5rem);
-      font-weight: 800;
-      line-height: 0.92;
-      letter-spacing: -0.01em;
-      text-transform: uppercase;
-      color: var(--text);
-      max-width: 900px;
-      text-align: left;
-    }
-    .hero-section h1 .accent { color: var(--ore); }
-    .hero-section h1 .dim    { color: var(--dust); }
-
-    .hero-section .hero-sub {
-      margin-top: 2.5rem;
-      font-size: 1.1rem;
-      font-weight: 300;
-      color: var(--dust-light);
-      max-width: 480px;
-      line-height: 1.65;
-      text-align: left;
-    }
-
-    .hero-actions { margin-top: 2.5rem; display: flex; gap: 1rem; align-items: center; }
-
-    .hero-metrics {
+    .hero::after {
+      content: "";
       position: absolute;
-      right: 3rem;
+      right: -120px;
+      top: 100px;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(184,117,46,.12), transparent 68%);
+      pointer-events: none;
+    }
+
+    .hero-copy { position: relative; z-index: 2; }
+    .hero-title .accent { color: var(--bronze); }
+
+    .hero-sub {
+      max-width: 610px;
+      margin-top: 2rem;
+      color: #545960;
+      font-size: 1.18rem;
+      line-height: 1.75;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .8rem;
+      margin-top: 2rem;
+    }
+
+    .hero-visual {
+      min-height: 500px;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .physics-orbit {
+      width: min(470px, 90vw);
+      aspect-ratio: 1;
+      position: relative;
+    }
+
+    .orbit-ring {
+      position: absolute;
+      inset: 10%;
+      border: 1px solid rgba(22,25,29,.18);
+      border-radius: 50%;
+      animation: rotate 28s linear infinite;
+    }
+
+    .orbit-ring:nth-child(2) {
+      inset: 25%;
+      animation-direction: reverse;
+      animation-duration: 20s;
+    }
+
+    .orbit-node {
+      position: absolute;
+      top: 50%;
+      left: -6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--bronze);
+      box-shadow: 0 0 0 8px rgba(184,117,46,.12);
+    }
+
+    .core {
+      position: absolute;
+      inset: 38%;
+      display: grid;
+      place-items: center;
+      background: var(--ink);
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .core svg { width: 58%; height: 58%; }
+
+    .field-line {
+      position: absolute;
+      left: 14%;
+      width: 72%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(184,117,46,.55), transparent);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    .field-line.one { top: 29%; transform: rotate(18deg); }
+    .field-line.two { top: 48%; transform: rotate(-14deg); animation-delay: .8s; }
+    .field-line.three { top: 66%; transform: rotate(8deg); animation-delay: 1.6s; }
+
+    .visual-label {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .label-a { left: 0; top: 18%; }
+    .label-b { right: 0; top: 30%; }
+    .label-c { left: 3%; bottom: 20%; }
+    .label-d { right: 1%; bottom: 15%; }
+
+    @keyframes rotate { to { transform: rotate(360deg); } }
+    @keyframes pulse { 0%,100% { opacity: .22; } 50% { opacity: 1; } }
+
+    /* Intelligence loop */
+    .loop-section {
+      padding: 34px 0;
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .loop-track {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border-left: 1px solid rgba(255,255,255,.14);
+    }
+
+    .loop-step {
+      min-height: 118px;
+      padding: 1.15rem 1.25rem;
+      position: relative;
+      border-right: 1px solid rgba(255,255,255,.14);
+    }
+
+    .loop-num {
+      color: var(--bronze-light);
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .14em;
+    }
+
+    .loop-name {
+      margin-top: .3rem;
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .loop-desc {
+      margin-top: .25rem;
+      color: rgba(255,255,255,.58);
+      font-size: .83rem;
+    }
+
+    .loop-step::after {
+      content: "";
+      position: absolute;
+      left: 0;
       bottom: 0;
+      height: 2px;
+      width: 0;
+      background: var(--bronze-light);
+      animation: progress 8s linear infinite;
+    }
+
+    .loop-step:nth-child(2)::after { animation-delay: 1.6s; }
+    .loop-step:nth-child(3)::after { animation-delay: 3.2s; }
+    .loop-step:nth-child(4)::after { animation-delay: 4.8s; }
+    .loop-step:nth-child(5)::after { animation-delay: 6.4s; }
+
+    @keyframes progress {
+      0%,18% { width: 0; opacity: 1; }
+      28%,100% { width: 100%; opacity: .2; }
+    }
+
+    /* Problem */
+    .problem-quote {
+      max-width: 920px;
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .problem-quote .accent { color: var(--bronze); }
+
+    .problem-grid {
+      margin-top: 4rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.4rem;
+    }
+
+    .problem-item {
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .problem-item h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      font-weight: 700;
+    }
+
+    .problem-item p {
+      margin: .55rem 0 0;
+      color: var(--muted);
+    }
+
+    /* Architecture */
+    .architecture { margin-top: 4rem; }
+
+    .arch-stack {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.1);
+    }
+
+    .arch-card {
+      min-height: 240px;
+      padding: 1.7rem;
+      position: relative;
+      background: #1d2025;
+    }
+
+    .arch-card small {
+      color: var(--bronze-light);
+      font-family: var(--font-mono);
+      font-size: .58rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .arch-card h3 {
+      margin-top: .65rem;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .arch-card p {
+      margin-top: .7rem;
+      color: rgba(255,255,255,.55);
+      font-size: .87rem;
+    }
+
+    .arch-icon {
+      position: absolute;
+      right: 1.6rem;
+      bottom: 1.6rem;
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(215,154,86,.35);
+    }
+
+    .arch-icon svg {
+      width: 26px;
+      fill: none;
+      stroke: var(--bronze-light);
+      stroke-width: 1.5;
+    }
+
+    /* Applications */
+    .application-list { margin-top: 3.5rem; }
+
+    .application-row {
+      display: grid;
+      grid-template-columns: 180px 1fr 280px;
+      gap: 2rem;
+      align-items: center;
+      padding: 2.4rem 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .application-row:last-child { border-bottom: 1px solid var(--line); }
+
+    .app-index {
+      color: var(--bronze-dark);
+      font-family: var(--font-mono);
+      font-size: .64rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .app-copy h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 1.95rem;
+      font-weight: 700;
+    }
+
+    .app-copy p { margin: .55rem 0 0; color: var(--muted); }
+
+    .app-signal {
+      min-height: 130px;
+      padding-left: 1.4rem;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
-      align-items: flex-end;
+      justify-content: center;
+      border-left: 1px solid var(--line);
     }
-    .metric-chip { display: flex; flex-direction: column; align-items: flex-end; gap: 0.15rem; }
-    .metric-val { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--ore-light); line-height: 1; }
-    .metric-label { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dust); }
-    .metric-divider { width: 1px; height: 30px; background: var(--seam); margin-left: auto; }
 
-    /* ── TICKER ── */
-    .ticker-wrap {
-      background: var(--steel-mid);
-      border-top: 1px solid rgba(200,135,58,0.2);
-      border-bottom: 1px solid rgba(200,135,58,0.2);
-      padding: 0.7rem 0;
-      overflow: hidden;
-      white-space: nowrap;
-      max-width: 100%;
-      position: relative;
-    }
-    .ticker-inner { display: inline-block; animation: ticker 28s linear infinite; will-change: transform; }
-    .ticker-item {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      font-family: var(--font-mono); font-size: 0.68rem;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--dust); padding: 0 3rem;
-    }
-    .ticker-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ore); display: inline-block; }
-    .ticker-item.live .ticker-dot { background: var(--signal); }
-    @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-    /* ── SECTION COMMONS ── */
-    .siq-section { padding: 6rem 0; }
-    .siq-section .container { max-width: 1100px; }
-
-    .section-label {
+    .signal-label {
+      color: var(--muted);
       font-family: var(--font-mono);
-      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--ore); margin-bottom: 1rem;
-      display: flex; align-items: center; gap: 0.75rem;
+      font-size: .6rem;
+      letter-spacing: .13em;
+      text-transform: uppercase;
     }
-    .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--ore); }
 
-    .siq-h2 {
+    .signal-value {
+      margin-top: .35rem;
+      color: var(--bronze-dark);
       font-family: var(--font-display);
-      font-size: clamp(2.2rem, 4vw, 3.8rem);
-      font-weight: 700; text-transform: uppercase;
-      line-height: 1.0; letter-spacing: 0.01em; color: var(--text);
-    }
-    .siq-h2 .accent { color: var(--ore); }
-
-    /* ── PROBLEM ── */
-    .problem-section {
-      background: var(--steel-mid);
-      border-top: 1px solid var(--seam);
-      border-bottom: 1px solid var(--seam);
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
     }
 
-    .problem-body { font-size: 1.05rem; color: var(--dust-light); line-height: 1.75; margin-top: 1.5rem; }
-
-    .pain-list { list-style: none; margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1rem; padding: 0; }
-    .pain-list li {
-      display: flex; gap: 1rem; align-items: flex-start;
-      font-size: 0.95rem; color: var(--dust-light);
-      padding: 1rem 1.25rem;
-      border: 1px solid var(--seam);
-      background: rgba(14,16,19,0.6);
+    /* Principles */
+    .principles {
+      margin-top: 3.5rem;
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 1px;
+      background: rgba(255,255,255,.12);
     }
-    .pain-icon { color: var(--danger); font-family: var(--font-mono); font-size: 0.85rem; font-weight: 500; flex-shrink: 0; margin-top: 0.1rem; }
 
-    /* ── PIPELINE ── */
-    .pipeline-section { background: var(--steel-deep); }
-
-    .pipeline-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 0; margin-top: 4rem;
-      border: 1px solid var(--seam);
+    .principle {
+      min-height: 250px;
+      padding: 2.2rem;
+      background: #1c1f23;
     }
-    .pipeline-step {
-      padding: 2.5rem 2rem;
-      border-right: 1px solid var(--seam);
+
+    .principle .symbol {
+      color: var(--bronze-light);
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      line-height: 1;
+    }
+
+    .principle h3 {
+      margin-top: 1rem;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .principle p { margin-top: .6rem; color: rgba(255,255,255,.58); }
+
+    /* Industries */
+    .industry-grid {
+      margin-top: 3.5rem;
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 1.2rem;
+    }
+
+    .industry-card {
+      min-height: 250px;
+      padding: 2rem;
       position: relative;
-    }
-    .pipeline-step:last-child { border-right: none; }
-    .step-num {
-      font-family: var(--font-display); font-size: 4rem; font-weight: 800;
-      color: rgba(200,135,58,0.12); line-height: 1;
-      position: absolute; top: 1.5rem; right: 1.5rem;
-    }
-    .step-icon-wrap {
-      width: 40px; height: 40px; border: 1px solid var(--ore-dark);
-      display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;
-    }
-    .step-icon-wrap svg { width: 20px; height: 20px; stroke: var(--ore); fill: none; stroke-width: 1.5; }
-    .step-title {
-      font-family: var(--font-display); font-size: 1.2rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.04em; color: var(--text); margin-bottom: 0.75rem;
-    }
-    .step-body { font-size: 0.88rem; color: var(--dust); line-height: 1.65; }
-    .step-tag {
-      display: inline-block; font-family: var(--font-mono); font-size: 0.58rem;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--signal); background: rgba(79,195,161,0.08);
-      border: 1px solid rgba(79,195,161,0.2); padding: 0.25rem 0.6rem; margin-top: 1rem;
-    }
-
-    /* ── USE CASES ── */
-    .usecases-section { background: var(--steel-mid); border-top: 1px solid var(--seam); }
-
-    .uc-intro-body { font-size: 1rem; color: var(--dust-light); line-height: 1.75; margin-top: 1rem; }
-
-    .uc-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 1px; background: var(--seam); margin-top: 4rem;
-    }
-    .uc-card { background: var(--steel-mid); padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1rem; }
-    .uc-eyebrow { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ore); }
-    .uc-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.1; color: var(--text); }
-    .uc-body { font-size: 0.88rem; color: var(--dust); line-height: 1.7; flex: 1; }
-    .uc-stat { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--ore-light); line-height: 1; margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--seam); }
-    .uc-stat span { display: block; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dust); margin-top: 0.25rem; }
-
-    /* ── VIDEO BLOCK ── */
-    .video-wrap {
-      border: 1px solid var(--seam);
-      background: #000;
       overflow: hidden;
+      background: var(--white);
+      box-shadow: 0 10px 30px rgba(22,25,29,.05);
     }
-    .video-wrap video { display: block; width: 100%; }
 
-    /* ── ABOUT / HOW IT WORKS ── */
-    .about-section { background: var(--steel-deep); }
-
-    .how-steps { margin-top: 2rem; display: flex; flex-direction: column; gap: 0; border: 1px solid var(--seam); }
-    .how-step {
-      display: grid; grid-template-columns: 3rem 1fr;
-      gap: 1.25rem; padding: 1.5rem 1.75rem;
-      border-bottom: 1px solid var(--seam); align-items: start;
+    .industry-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -25% -45% 30%;
+      height: 150px;
+      border: 1px solid rgba(184,117,46,.18);
+      border-radius: 50%;
     }
-    .how-step:last-child { border-bottom: none; }
-    .how-num { font-family: var(--font-mono); font-size: 0.65rem; color: var(--ore); font-weight: 500; margin-top: 0.2rem; }
-    .how-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); margin-bottom: 0.3rem; }
-    .how-body { font-size: 0.88rem; color: var(--dust); line-height: 1.65; }
 
-    /* ── EDGE SECTION ── */
-    .edge-section { background: var(--steel-mid); border-top: 1px solid var(--seam); }
+    .industry-card h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      font-weight: 700;
+    }
 
-    .edge-points { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--seam); margin-top: 1rem; }
-    .edge-point { padding: 1.5rem 1.75rem; border-bottom: 1px solid var(--seam); display: grid; grid-template-columns: auto 1fr; gap: 1.25rem; align-items: start; }
-    .edge-point:last-child { border-bottom: none; }
-    .edge-num { font-family: var(--font-mono); font-size: 0.65rem; color: var(--ore); font-weight: 500; margin-top: 0.2rem; }
-    .edge-point-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); margin-bottom: 0.3rem; }
-    .edge-point-body { font-size: 0.85rem; color: var(--dust); line-height: 1.65; }
+    .industry-card p { margin-top: .7rem; color: var(--muted); }
 
-    .terminal { background: #0A0C0F; border: 1px solid var(--seam); border-top: 3px solid var(--ore); overflow: hidden; max-width: 100%; }
-    .terminal-bar { background: rgba(200,135,58,0.06); padding: 0.6rem 1rem; border-bottom: 1px solid var(--seam); display: flex; align-items: center; gap: 0.5rem; }
-    .t-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .terminal-body { padding: 1.5rem; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.9; }
-    .t-comment { color: #4A4E57; } .t-key { color: var(--ore-light); } .t-val { color: var(--signal); }
-    .t-str { color: #B5D4A8; } .t-prompt { color: var(--ore); } .t-dim { color: #3A3E47; }
+    .industry-tag {
+      position: absolute;
+      left: 2rem;
+      bottom: 1.6rem;
+      color: var(--bronze-dark);
+      font-family: var(--font-mono);
+      font-size: .58rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
 
-    /* ── INDUSTRIES ── */
-    .industries-section { background: var(--steel-deep); border-top: 1px solid var(--seam); }
-    .ind-strip { display: flex; gap: 1px; background: var(--seam); margin-top: 4rem; }
-    .ind-tile { flex: 1; background: var(--steel-deep); padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
-    .ind-tile.active { background: var(--steel-mid); border-top: 2px solid var(--ore); }
-    .ind-name { font-family: var(--font-display); font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text); }
-    .ind-desc { font-size: 0.8rem; color: var(--dust); line-height: 1.55; }
-    .ind-tile.active .ind-name { color: var(--ore-light); }
+    /* Design partner */
+    .partner-panel {
+      padding: clamp(2rem, 6vw, 5rem);
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 3rem;
+      align-items: center;
+      background: var(--white);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
 
-    /* ── PRICING ── */
-    .pricing-section { background: var(--steel-mid); border-top: 1px solid var(--seam); text-align: center; }
-    .pricing-card { border: 1px solid var(--seam); padding: 4rem 2rem; background: var(--steel-deep); max-width: 540px; margin: 3rem auto 0; }
-    .pricing-card p { color: var(--dust-light); font-size: 1rem; margin: 1rem 0 2rem; }
+    .partner-panel h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5vw, 4.8rem);
+      font-weight: 700;
+      line-height: .98;
+    }
 
-    /* ── FAQ ── */
-    .faq-section { background: var(--steel-deep); border-top: 1px solid var(--seam); }
+    .partner-panel p { max-width: 620px; color: var(--muted); }
 
-    .accordion-item { border: 1px solid var(--seam) !important; border-radius: 0 !important; margin-bottom: 8px !important; overflow: hidden; background: var(--steel-mid) !important; }
+    .partner-points { list-style: none; margin: 0; padding: 0; }
+
+    .partner-points li {
+      padding: 1rem 0;
+      border-top: 1px solid var(--line);
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .partner-points li:last-child { border-bottom: 1px solid var(--line); }
+
+    /* FAQ */
+    .accordion-item {
+      border: none;
+      border-top: 1px solid var(--line);
+      border-radius: 0 !important;
+      background: transparent;
+    }
+
+    .accordion-item:last-child { border-bottom: 1px solid var(--line); }
+
     .accordion-button {
-      font-family: var(--font-body); font-weight: 500; font-size: 0.9rem;
-      background: var(--steel-mid) !important; color: var(--text) !important;
-      border-radius: 0 !important; padding: 1rem 1.25rem !important;
+      padding: 1.3rem 0;
+      background: transparent !important;
+      color: var(--ink) !important;
+      box-shadow: none !important;
+      font-weight: 600;
     }
-    .accordion-button:not(.collapsed) { background: rgba(200,135,58,0.08) !important; color: var(--ore-light) !important; box-shadow: none !important; }
-    .accordion-button::after { filter: invert(0.7) sepia(1) saturate(2) hue-rotate(5deg); }
-    .accordion-body { background: var(--steel-deep); color: var(--dust-light); font-size: 0.88rem; line-height: 1.7; padding: 1rem 1.25rem !important; border-top: 1px solid var(--seam); }
 
-    /* ── CONTACT ── */
-    .contact-section { background: var(--steel-mid); border-top: 1px solid var(--seam); }
-
-    .contact-info-label {
-      font-family: var(--font-mono); font-size: 0.65rem;
-      letter-spacing: 0.15em; text-transform: uppercase; color: var(--ore);
-      margin-bottom: 0.25rem; margin-top: 1.5rem;
+    .accordion-body {
+      max-width: 760px;
+      padding: 0 0 1.5rem;
+      color: var(--muted);
     }
-    .contact-info-val { font-size: 0.95rem; color: var(--dust-light); }
 
-    .form-label { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dust); margin-bottom: 0.4rem; }
+    /* Contact */
+    .contact-card {
+      min-height: 570px;
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .contact-copy,
+    .contact-form-wrap {
+      padding: clamp(2rem,5vw,4.5rem);
+    }
+
+    .contact-copy h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem,5vw,4.8rem);
+      font-weight: 700;
+      line-height: .98;
+    }
+
+    .contact-copy p { max-width: 390px; color: rgba(255,255,255,.6); }
+
+    .contact-form-wrap { background: #23272c; }
+
+    .form-label {
+      color: rgba(255,255,255,.55);
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
     .form-control {
-      background: var(--steel-deep) !important; border: 1px solid var(--seam) !important;
-      border-radius: 0 !important; color: var(--text) !important;
-      font-family: var(--font-body); font-size: 0.9rem; padding: 0.65rem 0.9rem !important;
+      padding-left: 0 !important;
+      background: transparent !important;
+      border: 0 !important;
+      border-bottom: 1px solid rgba(255,255,255,.2) !important;
+      border-radius: 0 !important;
+      color: #fff !important;
+      box-shadow: none !important;
     }
-    .form-control:focus { border-color: var(--ore) !important; box-shadow: none !important; outline: none; }
-    .form-control::placeholder { color: var(--dust) !important; }
-    textarea.form-control { resize: vertical; }
 
-    /* ── CTA STRIP ── */
-    .cta-section {
-      background: var(--steel-deep); border-top: 1px solid rgba(200,135,58,0.2);
-      text-align: center; padding: 7rem 0; position: relative; overflow: hidden;
+    .form-control:focus { border-bottom-color: var(--bronze-light) !important; }
+
+    .messages { list-style: none; padding: 0; }
+    .messages li {
+      margin-bottom: .7rem;
+      padding: .8rem 1rem;
+      border: 1px solid rgba(255,255,255,.15);
+      font-size: .85rem;
     }
-    .cta-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at center bottom, rgba(200,135,58,0.07) 0%, transparent 65%); }
-    .cta-note { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dust); margin-top: 1.75rem; }
 
-    /* ── FOOTER ── */
     footer {
-      background: #080A0C;
-      border-top: 1px solid var(--seam);
       padding: 2.5rem 0;
-      margin-top: 0;
+      background: #0f1114;
+      color: rgba(255,255,255,.62);
     }
-    .footer-logo { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; letter-spacing: 0.08em; color: var(--dust); }
-    .footer-logo span { color: var(--ore); }
-    .footer-tagline { font-size: 0.8rem; color: var(--text-muted); margin: 0.25rem 0 0; }
-    .footer-copy { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; color: #3A3E47; margin: 0; }
-    .footer-links { display: flex; gap: 2rem; list-style: none; padding: 0; margin: 0; }
-    .footer-links a { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dust); text-decoration: none; }
-    .footer-links a:hover { color: var(--ore-light); }
 
-    @media (max-width: 768px) {
-      .hero-inner { padding: 0 1.5rem; }
-      .hero-metrics { display: none; }
-      .pipeline-grid { grid-template-columns: 1fr; }
-      .uc-grid { grid-template-columns: 1fr; }
-      .ind-strip { flex-direction: column; }
-      .siq-section { padding: 4rem 0; }
-      .terminal { overflow-x: auto; }
-      .terminal-body { font-size: 0.62rem; padding: 1rem; word-break: break-all; }
-      .how-step { grid-template-columns: 2.5rem 1fr; }
-      .edge-point { grid-template-columns: 2.5rem 1fr; }
-      .footer-links { flex-wrap: wrap; gap: 1rem; }
-      .contact-form-wrap { padding: 1.5rem; }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
     }
-    @media (max-width: 480px) {
-      .pipeline-grid { grid-template-columns: 1fr; }
-      .hero-actions { flex-direction: column; align-items: flex-start; }
-      .ticker-inner { animation-duration: 40s; }
+
+    .footer-links a {
+      color: inherit;
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .1em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 991px) {
+      .navbar-collapse {
+        padding: 1rem;
+        background: var(--paper);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .hero { padding-top: 120px; }
+      .hero-visual { min-height: 420px; margin-top: 2rem; }
+      .loop-track { grid-template-columns: 1fr; }
+      .loop-step { border-bottom: 1px solid rgba(255,255,255,.14); }
+      .problem-grid,
+      .industry-grid,
+      .principles,
+      .arch-stack { grid-template-columns: 1fr; }
+
+      .arch-card { min-height: 190px; }
+
+      .application-row {
+        grid-template-columns: 1fr;
+        gap: .8rem;
+      }
+
+      .app-signal {
+        padding: 1rem 0 0;
+        border-top: 1px solid var(--line);
+        border-left: 0;
+      }
+
+      .partner-panel,
+      .contact-card { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 576px) {
+      .navbar { height: 64px; }
+      .hero { padding-top: 105px; }
+      .section-pad { padding: 78px 0; }
+      .display-title { font-size: clamp(3rem, 17vw, 5rem); }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .hero-actions .btn { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+        scroll-behavior: auto !important;
+      }
     }
   </style>
 </head>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KWWLJZR88D"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-KWWLJZR88D');
-</script>
-
 <body>
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-xl">
+      <a class="brand-lockup" href="#home" aria-label="Veldar home">
+        <svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="18" r="11" fill="currentColor"/>
+          <path d="M13 38 L43 90 Q50 98 57 90 L87 38 L66 38 L50 69 L34 38 Z" fill="currentColor"/>
+        </svg>
+        <span class="brand-word">Veldar</span>
+      </a>
 
-<!-- ================= NAVBAR ================= -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-  <div class="container">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <a class="navbar-brand" href="/">
-      <img src="{% static 'images/logo/semanticiq-high-resolution-logo-transparent.png' %}" alt="SemanticIQ Logo">
-    </a>
-
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
-            style="border-color: var(--seam);">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="mainNavbar">
-      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="#pipeline">Solution</a></li>
-        <li class="nav-item"><a class="nav-link" href="#features">Use Cases</a></li>
-        <li class="nav-item"><a class="nav-link" href="#about">How It Works</a></li>
-        <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
-        <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
-        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-        <li class="nav-item"><a class="nav-link" href="https://146179273.hs-sites-eu1.com/blog" target="_blank" rel="noopener noreferrer">Blog</a></li>
-      </ul>
-
-      <div class="d-flex align-items-center gap-2">
-        {% if user.is_authenticated %}
-          <a href="/logout" class="btn btn-primary">Sign out</a>
-          <div class="dropdown">
-            <a class="d-flex align-items-center text-decoration-none dropdown-toggle text-white"
-               href="#" data-bs-toggle="dropdown">
-              <img src="{{ user.userprofile.get_profile_image_url }}" class="rounded-circle me-2" width="32" height="32">
-              <strong style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.05em;">{{ user.first_name }}</strong>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end shadow">
-              <li><a class="dropdown-item" href="/main_menu">Home</a></li>
-              <li><a class="dropdown-item" href="/view_profile">User Profile</a></li>
-              <li><a class="dropdown-item" href="/account_settings">Settings</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/logout">Sign out</a></li>
-            </ul>
-          </div>
-        {% else %}
-          <a href="/login" class="btn btn-primary">Log In</a>
-          <a href="/signup" class="btn btn-outline-primary">Request Early Access</a>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</nav>
-
-<!-- ================= HERO ================= -->
-<section class="hero-section" id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-accent"></div>
-  <div class="hero-depth"></div>
-
-  <div class="hero-inner">
-    <div class="hero-tag">Physics-Native · Industrial Intelligence · Process Operations</div>
-
-    <h1>
-      The Physics<br>
-      <span class="accent">Layer</span><br>
-      <span class="dim">for Industrial Operations</span>
-    </h1>
-
-    <p class="hero-sub">
-      Industrial data tells you what happened. Physics tells you why. semanticIQ helps industrial teams understand how processes are actually performing — and what should happen next.
-    </p>
-
-    <div class="hero-actions">
-      {% if user.is_authenticated %}
-        <a href="/main_menu" class="btn btn-primary">Continue Using semanticIQ</a>
-      {% else %}
-        <a href="/signup" class="btn btn-primary">Request Early Access</a>
-        <a href="#pipeline" class="btn btn-outline-primary">See the Solution</a>
-      {% endif %}
-    </div>
-  </div>
-
-  <div class="hero-metrics">
-    <div class="metric-chip">
-      <div class="metric-val">Reactive</div>
-      <div class="metric-label">How most industrial software operates today</div>
-    </div>
-    <div class="metric-divider"></div>
-    <div class="metric-chip">
-      <div class="metric-val">Physics</div>
-      <div class="metric-label">What semanticIQ uses to understand why</div>
-    </div>
-    <div class="metric-divider"></div>
-    <div class="metric-chip">
-      <div class="metric-val">Decisions</div>
-      <div class="metric-label">What we help operators make better</div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= TICKER ================= -->
-<div class="ticker-wrap">
-  <div class="ticker-inner">
-    <span class="ticker-item live"><span class="ticker-dot"></span>Live Process Feed · Unit 3 — Energy Consumption 14% Above Physics Baseline</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>Physics Model Sync · Heat Exchanger Fouling Signature Deployed · Chemical Plant Site 4</span>
-    <span class="ticker-item live"><span class="ticker-dot"></span>Live Anomaly · Compressor Train B — Operating Point Drifting from Design Curve</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>Decision Alert · Pump 12 — Repair vs Replace Analysis Complete · Replacement Recommended</span>
-    <span class="ticker-item live"><span class="ticker-dot"></span>Live Efficiency · Water Treatment Line 2 — Running at 91% of Design Efficiency</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>Process Status · 1,240 Tags Streaming · Physics Models Active · Latency 9ms</span>
-    <span class="ticker-item live"><span class="ticker-dot"></span>Live Process Feed · Unit 3 — Energy Consumption 14% Above Physics Baseline</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>Physics Model Sync · Heat Exchanger Fouling Signature Deployed · Chemical Plant Site 4</span>
-    <span class="ticker-item live"><span class="ticker-dot"></span>Live Anomaly · Compressor Train B — Operating Point Drifting from Design Curve</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>Decision Alert · Pump 12 — Repair vs Replace Analysis Complete · Replacement Recommended</span>
-    <span class="ticker-item live"><span class="ticker-dot"></span>Live Efficiency · Water Treatment Line 2 — Running at 91% of Design Efficiency</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>Process Status · 1,240 Tags Streaming · Physics Models Active · Latency 9ms</span>
-  </div>
-</div>
-
-<!-- ================= PROBLEM ================= -->
-<section class="siq-section problem-section">
-  <div class="container">
-    <div class="row align-items-center g-5">
-      <div class="col-lg-5">
-        <div class="section-label">The Problem</div>
-        <h2 class="siq-h2">Industrial Software <span class="accent">Reacts.</span><br>It Doesn't Understand.</h2>
-        <p class="problem-body">Most industrial software is built around thresholds and alarms — it screams when a limit is breached. By then, efficiency has already dropped, energy has already been wasted, or equipment has already been stressed. The plant has data. What it lacks is understanding of what that data means against the physics of how the process should actually be behaving.</p>
-      </div>
-      <div class="col-lg-7">
-        <ul class="pain-list">
-          <li><span class="pain-icon">!</span><span>Threshold-based alarms fire after the problem has already occurred — not before the conditions that cause it have developed.</span></li>
-          <li><span class="pain-icon">!</span><span>Energy waste is invisible until it hits the utility bill — processes drift from their design operating point for months with nobody watching the gap.</span></li>
-          <li><span class="pain-icon">!</span><span>Repair, replace, and capital planning decisions are made on age and gut feel — with no physics-grounded picture of remaining useful life or true degradation trajectory.</span></li>
-          <li><span class="pain-icon">!</span><span>Every site diagnoses the same failure modes alone — with no way to benchmark how similar equipment and processes perform elsewhere under comparable conditions.</span></li>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item"><a class="nav-link" href="#platform">Platform</a></li>
+          <li class="nav-item"><a class="nav-link" href="#applications">Applications</a></li>
+          <li class="nav-item"><a class="nav-link" href="#industries">Industries</a></li>
+          <li class="nav-item"><a class="nav-link" href="#partners">Design Partners</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="https://146179273.hs-sites-eu1.com/blog" target="_blank" rel="noopener noreferrer">Blog</a></li>
         </ul>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ================= PIPELINE ================= -->
-<section class="siq-section pipeline-section" id="pipeline">
-  <div class="container">
-    <div class="section-label">Solution</div>
-    <h2 class="siq-h2">Physics-Native Intelligence,<br><span class="accent">Any Process, Any Plant</span></h2>
-    <p style="color: var(--dust-light); font-size: 1rem; max-width: 600px; margin-top: 1rem; line-height: 1.7;">How semanticIQ turns existing operational data into physics-based process intelligence — without replacing existing systems, without proprietary sensors.</p>
-
-    <div class="pipeline-grid">
-      <div class="pipeline-step">
-        <span class="step-num">01</span>
-        <div class="step-icon-wrap">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="12" y1="7" x2="5" y2="17"/><line x1="12" y1="7" x2="19" y2="17"/></svg>
-        </div>
-        <div class="step-title">Connect to Existing Data</div>
-        <div class="step-body">Connects to whatever you already have — OPC-UA, Modbus, OSIsoft PI historians, SCADA exports. No proprietary hardware, no rip and replace. The intelligence sits above your existing systems.</div>
-        <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--dust); margin-top: 0.75rem; line-height: 1.6; border-left: 2px solid var(--seam); padding-left: 0.75rem;">Works with existing plant instrumentation across any equipment brand or vintage.</div>
-        <div class="step-tag">Brownfield-first</div>
-      </div>
-      <div class="pipeline-step">
-        <span class="step-num">02</span>
-        <div class="step-icon-wrap">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
-        </div>
-        <div class="step-title">Harmonise & Contextualise</div>
-        <div class="step-body">Raw operational data is cleaned, structured, and given engineering context — linking live readings to design specifications, equipment class, and operating history so the physics models have the right foundation to reason from.</div>
-        <div class="step-tag">Data harmonisation layer</div>
-      </div>
-      <div class="pipeline-step">
-        <span class="step-num">03</span>
-        <div class="step-icon-wrap">
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
-        <div class="step-title">Apply Physics Models</div>
-        <div class="step-body">Engineering and physics models — thermodynamics, fluid mechanics, mass and energy balances — continuously compare live operating conditions against design intent, identifying deviations before they become problems.</div>
-        <div class="step-tag">Physics model library</div>
-      </div>
-      <div class="pipeline-step">
-        <span class="step-num">04</span>
-        <div class="step-icon-wrap">
-          <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-        </div>
-        <div class="step-title">Intelligence That Drives Decisions</div>
-        <div class="step-body">Outputs are framed as operational decisions — not raw anomaly scores. Energy waste to address, assets approaching replacement, process bottlenecks to clear, scenarios to evaluate — intelligence that feeds directly into how you run the plant.</div>
-        <div class="step-tag">Decision-ready outputs</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= USE CASES ================= -->
-<section class="siq-section usecases-section" id="features">
-  <div class="container">
-    <div class="row align-items-end g-4 mb-2">
-      <div class="col-lg-6">
-        <div class="section-label">Use Cases</div>
-        <h2 class="siq-h2">Intelligence Across <span class="accent">Every Operational Decision</span></h2>
-      </div>
-      <div class="col-lg-6">
-        <p class="uc-intro-body">semanticIQ connects to the operational data you already have and applies physics-based models to surface intelligence that matters — from daily reliability decisions to long-term capital planning. Start with one use case, one asset class, or one process unit. Expand at your own pace.</p>
-        <div class="mt-3">
-          <div class="video-wrap">
-            <video width="100%" controls>
-              <source src="" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="uc-grid">
-      <div class="uc-card">
-        <div class="uc-eyebrow">Reliability & Asset Health</div>
-        <div class="uc-title">Know What's Degrading Before It Fails</div>
-        <div class="uc-body">Physics models continuously compare live operating conditions against design intent — detecting developing faults from their hydraulic and thermodynamic signatures, not from vibration spikes that arrive after the damage has started.</div>
-        <div class="uc-stat">Earlier<span>Detection from causes, not symptoms</span></div>
-      </div>
-      <div class="uc-card">
-        <div class="uc-eyebrow">Energy Optimisation</div>
-        <div class="uc-title">Find the Energy Waste Your Meters Can't See</div>
-        <div class="uc-body">Process and equipment efficiency is tracked continuously against physics-based baselines — surfacing hidden energy losses from operating point drift, fouling, degradation, and suboptimal control setpoints before they accumulate into significant utility cost.</div>
-        <div class="uc-stat">Invisible<span>Until physics models surface it</span></div>
-      </div>
-      <div class="uc-card">
-        <div class="uc-eyebrow">Capital Planning & CapEx</div>
-        <div class="uc-title">Replace Assets When the Physics Says — Not When the Calendar Does</div>
-        <div class="uc-body">Degradation trajectories modelled from real operating history give a physics-grounded picture of remaining useful life — turning repair-vs-replace decisions from gut feel into a defensible, data-backed capital budget conversation.</div>
-        <div class="uc-stat">Grounded<span>CapEx decisions backed by physics</span></div>
-      </div>
-      <div class="uc-card">
-        <div class="uc-eyebrow">Debottlenecking</div>
-        <div class="uc-title">Find Exactly Where Your Process Is Leaving Throughput on the Table</div>
-        <div class="uc-body">Mass and energy balance models across the process identify where constraints are limiting output — distinguishing real capacity bottlenecks from operational inefficiencies, so improvement effort goes where the physics says it will have most impact.</div>
-        <div class="uc-stat">Pinpoint<span>Where throughput is actually constrained</span></div>
-      </div>
-      <div class="uc-card">
-        <div class="uc-eyebrow">Scenario Analysis</div>
-        <div class="uc-title">Test Process Changes Before You Make Them</div>
-        <div class="uc-body">The same physics models used for monitoring can simulate how a process would respond to a change in operating conditions, feedstock, throughput target, or equipment configuration — giving operators a grounded answer to "what happens if we do X?" before they commit.</div>
-        <div class="uc-stat">Simulate<span>Before committing to change</span></div>
-      </div>
-      <div class="uc-card">
-        <div class="uc-eyebrow">Asset Lifecycle & Selection</div>
-        <div class="uc-title">Specify and Select Assets Against Real-World Performance Data</div>
-        <div class="uc-body">Physics models informed by real operating experience across similar assets and processes let operators evaluate new equipment against how comparable assets actually perform in the field — not just what the catalogue specification claims.</div>
-        <div class="uc-stat">Real-world<span>Performance, not catalogue assumptions</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= ABOUT ================= -->
-<section class="siq-section about-section" id="about">
-  <div class="container">
-    <div class="row align-items-start g-5">
-      <div class="col-lg-6">
-        <div class="section-label">How It Works</div>
-        <h2 class="siq-h2">From Assessment <span class="accent">to Intelligence</span></h2>
-        <div class="how-steps">
-          <div class="how-step">
-            <div class="how-num">01</div>
-            <div><div class="how-title">Process & Asset Assessment</div><div class="how-body">We start with a structured assessment of your process, assets, and operational priorities — identifying where physics-based intelligence would have the highest impact. This is also the natural starting point for a conversation about what semanticIQ could do for your operation specifically.</div></div>
-          </div>
-          <div class="how-step">
-            <div class="how-num">02</div>
-            <div><div class="how-title">Data Review & Connectivity</div><div class="how-body">We review what operational data already exists — historian tags, SCADA outputs, CMMS records, design documentation — and connect directly to existing systems via OPC-UA, Modbus, or API. No new sensors, no rip and replace.</div></div>
-          </div>
-          <div class="how-step">
-            <div class="how-num">03</div>
-            <div><div class="how-title">Data Harmonisation</div><div class="how-body">Raw operational data is cleaned, structured, and given engineering context — linking live readings to design specifications, equipment class, and operating history, so physics models have a reliable foundation to reason from.</div></div>
-          </div>
-          <div class="how-step">
-            <div class="how-num">04</div>
-            <div><div class="how-title">Physics Model Deployment</div><div class="how-body">Engineering and physics models are configured for your specific process and asset classes — thermodynamics, fluid mechanics, mass and energy balances — and run continuously against live data to generate decision-ready intelligence.</div></div>
-          </div>
-          <div class="how-step">
-            <div class="how-num">05</div>
-            <div><div class="how-title">Ongoing Intelligence & Expansion</div><div class="how-body">Intelligence improves as operating history builds. Start with one asset class, unit process, or production line — then expand progressively across the plant as value is proven, without redesigning the underlying system.</div></div>
-          </div>
-        </div>
-        <div class="mt-4">
+        <div class="d-flex gap-2 align-items-center">
           {% if user.is_authenticated %}
-            <a href="/main_menu" class="btn btn-primary">Continue Using semanticIQ</a>
+            <a href="/main_menu" class="btn btn-veldar btn-veldar-primary">Open Veldar</a>
           {% else %}
-            <a href="/signup" class="btn btn-primary">Start With an Assessment</a>
+            <a href="#contact" class="btn btn-veldar btn-veldar-primary">Start an Assessment</a>
           {% endif %}
         </div>
       </div>
-      <div class="col-lg-6">
-        <img src="{% static 'images/about/about-image.svg' %}" alt="About semanticIQ" class="img-fluid" style="opacity: 0.8; filter: sepia(0.3) hue-rotate(5deg);">
-      </div>
     </div>
-  </div>
-</section>
+  </nav>
 
-<!-- ================= WHY EDGE ================= -->
-<section class="siq-section edge-section">
-  <div class="container">
-    <div class="row align-items-start g-5">
-      <div class="col-lg-6">
-        <div class="section-label">Why We're Different</div>
-        <h2 class="siq-h2">Threshold Alarms<br><span class="accent">React. Physics Understands.</span></h2>
-        <div class="edge-points">
-          <div class="edge-point">
-            <div class="edge-num">01</div>
-            <div><div class="edge-point-title">Physics, Not Just Pattern-Matching</div><div class="edge-point-body">Most industrial AI learns patterns from historical data — and fails when conditions change. semanticIQ reasons from the underlying laws of thermodynamics, fluid mechanics, and mass-energy balance, so it understands why a process behaves as it does, not just that something changed.</div></div>
+  <main>
+    <section class="hero" id="home">
+      <div class="container-xl">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-7 hero-copy reveal">
+            <div class="eyebrow">Physics-based intelligence · Industrial operations</div>
+            <h1 class="display-title hero-title">
+              Industrial Intelligence<br>
+              <span class="accent">Grounded in Physics</span>
+            </h1>
+
+            <p class="hero-sub">
+              Industrial operations generate vast amounts of data, but data alone rarely explains why a process behaves the way it does. Veldar combines live operational data with engineering physics to help operations understand, decide and ultimately optimise themselves.
+            </p>
+
+            <div class="hero-actions">
+              {% if user.is_authenticated %}
+                <a href="/main_menu" class="btn btn-veldar btn-veldar-primary">Open Veldar</a>
+              {% else %}
+                <a href="#contact" class="btn btn-veldar btn-veldar-primary">Start an Assessment</a>
+                <a href="#platform" class="btn btn-veldar btn-veldar-outline">See How It Works</a>
+              {% endif %}
+            </div>
           </div>
-          <div class="edge-point">
-            <div class="edge-num">02</div>
-            <div><div class="edge-point-title">Decisions, Not Just Observations</div><div class="edge-point-body">Most monitoring software surfaces data and alerts. semanticIQ frames outputs as operational decisions — energy waste to address, assets approaching replacement, bottlenecks constraining throughput, scenarios to evaluate before committing to a change.</div></div>
-          </div>
-          <div class="edge-point">
-            <div class="edge-num">03</div>
-            <div><div class="edge-point-title">Sits Above Existing Systems</div><div class="edge-point-body">No rip and replace. semanticIQ connects to the SCADA, historian, and operational data you already have — adding a physics intelligence layer above your existing control systems without disrupting them.</div></div>
-          </div>
-          <div class="edge-point">
-            <div class="edge-num">04</div>
-            <div><div class="edge-point-title">Start Small, Scale With Confidence</div><div class="edge-point-body">Begin with one asset class, one process unit, or one production line. Prove the value locally. Expand progressively — with an architecture designed to grow across the plant without redesign.</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="terminal">
-          <div class="terminal-bar">
-            <div class="t-dot" style="background:#E84545;"></div>
-            <div class="t-dot" style="background:#E8A855; margin:0 4px;"></div>
-            <div class="t-dot" style="background:#4FC3A1;"></div>
-            <span style="font-family:var(--font-mono);font-size:0.62rem;color:#4A4E57;margin-left:0.75rem;letter-spacing:0.1em;">semanticiq.process · site-04 · chemical-plant-west</span>
-          </div>
-          <div class="terminal-body">
-            <div class="t-comment"># semanticIQ Process Intelligence — Live Stream</div>
-            <div class="t-dim">─────────────────────────────────────────</div>
-            <div><span class="t-prompt">$</span> <span style="color:#EAE8E3;">siq status</span></div>
-            <div class="t-dim">&nbsp;</div>
-            <div><span class="t-key">site_id      </span> <span class="t-val">site-04-west-process</span></div>
-            <div><span class="t-key">data_source  </span> <span class="t-val">HISTORIAN · OPC-UA</span></div>
-            <div><span class="t-key">physics_mode </span> <span class="t-val">CONTINUOUS</span></div>
-            <div><span class="t-key">uptime       </span> <span class="t-val">21d 14h 07m</span></div>
-            <div class="t-dim">&nbsp;</div>
-            <div><span class="t-key">tags_active       </span> <span class="t-str">1,240 / 1,240</span></div>
-            <div><span class="t-key">models_running    </span> <span class="t-str">14 physics models</span></div>
-            <div><span class="t-key">inference_latency </span> <span class="t-str">9ms avg</span></div>
-            <div class="t-dim">&nbsp;</div>
-            <div><span class="t-key">last_insight </span> <span style="color:#E8A855;">UNIT_3_ENERGY_DRIFT_14PCT</span></div>
-            <div><span class="t-key">decision     </span> <span class="t-str">setpoint_review_recommended</span></div>
-            <div><span class="t-key">insight_age  </span> <span class="t-str">7m 34s</span></div>
-            <div class="t-dim">&nbsp;</div>
-            <div class="t-comment"># Physics running. Understanding process in real time.</div>
-            <div><span class="t-prompt">$</span> <span style="color:#4A4E57;">_</span></div>
+
+          <div class="col-lg-5 hero-visual reveal" aria-label="Animated physics intelligence illustration">
+            <div class="physics-orbit">
+              <div class="orbit-ring"><span class="orbit-node"></span></div>
+              <div class="orbit-ring"><span class="orbit-node"></span></div>
+              <div class="field-line one"></div>
+              <div class="field-line two"></div>
+              <div class="field-line three"></div>
+
+              <div class="core">
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                  <circle cx="50" cy="18" r="11" fill="currentColor"/>
+                  <path d="M13 38 L43 90 Q50 98 57 90 L87 38 L66 38 L50 69 L34 38 Z" fill="currentColor"/>
+                </svg>
+              </div>
+
+              <span class="visual-label label-a">Live data</span>
+              <span class="visual-label label-b">Physics models</span>
+              <span class="visual-label label-c">Decision intelligence</span>
+              <span class="visual-label label-d">Autonomous optimisation</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ================= INDUSTRIES ================= -->
-<section class="siq-section industries-section">
-  <div class="container">
-    <div class="section-label">Industry Coverage</div>
-    <h2 class="siq-h2">Physics Works Across<br><span class="accent">Every Process Industry</span></h2>
-    <div class="ind-strip">
-      <div class="ind-tile active">
-        <div class="ind-name">Water & Wastewater</div>
-        <div class="ind-desc">Energy efficiency, network performance, asset lifecycle and regulatory compliance for utilities under pressure to do more with ageing infrastructure.</div>
-      </div>
-      <div class="ind-tile">
-        <div class="ind-name">Chemical & Process</div>
-        <div class="ind-desc">Process reliability, energy optimisation, and debottlenecking for continuous process plants where unplanned downtime has immediate cost consequences.</div>
-      </div>
-      <div class="ind-tile">
-        <div class="ind-name">Food & Beverage</div>
-        <div class="ind-desc">Production line reliability, energy consumption, and throughput optimisation for manufacturers where process consistency directly affects product quality.</div>
-      </div>
-      <div class="ind-tile">
-        <div class="ind-name">Oil, Gas & Energy</div>
-        <div class="ind-desc">Asset integrity, process efficiency, and capital planning across upstream, midstream, and power generation operations with high asset criticality.</div>
-      </div>
-      <div class="ind-tile">
-        <div class="ind-name">Pulp, Paper & Mining</div>
-        <div class="ind-desc">Throughput maximisation, energy reduction, and equipment lifecycle intelligence for asset-intensive continuous process operations.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= PRICING ================= -->
-<section class="siq-section pricing-section" id="pricing">
-  <div class="container">
-    <div class="section-label" style="justify-content: center;">Pricing</div>
-    <h2 class="siq-h2 text-center">Built Around Your <span class="accent">Operation</span></h2>
-    <div class="pricing-card mx-auto">
-      <p>semanticIQ is currently in early access, working with a small number of design partners to shape the platform. We start with an assessment of your process and priorities — then scope the engagement around where physics-based intelligence would have the most immediate impact. Get in touch to start the conversation.</p>
-      <a href="#contact" class="btn btn-outline-primary">Start With an Assessment</a>
-    </div>
-  </div>
-</section>
-
-<!-- ================= FAQ ================= -->
-<section class="siq-section faq-section" id="faq">
-  <div class="container">
-    <div class="section-label">Common Questions</div>
-    <h2 class="siq-h2 mb-5">FAQ</h2>
-    <div class="row g-3">
-      <div class="col-lg-6">
-        <div class="accordion-item">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq1">Do I need to replace existing SCADA or control systems?</button></h2>
-          <div id="faq1" class="accordion-collapse collapse"><div class="accordion-body">No. semanticIQ sits above your existing systems — connecting to the historian, SCADA, and operational data you already have via OPC-UA, Modbus, or API. It adds a physics intelligence layer without disrupting what's already running.</div></div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq2">What types of processes and equipment does semanticIQ support?</button></h2>
-          <div id="faq2" class="accordion-collapse collapse"><div class="accordion-body">We build physics models for continuous process industries — covering rotating equipment (pumps, compressors, fans), heat transfer (exchangers, boilers, condensers), and broader process units. We typically start with one asset class or process unit and expand from there.</div></div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq3">How is this different from threshold-based monitoring or generic AI tools?</button></h2>
-          <div id="faq3" class="accordion-collapse collapse"><div class="accordion-body">Threshold alarms react after a limit is breached. Generic AI learns patterns from historical data — and can fail when operating conditions change. semanticIQ reasons from physics: thermodynamics, fluid mechanics, and mass-energy balance. It understands why a process behaves as it does, not just that something changed.</div></div>
+    <section class="loop-section" aria-label="Veldar intelligence loop">
+      <div class="container-xl">
+        <div class="loop-track">
+          <div class="loop-step"><div class="loop-num">01</div><div class="loop-name">Observe</div><div class="loop-desc">Connect live plant data.</div></div>
+          <div class="loop-step"><div class="loop-num">02</div><div class="loop-name">Understand</div><div class="loop-desc">Interpret behaviour through physics.</div></div>
+          <div class="loop-step"><div class="loop-num">03</div><div class="loop-name">Decide</div><div class="loop-desc">Evaluate the best next action.</div></div>
+          <div class="loop-step"><div class="loop-num">04</div><div class="loop-name">Act</div><div class="loop-desc">Integrate with people and systems.</div></div>
+          <div class="loop-step"><div class="loop-num">05</div><div class="loop-name">Autonomously Optimise</div><div class="loop-desc">Improve continuously within safe limits.</div></div>
         </div>
       </div>
-      <div class="col-lg-6">
-        <div class="accordion-item">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq4">What does the early access process look like?</button></h2>
-          <div id="faq4" class="accordion-collapse collapse"><div class="accordion-body">We start with a structured assessment of your process, assets, and operational priorities. From there we connect to existing data, harmonise it, deploy physics models, and begin generating decision-ready intelligence — typically within weeks of data access. Design partners have direct input into the product roadmap.</div></div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq5">How quickly does it produce useful output?</button></h2>
-          <div id="faq5" class="accordion-collapse collapse"><div class="accordion-body">Initial insights from the assessment are available quickly. Physics models begin generating process intelligence as soon as data is connected and harmonised — typically within days to weeks of starting, depending on data availability and process complexity.</div></div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq6">Can we start with one area and expand later?</button></h2>
-          <div id="faq6" class="accordion-collapse collapse"><div class="accordion-body">Yes — this is by design. semanticIQ is built to start where your most immediate operational headache is: a single asset class, a specific unit process, or one production line. Prove the value locally, then expand progressively across the plant without redesigning the underlying system.</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ================= CONTACT ================= -->
-<section class="siq-section contact-section" id="contact">
-  <div class="container">
-    <div class="row align-items-start g-5">
-      <div class="col-lg-6">
-        <div class="section-label">Get in Touch</div>
-        <h2 class="siq-h2">Start With an <span class="accent">Assessment</span></h2>
-        <p style="color: var(--dust-light); margin-top: 1.25rem; font-size: 1rem; max-width: 400px; line-height: 1.7;">We start every engagement with a structured assessment of your process, assets, and operational priorities — identifying where physics-based intelligence would have the most immediate impact. No commitment required. Just a conversation.</p>
+    <section class="section-pad light">
+      <div class="container-xl">
+        <div class="eyebrow reveal">The problem</div>
 
-        <div class="mt-4">
-          <div class="contact-info-label">Our Location</div>
-          <div class="contact-info-val">Iveagh Court, Harcourt Rd, Saint Kevin's<br>Dublin, D02 YT22</div>
-          <div class="contact-info-label">Email</div>
-          <div class="contact-info-val">mal@outreach.semanticiq.co</div>
+        <div class="problem-quote reveal">
+          Plants already have data.<br>
+          What they lack is <span class="accent">understanding.</span>
+        </div>
+
+        <div class="problem-grid">
+          <article class="problem-item reveal">
+            <h3>Reactive systems</h3>
+            <p>Threshold alarms explain that a limit has been crossed, often after efficiency has fallen or equipment has already been stressed.</p>
+          </article>
+
+          <article class="problem-item reveal">
+            <h3>Hidden process drift</h3>
+            <p>Energy loss, bottlenecks and operating-point drift can persist for months without a clear view of their physical cause.</p>
+          </article>
+
+          <article class="problem-item reveal">
+            <h3>Experience trapped in people</h3>
+            <p>Critical operating knowledge remains manual and difficult to scale as experienced engineers retire and skills shortages widen.</p>
+          </article>
         </div>
       </div>
+    </section>
 
-      <div class="col-lg-6">
-        <div style="border: 1px solid var(--seam); padding: 2rem; background: var(--steel-deep);">
-          <h4 style="font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text); margin-bottom: 1.5rem;">Send a Message</h4>
+    <section class="section-pad dark" id="platform">
+      <div class="container-xl">
+        <div class="eyebrow reveal">The Veldar physics layer</div>
 
-          {% if messages %}
-          <ul class="messages">
-            {% for message in messages %}
-            <li class="{{ message.tags }}">{{ message }}</li>
-            {% endfor %}
+        <div class="row g-5 align-items-end">
+          <div class="col-lg-7">
+            <h2 class="section-title reveal">From plant data to<br><span style="color:var(--bronze-light)">trusted action.</span></h2>
+          </div>
+
+          <div class="col-lg-5">
+            <p class="lead-copy reveal">
+              Veldar sits above existing operational systems. It combines live telemetry, engineering context and physics models to create decision-ready intelligence—without replacing the controls already running the plant.
+            </p>
+          </div>
+        </div>
+
+        <div class="architecture reveal">
+          <div class="arch-stack">
+            <article class="arch-card">
+              <small>01 · Observe</small>
+              <h3>Existing systems</h3>
+              <p>SCADA, historians, PLCs, sensors, CMMS and engineering documentation.</p>
+              <div class="arch-icon"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 12h5m3-5l2-1m-2 11l2 1"/></svg></div>
+            </article>
+
+            <article class="arch-card">
+              <small>02 · Contextualise</small>
+              <h3>Engineering context</h3>
+              <p>Design intent, operating envelopes, asset relationships and process constraints.</p>
+              <div class="arch-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16"/><path d="M4 10h16M10 4v16"/></svg></div>
+            </article>
+
+            <article class="arch-card">
+              <small>03 · Understand</small>
+              <h3>Physics models</h3>
+              <p>Mass and energy balances, fluid mechanics, heat transfer and equipment behaviour.</p>
+              <div class="arch-icon"><svg viewBox="0 0 24 24"><path d="M3 17c4-8 7-8 10 0s6 8 8 0"/><path d="M3 7h18"/></svg></div>
+            </article>
+
+            <article class="arch-card">
+              <small>04 · Decide</small>
+              <h3>Operational intelligence</h3>
+              <p>Recommendations, scenario analysis, bottleneck diagnosis and investment decisions.</p>
+              <div class="arch-icon"><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg></div>
+            </article>
+
+            <article class="arch-card">
+              <small>05 · Act</small>
+              <h3>Optimisation</h3>
+              <p>Human-guided actions today and progressively more autonomous operation over time.</p>
+              <div class="arch-icon"><svg viewBox="0 0 24 24"><path d="M4 12h14M14 7l5 5-5 5"/></svg></div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad warm" id="applications">
+      <div class="container-xl">
+        <div class="eyebrow reveal">Applications</div>
+
+        <div class="row g-5 align-items-end">
+          <div class="col-lg-7">
+            <h2 class="section-title reveal">Start with one decision.<br>Expand across the plant.</h2>
+          </div>
+
+          <div class="col-lg-5">
+            <p class="lead-copy reveal">
+              Each deployment begins where the operational value is clearest. The same intelligence layer can then extend across assets, process units and sites.
+            </p>
+          </div>
+        </div>
+
+        <div class="application-list">
+          <article class="application-row reveal">
+            <div class="app-index">01 · Reliability</div>
+            <div class="app-copy">
+              <h3>Understand degradation before failure</h3>
+              <p>Identify developing faults from the physical behaviour that causes them—not only from late-stage vibration or temperature symptoms.</p>
+            </div>
+            <div class="app-signal"><span class="signal-label">Outcome</span><span class="signal-value">Earlier action</span></div>
+          </article>
+
+          <article class="application-row reveal">
+            <div class="app-index">02 · Energy</div>
+            <div class="app-copy">
+              <h3>Expose hidden energy waste</h3>
+              <p>Compare current operating behaviour with physics-based efficiency baselines to find drift, fouling and poor setpoints.</p>
+            </div>
+            <div class="app-signal"><span class="signal-label">Outcome</span><span class="signal-value">Lower cost</span></div>
+          </article>
+
+          <article class="application-row reveal">
+            <div class="app-index">03 · Throughput</div>
+            <div class="app-copy">
+              <h3>Find the real bottleneck</h3>
+              <p>Use mass and energy balances to distinguish true capacity constraints from avoidable operating inefficiency.</p>
+            </div>
+            <div class="app-signal"><span class="signal-label">Outcome</span><span class="signal-value">More output</span></div>
+          </article>
+
+          <article class="application-row reveal">
+            <div class="app-index">04 · Scenario analysis</div>
+            <div class="app-copy">
+              <h3>Test changes before committing</h3>
+              <p>Explore changes in feedstock, throughput targets, equipment configuration or operating conditions before applying them in the plant.</p>
+            </div>
+            <div class="app-signal"><span class="signal-label">Outcome</span><span class="signal-value">Lower risk</span></div>
+          </article>
+
+          <article class="application-row reveal">
+            <div class="app-index">05 · Autonomy</div>
+            <div class="app-copy">
+              <h3>Build toward self-optimising operations</h3>
+              <p>Ground progressively more automated decisions in physics, process constraints and human-defined operating limits.</p>
+            </div>
+            <div class="app-signal"><span class="signal-label">Outcome</span><span class="signal-value">Trusted autonomy</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad dark">
+      <div class="container-xl">
+        <div class="eyebrow reveal">Why physics</div>
+        <h2 class="section-title reveal">A stronger foundation<br>for industrial intelligence.</h2>
+
+        <div class="principles">
+          <article class="principle reveal">
+            <div class="symbol">01</div>
+            <h3>Physics explains</h3>
+            <p>It connects measured behaviour to causes, constraints and operating conditions—not only statistical correlation.</p>
+          </article>
+
+          <article class="principle reveal">
+            <div class="symbol">02</div>
+            <h3>Physics generalises</h3>
+            <p>Engineering principles remain useful when operating conditions move beyond the historical data used to train a model.</p>
+          </article>
+
+          <article class="principle reveal">
+            <div class="symbol">03</div>
+            <h3>Physics enables trust</h3>
+            <p>Recommendations and autonomous actions can be constrained by physical laws, design limits and human-defined safety envelopes.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad warm" id="industries">
+      <div class="container-xl">
+        <div class="eyebrow reveal">Industry coverage</div>
+
+        <div class="row g-5 align-items-end">
+          <div class="col-lg-7"><h2 class="section-title reveal">Built for complex<br>process operations.</h2></div>
+          <div class="col-lg-5"><p class="lead-copy reveal">Veldar is designed for brownfield environments where physical processes, ageing assets and fragmented operational systems must work together.</p></div>
+        </div>
+
+        <div class="industry-grid">
+          <article class="industry-card reveal"><h3>Water & Wastewater</h3><p>Network performance, pumping efficiency, treatment process stability and lifecycle planning.</p><span class="industry-tag">Fluid systems</span></article>
+          <article class="industry-card reveal"><h3>Chemicals & Process</h3><p>Energy balances, debottlenecking, heat transfer, rotating equipment and continuous process optimisation.</p><span class="industry-tag">Continuous process</span></article>
+          <article class="industry-card reveal"><h3>Food & Beverage</h3><p>Throughput, quality consistency, thermal processing, utility use and production-line reliability.</p><span class="industry-tag">Production systems</span></article>
+          <article class="industry-card reveal"><h3>Energy & Utilities</h3><p>Asset integrity, efficiency, remote operations and safe automation across critical infrastructure.</p><span class="industry-tag">Critical infrastructure</span></article>
+          <article class="industry-card reveal"><h3>Pulp, Paper & Mining</h3><p>Comminution, pumping, material flow, energy intensity and equipment lifecycle intelligence.</p><span class="industry-tag">Asset intensive</span></article>
+          <article class="industry-card reveal"><h3>Advanced Manufacturing</h3><p>Process stability, resource efficiency, equipment performance and physics-grounded automation.</p><span class="industry-tag">Industrial production</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad light" id="partners">
+      <div class="container-xl">
+        <div class="partner-panel reveal">
+          <div>
+            <div class="eyebrow">Design partner programme</div>
+            <h2>Shape the future of physics-based industrial intelligence.</h2>
+            <p>Veldar is working with a small number of industrial organisations to validate the highest-value problems, deployment model and path toward trusted autonomy.</p>
+            <a href="#contact" class="btn btn-veldar btn-veldar-primary mt-3">Discuss a Design Partnership</a>
+          </div>
+
+          <ul class="partner-points">
+            <li>Start with one asset, process or line</li>
+            <li>Use existing plant data where possible</li>
+            <li>Define success before deployment</li>
+            <li>Expand only after value is proven</li>
           </ul>
-          {% endif %}
-
-          <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="mb-3">
-              <label class="form-label">Full Name*</label>
-              <input type="text" name="fullname" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Email*</label>
-              <input type="email" name="email" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Phone</label>
-              <input type="text" name="phone" class="form-control">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Message*</label>
-              <textarea name="message" class="form-control" rows="4" required></textarea>
-            </div>
-            <div class="g-recaptcha mb-3" data-sitekey="6LcK53osAAAAAHb0YMu9CxaOl_g_3V6oUnqkdndc"></div>
-            <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
-          </form>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ================= FOOTER ================= -->
-<footer>
-  <div class="container">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-      <div>
-        <div class="footer-logo">semantic<span>IQ</span></div>
-        <p class="footer-tagline">Physics-Native Industrial Intelligence</p>
+    <section class="section-pad warm" id="faq">
+      <div class="container-xl">
+        <div class="row g-5">
+          <div class="col-lg-4">
+            <div class="eyebrow reveal">Common questions</div>
+            <h2 class="section-title reveal">FAQ</h2>
+          </div>
+
+          <div class="col-lg-8">
+            <div class="accordion reveal" id="faqAccordion">
+              <div class="accordion-item">
+                <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqOne">Do we need to replace our SCADA or control systems?</button></h3>
+                <div id="faqOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">No. Veldar is designed to sit above existing systems and use the operational data already available through historians, SCADA, PLCs, APIs and engineering records.</div></div>
+              </div>
+
+              <div class="accordion-item">
+                <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqTwo">Is Veldar another predictive-maintenance tool?</button></h3>
+                <div id="faqTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">No. Reliability is one application. The broader goal is to understand full process behaviour and support decisions across energy, throughput, asset health, capital planning, scenario analysis and autonomy.</div></div>
+              </div>
+
+              <div class="accordion-item">
+                <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqThree">Can we begin with a narrow use case?</button></h3>
+                <div id="faqThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Yes. A deployment can begin with one asset class, process unit or production line and expand only after the value and data requirements are understood.</div></div>
+              </div>
+
+              <div class="accordion-item">
+                <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqFour">How does autonomy fit into the product?</button></h3>
+                <div id="faqFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Autonomy is a progression, not a starting claim. Veldar moves from observation and understanding to decision support, workflow integration and, where appropriate, bounded autonomous optimisation under human oversight.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <ul class="footer-links">
-        <li><a href="#pipeline">Solution</a></li>
-        <li><a href="#features">Use Cases</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="https://146179273.hs-sites-eu1.com/blog" target="_blank" rel="noopener noreferrer">Blog</a></li>
-      </ul>
-      <p class="footer-copy">© semanticIQ <script>document.write(new Date().getFullYear())</script>. All Rights Reserved.</p>
-    </div>
-  </div>
-</footer>
+    </section>
 
-<!-- ================= SCRIPTS ================= -->
-<script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+    <section class="section-pad light" id="contact">
+      <div class="container-xl">
+        <div class="contact-card reveal">
+          <div class="contact-copy">
+            <div class="eyebrow" style="color:var(--bronze-light)">Start a conversation</div>
+            <h2>Where could physics create the most value in your operation?</h2>
+            <p>We begin with a focused discussion about your process, available data and the operational decision you most want to improve.</p>
+
+            <div class="mt-5">
+              <div style="font-family:var(--font-mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bronze-light)">Email</div>
+              <div style="margin-top:.35rem">mal@outreach.semanticiq.co</div>
+            </div>
+          </div>
+
+          <div class="contact-form-wrap">
+            {% if messages %}
+            <ul class="messages">
+              {% for message in messages %}
+              <li class="{{ message.tags }}">{{ message }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+
+              <div class="mb-4">
+                <label class="form-label">Full name*</label>
+                <input type="text" name="fullname" class="form-control" required>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label">Work email*</label>
+                <input type="email" name="email" class="form-control" required>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label">Company / operation</label>
+                <input type="text" name="company" class="form-control">
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label">What operational challenge are you exploring?*</label>
+                <textarea name="message" class="form-control" rows="5" required></textarea>
+              </div>
+
+              <div class="g-recaptcha mb-4" data-sitekey="6LcK53osAAAAAHb0YMu9CxaOl_g_3V6oUnqkdndc"></div>
+              <button type="submit" class="btn btn-veldar btn-veldar-primary w-100">Send Message</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container-xl">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <a class="brand-lockup text-white" href="#home">
+          <svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="18" r="11" fill="currentColor"/>
+            <path d="M13 38 L43 90 Q50 98 57 90 L87 38 L66 38 L50 69 L34 38 Z" fill="currentColor"/>
+          </svg>
+          <span class="brand-word">Veldar</span>
+        </a>
+
+        <ul class="footer-links">
+          <li><a href="#platform">Platform</a></li>
+          <li><a href="#applications">Applications</a></li>
+          <li><a href="#industries">Industries</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <small>© Veldar <script>document.write(new Date().getFullYear())</script></small>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  </script>
 </body>
 </html>
