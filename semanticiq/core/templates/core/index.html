@@ -38,16 +38,49 @@
       --shadow: 0 18px 55px rgba(22, 25, 29, .09);
     }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html,
     body {
+      width: 100%;
+      max-width: 100%;
       margin: 0;
+      overflow-x: hidden;
+      overscroll-behavior-x: none;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      position: relative;
       background: var(--paper);
       color: var(--ink);
       font-family: var(--font-body);
       font-weight: 400;
       line-height: 1.6;
-      overflow-x: hidden;
+    }
+
+    main,
+    nav,
+    section,
+    footer {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: clip;
+    }
+
+    img,
+    svg,
+    video {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .row > *,
+    .arch-card,
+    .application-row,
+    .industry-card {
+      min-width: 0;
     }
 
     .container-xl { max-width: 1180px; }
@@ -160,8 +193,13 @@
 
 
     .brand-mark-image {
+      display: block;
       object-fit: contain;
       filter: none;
+    }
+
+    footer .brand-mark-image {
+      filter: brightness(0) invert(1);
     }
 
     .core-logo {
@@ -901,7 +939,19 @@
       .principles,
       .arch-stack { grid-template-columns: 1fr; }
 
-      .arch-card { min-height: 190px; }
+      .arch-card {
+        min-height: 0;
+        padding-right: 1.7rem;
+      }
+
+      .arch-icon {
+        position: static;
+        margin-top: 1.25rem;
+      }
+
+      .physics-orbit {
+        width: min(420px, 82vw);
+      }
 
       .application-row {
         grid-template-columns: 1fr;
@@ -919,6 +969,19 @@
     }
 
     @media (max-width: 576px) {
+      html,
+      body {
+        overflow-x: hidden;
+        touch-action: pan-y;
+      }
+
+      .container,
+      .container-fluid,
+      .container-xl {
+        max-width: 100%;
+        overflow-x: clip;
+      }
+
       .navbar { height: 64px; }
       .hero { padding-top: 105px; }
       .section-pad { padding: 78px 0; }
@@ -1275,22 +1338,22 @@
           <div class="col-lg-8">
             <div class="accordion reveal" id="faqAccordion">
               <div class="accordion-item">
-                <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqOne">Do we need to replace our SCADA or control systems?</button></h3>
+                <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#faqOne">Do we need to replace our SCADA or control systems?</button></h3>
                 <div id="faqOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">No. Veldar is designed to sit above existing systems and use the operational data already available through historians, SCADA, PLCs, APIs and engineering records.</div></div>
               </div>
 
               <div class="accordion-item">
-                <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqTwo">Is Veldar another predictive-maintenance tool?</button></h3>
+                <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#faqTwo">Is Veldar another predictive-maintenance tool?</button></h3>
                 <div id="faqTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">No. Reliability is one application. The broader goal is to understand full process behaviour and support decisions across energy, throughput, asset health, capital planning, scenario analysis and autonomy.</div></div>
               </div>
 
               <div class="accordion-item">
-                <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqThree">Can we begin with a narrow use case?</button></h3>
+                <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#faqThree">Can we begin with a narrow use case?</button></h3>
                 <div id="faqThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Yes. A deployment can begin with one asset class, process unit or production line and expand only after the value and data requirements are understood.</div></div>
               </div>
 
               <div class="accordion-item">
-                <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqFour">How does autonomy fit into the product?</button></h3>
+                <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#faqFour">How does autonomy fit into the product?</button></h3>
                 <div id="faqFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Autonomy is a progression, not a starting claim. Veldar moves from observation and understanding to decision support, workflow integration and, where appropriate, bounded autonomous optimisation under human oversight.</div></div>
               </div>
             </div>
@@ -1374,8 +1437,38 @@
     </div>
   </footer>
 
-  <script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+          crossorigin="anonymous"></script>
   <script>
+    // Fallback accordion behaviour if Bootstrap fails to load.
+    if (typeof window.bootstrap === 'undefined') {
+      document.querySelectorAll('.accordion-button').forEach((button) => {
+        button.addEventListener('click', () => {
+          const selector = button.getAttribute('data-bs-target');
+          const panel = selector ? document.querySelector(selector) : null;
+          if (!panel) return;
+
+          const accordion = button.closest('.accordion');
+          const willOpen = !panel.classList.contains('show');
+
+          if (accordion) {
+            accordion.querySelectorAll('.accordion-collapse.show').forEach((openPanel) => {
+              openPanel.classList.remove('show');
+            });
+            accordion.querySelectorAll('.accordion-button').forEach((otherButton) => {
+              otherButton.classList.add('collapsed');
+              otherButton.setAttribute('aria-expanded', 'false');
+            });
+          }
+
+          panel.classList.toggle('show', willOpen);
+          button.classList.toggle('collapsed', !willOpen);
+          button.setAttribute('aria-expanded', String(willOpen));
+        });
+      });
+    }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
