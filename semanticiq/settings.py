@@ -16,8 +16,8 @@ DEBUG = os.getenv('DJANGO_DEBUG', '1') == '1'
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://semanticiq.co",
-    "https://www.semanticiq.co",
+    "https://veldar.co",
+    "https://www.veldar.co",
     "https://semanticiq-dawn-brook-485.fly.dev",
 ]
 
