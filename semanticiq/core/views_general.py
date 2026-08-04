@@ -14,6 +14,9 @@ from .roles import (
 def index(request):
     return render(request, 'core/index.html')
 
+def sentinel_os(request):
+    return render(request, 'core/sentinel_os.html')
+
 @require_GET
 def main_menu(request):
     user = request.user

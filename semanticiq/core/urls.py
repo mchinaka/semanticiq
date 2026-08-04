@@ -20,6 +20,7 @@ urlpatterns = [
     
     # General
     path('', gen.index, name='index'),
+    path('sentinel_os', gen.sentinel_os, name='sentinel_os'),
     path('main_menu', gen.main_menu, name='main_menu'),
     path('switch_tenant', gen.switch_tenant, name='switch_tenant'),
     
