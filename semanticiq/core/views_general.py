@@ -17,6 +17,9 @@ def index(request):
 def sentinel_os(request):
     return render(request, 'core/sentinel_os.html')
 
+def alchemy(request):
+    return render(request, 'core/alchemy.html')
+
 @require_GET
 def main_menu(request):
     user = request.user
