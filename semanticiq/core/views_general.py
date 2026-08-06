@@ -15,7 +15,7 @@ def index(request):
     return render(request, 'core/index.html')
 
 def sentinel_os(request):
-    return render(request, 'core/sentinel_os.html')
+    return render(request, 'core/sentinel-os.html')
 
 def alchemy(request):
     return render(request, 'core/alchemy.html')
