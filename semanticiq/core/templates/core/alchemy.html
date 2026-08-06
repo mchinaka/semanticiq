@@ -19,6 +19,26 @@
     :root{--ink:#16191d;--ink-soft:#262b31;--muted:#666a70;--line:#d9d5cd;--paper:#fbfaf7;--warm:#f2efe9;--white:#fff;--bronze:#b8752e;--bronze-dark:#7e4e20;--bronze-light:#d79a56;--green:#4fc3a1;--red:#df6767;--font-display:"Barlow Condensed",sans-serif;--font-body:"Barlow",sans-serif;--font-mono:"IBM Plex Mono",monospace;--shadow:0 18px 55px rgba(22,25,29,.09)}
     *,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}html,body{width:100%;max-width:100%;margin:0;overflow-x:hidden}body{background:var(--paper);color:var(--ink);font-family:var(--font-body);line-height:1.6}img,svg{max-width:100%;height:auto}section,nav,footer{max-width:100vw;overflow-x:clip}.container-xl{max-width:1180px}
     .navbar{height:72px;padding:0;background:rgba(251,250,247,.95)!important;backdrop-filter:blur(12px);border-bottom:1px solid rgba(22,25,29,.08)}.navbar .container-xl{height:100%}.brand-lockup{display:inline-flex;align-items:center;gap:.72rem;text-decoration:none;color:var(--ink)}.brand-mark{width:32px;height:32px;object-fit:contain}.brand-word{font-family:var(--font-display);font-size:1.42rem;font-weight:700}.product-chip{padding:.26rem .48rem;border-left:1px solid var(--line);font-family:var(--font-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bronze-dark)}.navbar-nav .nav-link{margin:0 .42rem;color:#555960!important;font-family:var(--font-mono);font-size:.64rem;letter-spacing:.09em;text-transform:uppercase}.navbar-nav .nav-link:hover{color:var(--bronze-dark)!important}
+    .navbar-toggler {
+      border: none;
+      padding: .25rem;
+      box-shadow: none !important;
+    }
+
+    .navbar-toggler:focus {
+      box-shadow: none !important;
+    }
+
+    .navbar-toggler-icon {
+      width: 30px;
+      height: 30px;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(22,25,29,0.95)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    .navbar-toggler:hover .navbar-toggler-icon {
+      opacity: .72;
+    }
+
     .btn-v{border-radius:0;padding:.86rem 1.35rem;border:1px solid transparent;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;transition:.22s ease}.btn-primary-v{background:var(--bronze);color:#fff}.btn-primary-v:hover{background:var(--bronze-dark);color:#fff;transform:translateY(-1px)}.btn-outline-v{background:transparent;color:var(--ink);border-color:var(--ink)}.btn-outline-v:hover{background:var(--ink);color:#fff}.btn-dark-outline{border-color:rgba(255,255,255,.4);color:#fff}.btn-dark-outline:hover{background:#fff;color:var(--ink)}
     .eyebrow{display:inline-flex;align-items:center;gap:.75rem;font-family:var(--font-mono);font-size:.67rem;letter-spacing:.16em;text-transform:uppercase;color:var(--bronze-dark);margin-bottom:1rem}.eyebrow::before{content:"";width:28px;height:1px;background:currentColor}.section-pad{padding:110px 0}.light{background:var(--paper)}.warm{background:var(--warm)}.dark{background:var(--ink);color:#fff}.dark .eyebrow{color:var(--bronze-light)}.section-title{margin:0;font-family:var(--font-display);font-size:clamp(2.5rem,4.7vw,4.7rem);font-weight:700;line-height:.98}.lead-copy{max-width:680px;color:var(--muted);font-size:1.08rem;line-height:1.75}.dark .lead-copy{color:rgba(255,255,255,.62)}
     .hero{min-height:96vh;padding:135px 0 76px;position:relative;background:linear-gradient(rgba(22,25,29,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(22,25,29,.035) 1px,transparent 1px),var(--paper);background-size:42px 42px}.hero::after{content:"";position:absolute;right:-100px;top:80px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(184,117,46,.13),transparent 68%);pointer-events:none}.hero-copy{position:relative;z-index:2}.hero-title{margin:0;font-family:var(--font-display);font-size:clamp(4rem,8.2vw,8.2rem);font-weight:800;line-height:.87;letter-spacing:-.018em;text-transform:uppercase}.hero-title .accent{color:var(--bronze)}.hero-sub{max-width:650px;margin-top:2rem;color:#555a61;font-size:1.18rem;line-height:1.75}.hero-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:2rem}.vision-note{margin-top:1.4rem;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
