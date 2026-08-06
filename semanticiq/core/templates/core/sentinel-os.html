@@ -354,6 +354,26 @@
 
     .navbar .container-xl { height: 100%; }
 
+    .navbar-toggler {
+      border: none;
+      padding: .25rem;
+      box-shadow: none !important;
+    }
+
+    .navbar-toggler:focus {
+      box-shadow: none !important;
+    }
+
+    .navbar-toggler-icon {
+      width: 30px;
+      height: 30px;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(22,25,29,0.95)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    .navbar-toggler:hover .navbar-toggler-icon {
+      opacity: .72;
+    }
+
     .navbar-nav .nav-link {
       margin: 0 .48rem;
       color: #555960 !important;
@@ -1496,7 +1516,7 @@
     </div></div>
   </footer>
 
-  <script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
   <script>
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
