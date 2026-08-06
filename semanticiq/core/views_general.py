@@ -14,7 +14,7 @@ from .roles import (
 def index(request):
     return render(request, 'core/index.html')
 
-def sentinel_os(request):
+def sentinel-os(request):
     return render(request, 'core/sentinel-os.html')
 
 def alchemy(request):
